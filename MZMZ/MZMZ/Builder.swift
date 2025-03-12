@@ -9,6 +9,8 @@ import Foundation
 
 final class ApplicationRootBuilder {
     func makeRootViewModel() -> ApplicationRootViewModel {
-        return ApplicationRootViewModel()
+        let viewModel = ApplicationRootViewModel()
+        viewModel.router = ApplicationRouter()
+        return viewModel
     }
 }

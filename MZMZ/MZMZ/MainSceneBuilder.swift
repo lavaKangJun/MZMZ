@@ -9,6 +9,6 @@ import UIKit
 
 final class MainSceneBuilder {
     func makeMainScene() -> UIViewController {
-        return UIViewController(nibName: nil, bundle: nil)
+        return ViewController()
     }
 }
