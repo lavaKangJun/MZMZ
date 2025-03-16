@@ -8,11 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		51775D3E2D871483000EFBA0 /* Domain.h in Headers */ = {isa = PBXBuildFile; fileRef = 51775D3D2D871483000EFBA0 /* Domain.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		51775D472D8716A5000EFBA0 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D462D8716A5000EFBA0 /* Repository.swift */; };
+		51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5B2D871A02000EFBA0 /* DustEntity.swift */; };
+		51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		51775D3A2D871483000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D3D2D871483000EFBA0 /* Domain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Domain.h; sourceTree = "<group>"; };
+		51775D462D8716A5000EFBA0 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		51775D5B2D871A02000EFBA0 /* DustEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustEntity.swift; sourceTree = "<group>"; };
+		51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +35,9 @@
 		51775D302D871483000EFBA0 = {
 			isa = PBXGroup;
 			children = (
+				51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */,
+				51775D5B2D871A02000EFBA0 /* DustEntity.swift */,
+				51775D452D87168A000EFBA0 /* Repositories */,
 				51775D3C2D871483000EFBA0 /* Domain */,
 				51775D3B2D871483000EFBA0 /* Products */,
 			);
@@ -48,6 +57,14 @@
 				51775D3D2D871483000EFBA0 /* Domain.h */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+		51775D452D87168A000EFBA0 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				51775D462D8716A5000EFBA0 /* Repository.swift */,
+			);
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,6 +110,7 @@
 				TargetAttributes = {
 					51775D392D871483000EFBA0 = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 1520;
 					};
 				};
 			};
@@ -129,6 +147,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */,
+				51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */,
+				51775D472D8716A5000EFBA0 /* Repository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,6 +284,7 @@
 		51775D422D871483000EFBA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -286,6 +308,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -294,6 +317,7 @@
 		51775D432D871483000EFBA0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
