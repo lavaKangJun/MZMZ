@@ -9,12 +9,29 @@
 /* Begin PBXBuildFile section */
 		51775D6F2D8858D9000EFBA0 /* Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = 51775D6E2D8858D9000EFBA0 /* Testing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51775D762D8858EB000EFBA0 /* MockingRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D752D8858EB000EFBA0 /* MockingRepository.swift */; };
+		51775D7F2D885F50000EFBA0 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D7E2D885F50000EFBA0 /* Domain.framework */; };
+		51775D802D885F50000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D7E2D885F50000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		51775D812D885F50000EFBA0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				51775D802D885F50000EFBA0 /* Domain.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		51775D6B2D8858D9000EFBA0 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D6E2D8858D9000EFBA0 /* Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Testing.h; sourceTree = "<group>"; };
 		51775D752D8858EB000EFBA0 /* MockingRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingRepository.swift; sourceTree = "<group>"; };
+		51775D7E2D885F50000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -22,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51775D7F2D885F50000EFBA0 /* Domain.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34,6 +52,7 @@
 				51775D752D8858EB000EFBA0 /* MockingRepository.swift */,
 				51775D6D2D8858D9000EFBA0 /* Testing */,
 				51775D6C2D8858D9000EFBA0 /* Products */,
+				51775D7D2D885F50000EFBA0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,6 +70,14 @@
 				51775D6E2D8858D9000EFBA0 /* Testing.h */,
 			);
 			path = Testing;
+			sourceTree = "<group>";
+		};
+		51775D7D2D885F50000EFBA0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				51775D7E2D885F50000EFBA0 /* Domain.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -75,6 +102,7 @@
 				51775D672D8858D9000EFBA0 /* Sources */,
 				51775D682D8858D9000EFBA0 /* Frameworks */,
 				51775D692D8858D9000EFBA0 /* Resources */,
+				51775D812D885F50000EFBA0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

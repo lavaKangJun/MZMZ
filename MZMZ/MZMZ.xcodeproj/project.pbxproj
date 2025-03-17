@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		511F71BE2D7C298000503E07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71BD2D7C298000503E07 /* AppDelegate.swift */; };
 		511F71C02D7C298000503E07 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71BF2D7C298000503E07 /* SceneDelegate.swift */; };
-		511F71C22D7C298000503E07 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71C12D7C298000503E07 /* ViewController.swift */; };
 		511F71C72D7C298500503E07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 511F71C62D7C298500503E07 /* Assets.xcassets */; };
 		511F71CA2D7C298500503E07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 511F71C82D7C298500503E07 /* LaunchScreen.storyboard */; };
 		511F71D22D7C305B00503E07 /* MainSceneBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71D12D7C305B00503E07 /* MainSceneBuilder.swift */; };
@@ -23,6 +22,8 @@
 		51775D582D871943000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D5A2D871966000EFBA0 /* DustListViewDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D592D871966000EFBA0 /* DustListViewDataModel.swift */; };
 		51775D602D871BA2000EFBA0 /* DustListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5F2D871BA2000EFBA0 /* DustListViewModel.swift */; };
+		51775D782D88595B000EFBA0 /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; };
+		51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				51775D582D871943000EFBA0 /* Domain.framework in Embed Frameworks */,
+				51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */,
 				51775D542D871936000EFBA0 /* Repository.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -44,7 +46,6 @@
 		511F71BA2D7C298000503E07 /* MZMZ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MZMZ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		511F71BD2D7C298000503E07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		511F71BF2D7C298000503E07 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		511F71C12D7C298000503E07 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		511F71C62D7C298500503E07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		511F71C92D7C298500503E07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		511F71CB2D7C298500503E07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,6 +58,7 @@
 		51775D562D871943000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D592D871966000EFBA0 /* DustListViewDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListViewDataModel.swift; sourceTree = "<group>"; };
 		51775D5F2D871BA2000EFBA0 /* DustListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListViewModel.swift; sourceTree = "<group>"; };
+		51775D772D88595B000EFBA0 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51775D572D871943000EFBA0 /* Domain.framework in Frameworks */,
+				51775D782D88595B000EFBA0 /* Testing.framework in Frameworks */,
 				51775D532D871936000EFBA0 /* Repository.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,8 +78,7 @@
 		511F71B12D7C298000503E07 = {
 			isa = PBXGroup;
 			children = (
-				51775D5F2D871BA2000EFBA0 /* DustListViewModel.swift */,
-				51775D592D871966000EFBA0 /* DustListViewDataModel.swift */,
+				51775D7C2D885E9C000EFBA0 /* DustList */,
 				511F71BC2D7C298000503E07 /* MZMZ */,
 				511F71BB2D7C298000503E07 /* Products */,
 				51775D512D87192D000EFBA0 /* Frameworks */,
@@ -96,7 +98,6 @@
 			children = (
 				511F71BD2D7C298000503E07 /* AppDelegate.swift */,
 				511F71BF2D7C298000503E07 /* SceneDelegate.swift */,
-				511F71C12D7C298000503E07 /* ViewController.swift */,
 				511F71C62D7C298500503E07 /* Assets.xcassets */,
 				511F71C82D7C298500503E07 /* LaunchScreen.storyboard */,
 				511F71CB2D7C298500503E07 /* Info.plist */,
@@ -104,7 +105,6 @@
 				511F71D32D7C310700503E07 /* Routing.swift */,
 				511F71D52D7C317400503E07 /* Builder.swift */,
 				511F71D72D7C318A00503E07 /* ApplicationRootViewModel.swift */,
-				51775D4F2D8718B8000EFBA0 /* DustListView.swift */,
 			);
 			path = MZMZ;
 			sourceTree = "<group>";
@@ -112,10 +112,21 @@
 		51775D512D87192D000EFBA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				51775D772D88595B000EFBA0 /* Testing.framework */,
 				51775D562D871943000EFBA0 /* Domain.framework */,
 				51775D522D871936000EFBA0 /* Repository.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		51775D7C2D885E9C000EFBA0 /* DustList */ = {
+			isa = PBXGroup;
+			children = (
+				51775D4F2D8718B8000EFBA0 /* DustListView.swift */,
+				51775D592D871966000EFBA0 /* DustListViewDataModel.swift */,
+				51775D5F2D871BA2000EFBA0 /* DustListViewModel.swift */,
+			);
+			path = DustList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -191,7 +202,6 @@
 			files = (
 				511F71D82D7C318A00503E07 /* ApplicationRootViewModel.swift in Sources */,
 				511F71D42D7C310700503E07 /* Routing.swift in Sources */,
-				511F71C22D7C298000503E07 /* ViewController.swift in Sources */,
 				51775D5A2D871966000EFBA0 /* DustListViewDataModel.swift in Sources */,
 				51775D602D871BA2000EFBA0 /* DustListViewModel.swift in Sources */,
 				511F71BE2D7C298000503E07 /* AppDelegate.swift in Sources */,

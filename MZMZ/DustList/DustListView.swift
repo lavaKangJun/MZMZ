@@ -16,8 +16,10 @@ struct DustListView: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             Text("미세먼지")
-                .font(Font.system(size: 20, weight: .bold))
+                .font(Font.system(size: 30, weight: .bold))
                 .fontWeight(.bold)
                 
             List(viewModel.fetchDust()) { dataModel in
@@ -42,7 +44,7 @@ struct DustListView: View {
             
             Spacer()
         }
-        .frame(height: 42)
+        .frame(height: 80)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 10)
         .background(Color.gray.opacity(0.5))

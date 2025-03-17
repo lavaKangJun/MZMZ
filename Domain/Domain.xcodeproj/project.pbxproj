@@ -35,8 +35,8 @@
 		51775D302D871483000EFBA0 = {
 			isa = PBXGroup;
 			children = (
-				51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */,
-				51775D5B2D871A02000EFBA0 /* DustEntity.swift */,
+				51775D7B2D885E6B000EFBA0 /* Entities */,
+				51775D7A2D885E60000EFBA0 /* UseCases */,
 				51775D452D87168A000EFBA0 /* Repositories */,
 				51775D3C2D871483000EFBA0 /* Domain */,
 				51775D3B2D871483000EFBA0 /* Products */,
@@ -65,6 +65,22 @@
 				51775D462D8716A5000EFBA0 /* Repository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		51775D7A2D885E60000EFBA0 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		51775D7B2D885E6B000EFBA0 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				51775D5B2D871A02000EFBA0 /* DustEntity.swift */,
+			);
+			path = Entities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

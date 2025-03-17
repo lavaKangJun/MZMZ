@@ -9,6 +9,7 @@ import UIKit
 import Domain
 import Repository
 import SwiftUI
+import Testing
 
 final class MainSceneBuilder {
     func makeMainScene() -> UIViewController {
