@@ -12,30 +12,46 @@ enum Endpoint: String {
     case dustList = ""
 }
 
+enum RemoteAPIMethod {
+    case get
+    case put
+    case delete
+    case post
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .get:
+            return .get
+        case .post:
+            return .post
+        case .put:
+            return .put
+        case .delete:
+            return .delete
+        }
+    }
+}
+
 protocol RemoteProtocol {
     func request<T: Decodable>(
         endpoint: Endpoint,
-        method: HTTPMethod,
+        method: RemoteAPIMethod,
         parameters: [String : Any]
     ) async throws -> T
 }
 
 final class Remote: RemoteProtocol {
-    private let session: Session
+    private let session: Session = Session.default
     private let header: HTTPHeaders? = nil
-    
-    init(session: Session) {
-        self.session = session
-    }
     
     func request<T: Decodable>(
         endpoint: Endpoint,
-        method: HTTPMethod,
+        method: RemoteAPIMethod,
         parameters: [String : Any]
     ) async throws -> T {
         let dataTask = self.session.request(
             endpoint.rawValue,
-            method: method, 
+            method: method.httpMethod,
             parameters: parameters,
             headers: header
         ).serializingData()
