@@ -9,10 +9,15 @@ import Foundation
 import Domain
 
 final class DustListViewModel {
+    private let locationService: LocationServiceProtocol
     private let usecase: DustListUseCaseProtocol
     
-    init(usecase: DustListUseCaseProtocol) {
+    init(locationService: LocationServiceProtocol, usecase: DustListUseCaseProtocol) {
+        self.locationService = locationService
         self.usecase = usecase
+        
+        let location = self.locationService.getLocation()
+        print(location)
     }
     
     func fetchDust() -> [DustListViewDataModel] {

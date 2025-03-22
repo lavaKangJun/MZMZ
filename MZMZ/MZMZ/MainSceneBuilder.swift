@@ -15,7 +15,8 @@ final class MainSceneBuilder {
     func makeMainScene() -> UIViewController {
         let repository = MockingRepository()
         let useCase = DustListUseCase(repository: repository)
-        let viewModel = DustListViewModel(usecase: useCase)
+        let locationService = LocationService.shared
+        let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
         let listView = DustListView(viewModel: viewModel)
         let viewControlelr = UIHostingController(rootView: listView)
         return viewControlelr

@@ -13,7 +13,6 @@
 		51775D4D2D8717B1000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D4B2D8717B1000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D832D885FC6000EFBA0 /* Remote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D822D885FC6000EFBA0 /* Remote.swift */; };
 		51775D862D8861BF000EFBA0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 51775D852D8861BF000EFBA0 /* Alamofire */; };
-		51775D882D8861BF000EFBA0 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 51775D872D8861BF000EFBA0 /* AlamofireDynamic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,7 +43,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				51775D4C2D8717B1000EFBA0 /* Domain.framework in Frameworks */,
-				51775D882D8861BF000EFBA0 /* AlamofireDynamic in Frameworks */,
 				51775D862D8861BF000EFBA0 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +116,6 @@
 			name = Repository;
 			packageProductDependencies = (
 				51775D852D8861BF000EFBA0 /* Alamofire */,
-				51775D872D8861BF000EFBA0 /* AlamofireDynamic */,
 			);
 			productName = Repository;
 			productReference = 51775D262D87146C000EFBA0 /* Repository.framework */;
@@ -412,11 +409,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 51775D842D8861BF000EFBA0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		51775D872D8861BF000EFBA0 /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 51775D842D8861BF000EFBA0 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
