@@ -9,7 +9,6 @@ import Foundation
 import Domain
 
 public final class MockingRepository: RepositoryProtocol {
-    
     public init () { }
     
     public func fetchDust() -> [DustEntity] {
@@ -26,4 +25,8 @@ public final class MockingRepository: RepositoryProtocol {
             )
             ]
         }
+    
+    public func formatTMCoordinate(locationInfo: Domain.LocationInfo, key: String) async throws -> [Domain.TMLocationInfo] {
+        return []
+    }
 }

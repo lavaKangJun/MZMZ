@@ -12,9 +12,18 @@ public protocol LocationServiceProtocol {
     func getLocation() -> LocationInfo?
 }
 
-public struct LocationInfo {
+public struct LocationInfo: Decodable {
     public let latitude: Double
     public let longtitude: Double
+}
+
+public struct TMLocationDocument: Decodable {
+    public let documents: [TMLocationInfo]
+}
+
+public struct TMLocationInfo: Decodable {
+    public let x: Double
+    public let y: Double
 }
 
 public final class LocationService: NSObject, LocationServiceProtocol {

@@ -8,11 +8,12 @@
 import Foundation
 import Alamofire
 
-enum Endpoint: String {
+public enum Endpoint: String {
     case dustList = ""
+    case tmLocation = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json"
 }
 
-enum RemoteAPIMethod {
+public enum RemoteAPIMethod {
     case get
     case put
     case delete
@@ -32,19 +33,24 @@ enum RemoteAPIMethod {
     }
 }
 
-protocol RemoteProtocol {
+public protocol RemoteProtocol {
     func request<T: Decodable>(
+        header: [String : String]?,
         endpoint: Endpoint,
         method: RemoteAPIMethod,
         parameters: [String : Any]
     ) async throws -> T
 }
 
-final class Remote: RemoteProtocol {
+public final class Remote: RemoteProtocol {
     private let session: Session = Session.default
-    private let header: HTTPHeaders? = nil
     
-    func request<T: Decodable>(
+    public init() {
+        
+    }
+    
+    public func request<T: Decodable>(
+        header: [String : String]?,
         endpoint: Endpoint,
         method: RemoteAPIMethod,
         parameters: [String : Any]
@@ -53,7 +59,7 @@ final class Remote: RemoteProtocol {
             endpoint.rawValue,
             method: method.httpMethod,
             parameters: parameters,
-            headers: header
+            headers: header.map { HTTPHeaders($0) }
         ).serializingData()
         
         let response = await dataTask.response
