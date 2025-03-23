@@ -12,6 +12,8 @@
 		51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5B2D871A02000EFBA0 /* DustEntity.swift */; };
 		51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */; };
 		51E9C2762D8EF41200C49EE9 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2752D8EF41200C49EE9 /* LocationService.swift */; };
+		51E9C2782D9045C600C49EE9 /* TMLocationDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2772D9045C600C49EE9 /* TMLocationDocument.swift */; };
+		51E9C27A2D904A6600C49EE9 /* Msrstn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2792D904A6600C49EE9 /* Msrstn.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,8 @@
 		51775D5B2D871A02000EFBA0 /* DustEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustEntity.swift; sourceTree = "<group>"; };
 		51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListUseCase.swift; sourceTree = "<group>"; };
 		51E9C2752D8EF41200C49EE9 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		51E9C2772D9045C600C49EE9 /* TMLocationDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMLocationDocument.swift; sourceTree = "<group>"; };
+		51E9C2792D904A6600C49EE9 /* Msrstn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Msrstn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				51775D5B2D871A02000EFBA0 /* DustEntity.swift */,
+				51E9C2772D9045C600C49EE9 /* TMLocationDocument.swift */,
+				51E9C2792D904A6600C49EE9 /* Msrstn.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -174,9 +180,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51E9C27A2D904A6600C49EE9 /* Msrstn.swift in Sources */,
 				51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */,
 				51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */,
 				51E9C2762D8EF41200C49EE9 /* LocationService.swift in Sources */,
+				51E9C2782D9045C600C49EE9 /* TMLocationDocument.swift in Sources */,
 				51775D472D8716A5000EFBA0 /* Repository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

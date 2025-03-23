@@ -17,7 +17,7 @@ final class MainSceneBuilder {
         let remote = Remote()
         let repository = Repository(remote: remote)
         let useCase = DustListUseCase(repository: repository)
-        let locationService = LocationService.shared
+        let locationService = LocationService(repository: repository)
         let viewModel = DustListViewModel(repository: repository, locationService: locationService, usecase: useCase)
         let listView = DustListView(viewModel: viewModel)
         let viewControlelr = UIHostingController(rootView: listView)

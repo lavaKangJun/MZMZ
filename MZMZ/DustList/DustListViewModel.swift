@@ -22,10 +22,11 @@ final class DustListViewModel {
         
         Task {
             guard let location = self.locationService.getLocation() else { return }
-            print(location)
             do {
-                let location = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
-                print("location", location)
+                if let location = try await repository.formatTMCoordinate(locationInfo: location, key: authKey).last {
+                    let msrstn = try await repository.fetchMsrstnList(tmX: location.x, tmY: location.y)
+                    print(msrstn)
+                }
             } catch {
                 print(error)
             }

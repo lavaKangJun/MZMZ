@@ -11,6 +11,7 @@ import Alamofire
 public enum Endpoint: String {
     case dustList = ""
     case tmLocation = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json"
+    case nearbyMsrstnList = "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList"
 }
 
 public enum RemoteAPIMethod {
@@ -64,12 +65,17 @@ public final class Remote: RemoteProtocol {
         
         let response = await dataTask.response
         let result = response.result
-        
+        print(response)
         switch result {
         case let .success(data):
+            if case .nearbyMsrstnList = endpoint {
+                print(String(data: data, encoding: .utf8))
+            }
+        //    let decode = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
             let decodeResult = try JSONDecoder().decode(T.self, from: data)
             return decodeResult
         case let .failure(error):
+            print(endpoint, error)
             throw error
         }
     }

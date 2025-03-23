@@ -12,26 +12,18 @@ public protocol LocationServiceProtocol {
     func getLocation() -> LocationInfo?
 }
 
-public struct LocationInfo: Decodable {
-    public let latitude: Double
-    public let longtitude: Double
-}
-
-public struct TMLocationDocument: Decodable {
-    public let documents: [TMLocationInfo]
-}
-
-public struct TMLocationInfo: Decodable {
-    public let x: Double
-    public let y: Double
-}
-
 public final class LocationService: NSObject, LocationServiceProtocol {
-    public static let shared = LocationService()
     private let locationManager = CLLocationManager()
+    private let repository: RepositoryProtocol
     
-    private override init() {
+    public init(repository: RepositoryProtocol) {
+        self.repository = repository
         super.init()
+        
+        setupInit()
+    }
+    
+    private func setupInit() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
