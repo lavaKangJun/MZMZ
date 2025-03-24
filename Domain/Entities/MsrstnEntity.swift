@@ -7,25 +7,17 @@
 
 import Foundation
 
-public struct AirKoreaResponse: Decodable {
-    public let response: AirKoreaBody
-}
-
-public struct AirKoreaBody: Decodable {
-    public let body: MsrstnList
-}
-
-public struct MsrstnList: Decodable {
+public struct MsrstnListEntity {
     public let totalCount: Int
-    public let items: [Msrstn]
+    public let items: [MsrstnEntity]
     
-    public init(totalCount: Int, item: [Msrstn]) {
+    public init(totalCount: Int, items: [MsrstnEntity]) {
         self.totalCount = totalCount
-        self.items = item
+        self.items = items
     }
 }
 
-public struct Msrstn: Decodable {
+public struct MsrstnEntity: Decodable {
     public let stationCode: String
     public let tm: Double
     public let addr: String

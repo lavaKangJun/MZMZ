@@ -20,7 +20,7 @@ public final class Repository: RepositoryProtocol {
         return []
     }
     
-    public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnList {
+    public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
         var parameters: [String: Any] = [:]
         parameters["tmX"] = "\(tmX)"
         parameters["tmY"] = "\(tmX)"
@@ -29,7 +29,7 @@ public final class Repository: RepositoryProtocol {
         parameters["ver"] = "1.1"
         
         let result: AirKoreaResponse = try await self.remote.request(header: nil, endpoint: .nearbyMsrstnList, method: .get, parameters: parameters)
-        return result.response.body
+        return result.response.body.makeEntity()
     }
     
     public func formatTMCoordinate(locationInfo: LocationInfo, key: String) async throws -> [TMLocationInfo] {

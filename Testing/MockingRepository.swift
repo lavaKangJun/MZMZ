@@ -30,7 +30,7 @@ public final class MockingRepository: RepositoryProtocol {
         return []
     }
     
-    public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnList {
-        return MsrstnList(totalCount: 0, item: [])
+    public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
+        return MsrstnListEntity(totalCount: 0, items: [])
     }
 }

@@ -13,6 +13,7 @@
 		51775D4D2D8717B1000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D4B2D8717B1000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D832D885FC6000EFBA0 /* Remote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D822D885FC6000EFBA0 /* Remote.swift */; };
 		51775D862D8861BF000EFBA0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 51775D852D8861BF000EFBA0 /* Alamofire */; };
+		51E9C27C2D91839100C49EE9 /* MsrstnListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +36,7 @@
 		51775D482D8717A0000EFBA0 /* RepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryImp.swift; sourceTree = "<group>"; };
 		51775D4B2D8717B1000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D822D885FC6000EFBA0 /* Remote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Remote.swift; sourceTree = "<group>"; };
+		51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsrstnListDTO.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 		51775D1C2D87146C000EFBA0 = {
 			isa = PBXGroup;
 			children = (
+				51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */,
 				51775D822D885FC6000EFBA0 /* Remote.swift */,
 				51775D482D8717A0000EFBA0 /* RepositoryImp.swift */,
 				51775D282D87146C000EFBA0 /* Repository */,
@@ -172,6 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51E9C27C2D91839100C49EE9 /* MsrstnListDTO.swift in Sources */,
 				51775D492D8717A0000EFBA0 /* RepositoryImp.swift in Sources */,
 				51775D832D885FC6000EFBA0 /* Remote.swift in Sources */,
 			);
