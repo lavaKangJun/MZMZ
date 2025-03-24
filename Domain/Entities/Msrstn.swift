@@ -17,11 +17,11 @@ public struct AirKoreaBody: Decodable {
 
 public struct MsrstnList: Decodable {
     public let totalCount: Int
-    public let item: [Msrstn]
+    public let items: [Msrstn]
     
     public init(totalCount: Int, item: [Msrstn]) {
         self.totalCount = totalCount
-        self.item = item
+        self.items = item
     }
 }
 

@@ -68,10 +68,6 @@ public final class Remote: RemoteProtocol {
         print(response)
         switch result {
         case let .success(data):
-            if case .nearbyMsrstnList = endpoint {
-                print(String(data: data, encoding: .utf8))
-            }
-        //    let decode = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
             let decodeResult = try JSONDecoder().decode(T.self, from: data)
             return decodeResult
         case let .failure(error):
