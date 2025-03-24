@@ -32,7 +32,7 @@ public final class Repository: RepositoryProtocol {
         return result.response.body.makeEntity()
     }
     
-    public func formatTMCoordinate(locationInfo: LocationInfo, key: String) async throws -> [TMLocationInfo] {
+    public func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity] {
         var header = ["Authorization": "KakaoAK \(key)"]
         header["content-type"] = "application/json"
         var parameters: [String: Any] = [:]
@@ -41,6 +41,6 @@ public final class Repository: RepositoryProtocol {
         parameters["output_coord"] = "TM"
         
         let result: TMLocationDocument = try await self.remote.request(header: header, endpoint: .tmLocation, method: .get, parameters: parameters)
-        return result.documents
+        return result.documents.map { $0.makeEntity() }
     }
 }

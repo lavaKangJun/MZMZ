@@ -1,23 +1,18 @@
 //
-//  TMLocationDocument.swift
-//  Domain
+//  TMLocatioDTO.swift
+//  Repository
 //
-//  Created by 강준영 on 2025/03/23.
+//  Created by 강준영 on 2025/03/24.
 //
 
 import Foundation
-
-public struct LocationInfo: Decodable {
-    public let latitude: Double
-    public let longtitude: Double
-}
-
+import Domain
 public struct TMLocationDocument: Decodable {
     public let documents: [TMLocationInfo]
 }
 
 public struct TMLocationInfo: Decodable {
-    public enum regionType: String, Decodable {
+    public enum RegionType: String, Decodable {
         case H = "H"
         case B = "B"
     }
@@ -30,5 +25,9 @@ public struct TMLocationInfo: Decodable {
         case x
         case y
         case regionType = "region_type"
+    }
+    
+    func makeEntity() -> TMLocationInfoEntity {
+        return TMLocationInfoEntity(regionType: regionType, x: x, y: y)
     }
 }

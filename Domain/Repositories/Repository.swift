@@ -9,6 +9,6 @@ import Foundation
 
 public protocol RepositoryProtocol {
     func fetchDust() -> [DustEntity]
-    func formatTMCoordinate(locationInfo: LocationInfo, key: String) async throws -> [TMLocationInfo]
+    func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity]
     func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity
 }

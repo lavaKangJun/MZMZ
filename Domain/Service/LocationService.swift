@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 public protocol LocationServiceProtocol {
-    func getLocation() -> LocationInfo?
+    func getLocation() -> LocationInfoEntity?
 }
 
 public final class LocationService: NSObject, LocationServiceProtocol {
@@ -34,9 +34,9 @@ public final class LocationService: NSObject, LocationServiceProtocol {
         }
     }
     
-    public func getLocation() -> LocationInfo? {
+    public func getLocation() -> LocationInfoEntity? {
         guard let coordinate = locationManager.location?.coordinate else { return nil }
-        return LocationInfo(latitude: coordinate.latitude, longtitude: coordinate.longitude)
+        return LocationInfoEntity(latitude: coordinate.latitude, longtitude: coordinate.longitude)
     }
 }
 
