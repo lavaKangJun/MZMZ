@@ -25,7 +25,9 @@ final class DustListViewModel {
             do {
                 if let location = try await repository.formatTMCoordinate(locationInfo: location, key: authKey).last {
                     let msrstn = try await repository.fetchMsrstnList(tmX: location.x, tmY: location.y)
-                    print(msrstn)
+                    print("1", msrstn)
+                    let measureDust = try await repository.fetchMesureDnsty(stationName: msrstn.items.first?.stationName ?? "")
+                    print("2", measureDust)
                 }
             } catch {
                 print(error)

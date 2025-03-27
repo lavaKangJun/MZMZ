@@ -8,12 +8,12 @@
 import Foundation
 import Domain
 
-public struct AirKoreaResponse: Decodable {
-    public let response: AirKoreaBody
+public struct AirKoreaResponse<T: Decodable>: Decodable {
+    public let response: AirKoreaBody<T>
 }
 
-public struct AirKoreaBody: Decodable {
-    public let body: MsrstnList
+public struct AirKoreaBody<T: Decodable>: Decodable {
+    public let body: T
 }
 
 public struct MsrstnList: Decodable {

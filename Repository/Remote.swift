@@ -12,6 +12,7 @@ public enum Endpoint: String {
     case dustList = ""
     case tmLocation = "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json"
     case nearbyMsrstnList = "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList"
+    case msrstnAcctoRltmMesureDnsty = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty"
 }
 
 public enum RemoteAPIMethod {
@@ -65,9 +66,10 @@ public final class Remote: RemoteProtocol {
         
         let response = await dataTask.response
         let result = response.result
-        print(response)
         switch result {
         case let .success(data):
+            let json = try JSONSerialization.jsonObject(with: data)
+            print(json)
             let decodeResult = try JSONDecoder().decode(T.self, from: data)
             return decodeResult
         case let .failure(error):

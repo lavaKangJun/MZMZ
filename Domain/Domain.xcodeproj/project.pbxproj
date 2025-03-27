@@ -14,6 +14,7 @@
 		51E9C2762D8EF41200C49EE9 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2752D8EF41200C49EE9 /* LocationService.swift */; };
 		51E9C2782D9045C600C49EE9 /* TMLocationInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2772D9045C600C49EE9 /* TMLocationInfoEntity.swift */; };
 		51E9C27A2D904A6600C49EE9 /* MsrstnEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2792D904A6600C49EE9 /* MsrstnEntity.swift */; };
+		51E9C2822D95CEA900C49EE9 /* MesureDnsty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C2812D95CEA900C49EE9 /* MesureDnsty.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		51E9C2752D8EF41200C49EE9 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		51E9C2772D9045C600C49EE9 /* TMLocationInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMLocationInfoEntity.swift; sourceTree = "<group>"; };
 		51E9C2792D904A6600C49EE9 /* MsrstnEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsrstnEntity.swift; sourceTree = "<group>"; };
+		51E9C2812D95CEA900C49EE9 /* MesureDnsty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesureDnsty.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				51775D5B2D871A02000EFBA0 /* DustEntity.swift */,
 				51E9C2772D9045C600C49EE9 /* TMLocationInfoEntity.swift */,
 				51E9C2792D904A6600C49EE9 /* MsrstnEntity.swift */,
+				51E9C2812D95CEA900C49EE9 /* MesureDnsty.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 				51E9C27A2D904A6600C49EE9 /* MsrstnEntity.swift in Sources */,
 				51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */,
 				51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */,
+				51E9C2822D95CEA900C49EE9 /* MesureDnsty.swift in Sources */,
 				51E9C2762D8EF41200C49EE9 /* LocationService.swift in Sources */,
 				51E9C2782D9045C600C49EE9 /* TMLocationInfoEntity.swift in Sources */,
 				51775D472D8716A5000EFBA0 /* Repository.swift in Sources */,

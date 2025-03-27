@@ -28,7 +28,19 @@ public final class Repository: RepositoryProtocol {
         parameters["returnType"] = "json"
         parameters["ver"] = "1.1"
         
-        let result: AirKoreaResponse = try await self.remote.request(header: nil, endpoint: .nearbyMsrstnList, method: .get, parameters: parameters)
+        let result: AirKoreaResponse<MsrstnList> = try await self.remote.request(header: nil, endpoint: .nearbyMsrstnList, method: .get, parameters: parameters)
+        return result.response.body.makeEntity()
+    }
+    
+    public func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity {
+        var parameters: [String: Any] = [:]
+        parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
+        parameters["returnType"] = "json"
+        parameters["ver"] = "1.1"
+        parameters["stationName"] = stationName
+        parameters["dataTerm"] = "DAILY"
+        
+        let result: AirKoreaResponse<MesureDnstyList> = try await self.remote.request(header: nil, endpoint: .msrstnAcctoRltmMesureDnsty, method: .get, parameters: parameters)
         return result.response.body.makeEntity()
     }
     
