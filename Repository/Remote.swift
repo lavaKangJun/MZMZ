@@ -45,11 +45,9 @@ public protocol RemoteProtocol {
 }
 
 public final class Remote: RemoteProtocol {
-    private let session: Session = Session.default
+    private let session: Session = Session(serializationQueue: DispatchQueue(label: "Alamofire.serialization"))
     
-    public init() {
-        
-    }
+    public init() { }
     
     public func request<T: Decodable>(
         header: [String : String]?,
@@ -68,12 +66,9 @@ public final class Remote: RemoteProtocol {
         let result = response.result
         switch result {
         case let .success(data):
-            let json = try JSONSerialization.jsonObject(with: data)
-            print(json)
             let decodeResult = try JSONDecoder().decode(T.self, from: data)
             return decodeResult
         case let .failure(error):
-            print(endpoint, error)
             throw error
         }
     }

@@ -28,6 +28,6 @@ public struct TMLocationInfo: Decodable {
     }
     
     func makeEntity() -> TMLocationInfoEntity {
-        return TMLocationInfoEntity(regionType: regionType, x: x, y: y)
+        return TMLocationInfoEntity(x: x, y: y)
     }
 }

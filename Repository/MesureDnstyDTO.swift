@@ -17,8 +17,8 @@ public struct MesureDnstyList: Decodable {
         self.items = items
     }
     
-    func makeEntity() -> MesureDnstyListEntity {
-        return MesureDnstyListEntity(totalCount: totalCount, items: items.map { $0.makeEntity() })
+    func makeEntity(location: String) -> MesureDnstyListEntity {
+        return MesureDnstyListEntity(totalCount: totalCount, items: items.map { $0.makeEntity(location: location) })
     }
 }
 
@@ -61,8 +61,9 @@ public struct MesureDnsty: Decodable {
         self.no2Value = no2Value
     }
     
-    func makeEntity() -> MesureDnstyEntity {
+    func makeEntity(location: String) -> MesureDnstyEntity {
         return MesureDnstyEntity(
+            location: location,
             dataTime: dataTime,
             pm10Value: pm10Value,
             pm25Value: pm25Value,

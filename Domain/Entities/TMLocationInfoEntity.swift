@@ -9,12 +9,10 @@ import Foundation
 
 
 public struct TMLocationInfoEntity {
-    public let regionType: String
     public let x: Double
     public let y: Double
     
-    public init(regionType: String, x: Double, y: Double) {
-        self.regionType = regionType
+    public init(x: Double, y: Double) {
         self.x = x
         self.y = y
     }

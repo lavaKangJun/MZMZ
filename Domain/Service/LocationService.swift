@@ -14,12 +14,9 @@ public protocol LocationServiceProtocol {
 
 public final class LocationService: NSObject, LocationServiceProtocol {
     private let locationManager = CLLocationManager()
-    private let repository: RepositoryProtocol
     
-    public init(repository: RepositoryProtocol) {
-        self.repository = repository
+    public override init() {
         super.init()
-        
         setupInit()
     }
     

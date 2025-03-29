@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:DustListView/DustListView.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Testing/Testing.xcodeproj">
    </FileRef>
    <FileRef

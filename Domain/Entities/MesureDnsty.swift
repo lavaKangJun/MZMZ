@@ -18,6 +18,7 @@ public struct MesureDnstyListEntity {
 }
 
 public struct MesureDnstyEntity {
+    public let location: String
     public let dataTime: String
     public let pm10Value: String // 미세먼지 농도
     public let pm25Value: String //초미세먼지 농도
@@ -31,6 +32,7 @@ public struct MesureDnstyEntity {
     public let no2Value: String // 이산화질소
     
     public init(
+        location: String,
         dataTime: String,
         pm10Value: String,
         pm25Value: String,
@@ -43,6 +45,7 @@ public struct MesureDnstyEntity {
         o3Value: String,
         no2Value: String
     ) {
+        self.location = location
         self.dataTime = dataTime
         self.pm10Value = pm10Value
         self.pm25Value = pm25Value

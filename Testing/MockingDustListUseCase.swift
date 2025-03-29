@@ -1,21 +1,16 @@
 //
-//  DustListUseCase.swift
-//  Domain
+//  MockingDustListUseCase.swift
+//  Testing
 //
-//  Created by 강준영 on 2025/03/16.
+//  Created by 강준영 on 2025/03/29.
 //
 
 import Foundation
+import Domain
 
-public protocol DustListUseCaseProtocol {
-    func fetchLocation() async throws -> TMLocationInfoEntity?
-    func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
-}
-
-public final class DustListUseCase: DustListUseCaseProtocol {
+public final class MockingDustListUseCase: DustListUseCaseProtocol {
     private let repository: RepositoryProtocol
     private let locationService: LocationServiceProtocol
-    private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
     
     public init(repository: RepositoryProtocol, locationService: LocationServiceProtocol) {
         self.repository = repository
@@ -24,7 +19,7 @@ public final class DustListUseCase: DustListUseCaseProtocol {
     
     public func fetchLocation() async throws -> TMLocationInfoEntity? {
         guard let location = self.locationService.getLocation() else { return nil }
-        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
+        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: "authKey")
         return makeTMLocation.first
     }
     
