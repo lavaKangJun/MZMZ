@@ -23,8 +23,8 @@ public struct MesureDnstyEntity {
     public let pm25Value: String //초미세먼지 농도
     public let pm10Grade: String? // 미세먼지 24시간 등금
     public let pm25Grade: String? // 초미세먼지 24시간 등급
-//    public let pm10Grade1h: String? // 미세먼지 1시간 등급
-//    public let pm25Grade1h: String? // 초미세전지 1시간 등급
+    public let pm10Grade1h: String? // 미세먼지 1시간 등급
+    public let pm25Grade1h: String? // 초미세전지 1시간 등급
     public let so2Value: String // 아황산가스 농도
     public let coValue: String // 일산화탄소 농도
     public let o3Value: String // 오존 농도
@@ -36,8 +36,8 @@ public struct MesureDnstyEntity {
         pm25Value: String,
         pm10Grade: String?,
         pm25Grade: String?,
-//        pm10Grade1h: String?,
-//        pm25Grade1h: String?,
+        pm10Grade1h: String?,
+        pm25Grade1h: String?,
         so2Value: String,
         coValue: String,
         o3Value: String,
@@ -48,8 +48,8 @@ public struct MesureDnstyEntity {
         self.pm25Value = pm25Value
         self.pm10Grade = pm10Grade
         self.pm25Grade = pm25Grade
-//        self.pm10Grade1h = pm10Grade1h
-//        self.pm25Grade1h = pm25Grade1h
+        self.pm10Grade1h = pm10Grade1h
+        self.pm25Grade1h = pm25Grade1h
         self.so2Value = so2Value
         self.coValue = coValue
         self.o3Value = o3Value
