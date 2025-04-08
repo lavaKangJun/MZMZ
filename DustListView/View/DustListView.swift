@@ -10,29 +10,30 @@ import SwiftUI
 public struct DustListView: View {
     private let viewModel: DustListViewModel
     @State private var dustListModel: [DustListViewDataModel] = []
+    @State private var searchCity = ""
     
     public init(viewModel: DustListViewModel) {
         self.viewModel = viewModel
     }
     
     public var body: some View {
-        VStack {
-            Spacer()
-            
-            Text("미세먼지")
-                .font(Font.system(size: 30, weight: .bold))
-                .fontWeight(.bold)
-                
-            List(self.dustListModel) { dataModel in
-                listView(dataModel)
-                    .listRowSeparator(.hidden)
+        NavigationView {
+            ScrollView {
+                VStack {
+                    List(self.dustListModel) { dataModel in
+                        listView(dataModel)
+                            .listRowSeparator(.hidden)
+                    }
+                    .background(Color.yellow)
+                    .listStyle(.inset)
+                }
             }
-            .background(Color.yellow)
-            .listStyle(.inset)
-        }
-        .onReceive(viewModel.dustListStream) { dustList in
-            self.dustListModel = dustList
-            print(dustList)
+            .navigationTitle("미세먼지")
+            .searchable(text: $searchCity, prompt: "도시 검색")
+            .onReceive(viewModel.dustListStream) { dustList in
+                self.dustListModel = dustList
+                print(dustList)
+            }
         }
     }
     
