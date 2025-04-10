@@ -17,26 +17,19 @@ public struct DustListView: View {
     }
     
     public var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack {
-                    List(self.dustListModel) { dataModel in
-                        listView(dataModel)
-                            .listRowSeparator(.hidden)
-                    }
-                    .background(Color.yellow)
-                    .listStyle(.inset)
-                }
+        SearchNavigationWrapper(searchText: $searchCity) {
+            List(self.dustListModel) { dataModel in
+                listView(dataModel)
+                    .listRowSeparator(.hidden)
             }
-            .navigationTitle("미세먼지")
-            .searchable(text: $searchCity, prompt: "도시 검색")
-            .onReceive(viewModel.dustListStream) { dustList in
-                self.dustListModel = dustList
-                print(dustList)
-            }
+            .scrollContentBackground(.hidden)
+            .background(Color.white)
+        }
+        .onReceive(viewModel.dustListStream) { dustList in
+            self.dustListModel = dustList
         }
     }
-    
+
     public func listView(_ dataModel: DustListViewDataModel) -> some View {
         HStack(alignment: .top) {
             Text(dataModel.location)

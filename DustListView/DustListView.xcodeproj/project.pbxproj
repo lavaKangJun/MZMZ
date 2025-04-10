@@ -13,6 +13,7 @@
 		510952802D982F4D00951EE7 /* DustListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5109527F2D982F4D00951EE7 /* DustListViewModel.swift */; };
 		510952832D982F7F00951EE7 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510952822D982F7F00951EE7 /* Domain.framework */; };
 		510952842D982F7F00951EE7 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 510952822D982F7F00951EE7 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		518C4C002DA81DD1009792BB /* SearchNavigationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		5109527D2D982F3B00951EE7 /* DustListViewDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListViewDataModel.swift; sourceTree = "<group>"; };
 		5109527F2D982F4D00951EE7 /* DustListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustListViewModel.swift; sourceTree = "<group>"; };
 		510952822D982F7F00951EE7 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				5109527B2D982F1E00951EE7 /* DustListView.swift */,
 				5109527D2D982F3B00951EE7 /* DustListViewDataModel.swift */,
 				5109527F2D982F4D00951EE7 /* DustListViewModel.swift */,
+				518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				510952802D982F4D00951EE7 /* DustListViewModel.swift in Sources */,
 				5109527E2D982F3B00951EE7 /* DustListViewDataModel.swift in Sources */,
 				5109527C2D982F1E00951EE7 /* DustListView.swift in Sources */,
+				518C4C002DA81DD1009792BB /* SearchNavigationWrapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
