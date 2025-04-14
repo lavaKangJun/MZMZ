@@ -21,42 +21,61 @@ public struct DustListView: View {
             List(self.dustListModel) { dataModel in
                 listView(dataModel)
                     .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
             }
             .scrollContentBackground(.hidden)
-            .background(Color.white)
         }
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList
         }
     }
-
+    
     public func listView(_ dataModel: DustListViewDataModel) -> some View {
-        HStack(alignment: .top) {
-            Text(dataModel.location)
-                .font(.headline)
+        ZStack {
+            Color.clear
+                .background(
+                    Image("sunny", bundle: Bundle.current)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .clipped()
+                        .alignmentGuide(.top) { d in d[.top] }
+                )
+                .mask(RoundedRectangle(cornerRadius: 10))
             
-            HStack {
-                Text("미세먼지: ")
-                    .font(.title3)
-                Text(dataModel.dustGrade ?? "")
-                    .font(.body)
+            HStack(alignment: .top) {
+                Text(dataModel.location)
+                    .font(.headline)
+                
+                HStack {
+                    Text("미세먼지: ")
+                        .font(.title3)
+                    Text(dataModel.dustGrade ?? "")
+                        .font(.body)
+                }
+                
+                HStack {
+                    Text("초미세먼지: ")
+                        .font(.title3)
+                    Text(dataModel.microDustGrade ?? "")
+                        .font(.body)
+                }
+                
+                Spacer()
             }
-            
-            HStack {
-                Text("초미세먼지: ")
-                    .font(.title3)
-                Text(dataModel.microDustGrade ?? "")
-                    .font(.body)
-            }
-            
-            Spacer()
         }
         .frame(height: 80)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 10)
-        .background(Color.gray.opacity(0.5))
         .cornerRadius(10)
+        .clipped()
     }
 }
 
-
+class BundleFinder {}
+extension Bundle {
+    static var current: Bundle {
+        return Bundle(for: BundleFinder.self)
+    }
+}
