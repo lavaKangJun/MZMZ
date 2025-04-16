@@ -23,7 +23,24 @@
 		51775D582D871943000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D782D88595B000EFBA0 /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; };
 		51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		51D2B3102DAFF83900D3532C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D2B30F2DAFF83900D3532C /* WidgetKit.framework */; };
+		51D2B3122DAFF83900D3532C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D2B3112DAFF83900D3532C /* SwiftUI.framework */; };
+		51D2B3152DAFF83900D3532C /* MZMZWidzetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3142DAFF83900D3532C /* MZMZWidzetBundle.swift */; };
+		51D2B3172DAFF83900D3532C /* MZMZWidzetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3162DAFF83900D3532C /* MZMZWidzetLiveActivity.swift */; };
+		51D2B3192DAFF83900D3532C /* MZMZWidzet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3182DAFF83900D3532C /* MZMZWidzet.swift */; };
+		51D2B31B2DAFF83C00D3532C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51D2B31A2DAFF83C00D3532C /* Assets.xcassets */; };
+		51D2B31F2DAFF83C00D3532C /* MZMZWidzetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 51D2B30E2DAFF83900D3532C /* MZMZWidzetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		51D2B31D2DAFF83C00D3532C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 511F71B22D7C298000503E07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 51D2B30D2DAFF83900D3532C;
+			remoteInfo = MZMZWidzetExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		51775D552D871937000EFBA0 /* Embed Frameworks */ = {
@@ -38,6 +55,17 @@
 				51775D542D871936000EFBA0 /* Repository.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51D2B3202DAFF83C00D3532C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				51D2B31F2DAFF83C00D3532C /* MZMZWidzetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -57,6 +85,14 @@
 		51775D522D871936000EFBA0 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D562D871943000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D772D88595B000EFBA0 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		51D2B30E2DAFF83900D3532C /* MZMZWidzetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MZMZWidzetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		51D2B30F2DAFF83900D3532C /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		51D2B3112DAFF83900D3532C /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		51D2B3142DAFF83900D3532C /* MZMZWidzetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MZMZWidzetBundle.swift; sourceTree = "<group>"; };
+		51D2B3162DAFF83900D3532C /* MZMZWidzetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MZMZWidzetLiveActivity.swift; sourceTree = "<group>"; };
+		51D2B3182DAFF83900D3532C /* MZMZWidzet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MZMZWidzet.swift; sourceTree = "<group>"; };
+		51D2B31A2DAFF83C00D3532C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		51D2B31C2DAFF83C00D3532C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +107,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51D2B30B2DAFF83900D3532C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51D2B3122DAFF83900D3532C /* SwiftUI.framework in Frameworks */,
+				51D2B3102DAFF83900D3532C /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -79,6 +124,7 @@
 			children = (
 				51775D7C2D885E9C000EFBA0 /* DustList */,
 				511F71BC2D7C298000503E07 /* MZMZ */,
+				51D2B3132DAFF83900D3532C /* MZMZWidzet */,
 				511F71BB2D7C298000503E07 /* Products */,
 				51775D512D87192D000EFBA0 /* Frameworks */,
 			);
@@ -88,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				511F71BA2D7C298000503E07 /* MZMZ.app */,
+				51D2B30E2DAFF83900D3532C /* MZMZWidzetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,6 +162,8 @@
 				51775D772D88595B000EFBA0 /* Testing.framework */,
 				51775D562D871943000EFBA0 /* Domain.framework */,
 				51775D522D871936000EFBA0 /* Repository.framework */,
+				51D2B30F2DAFF83900D3532C /* WidgetKit.framework */,
+				51D2B3112DAFF83900D3532C /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -124,6 +173,18 @@
 			children = (
 			);
 			path = DustList;
+			sourceTree = "<group>";
+		};
+		51D2B3132DAFF83900D3532C /* MZMZWidzet */ = {
+			isa = PBXGroup;
+			children = (
+				51D2B3142DAFF83900D3532C /* MZMZWidzetBundle.swift */,
+				51D2B3162DAFF83900D3532C /* MZMZWidzetLiveActivity.swift */,
+				51D2B3182DAFF83900D3532C /* MZMZWidzet.swift */,
+				51D2B31A2DAFF83C00D3532C /* Assets.xcassets */,
+				51D2B31C2DAFF83C00D3532C /* Info.plist */,
+			);
+			path = MZMZWidzet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,15 +198,34 @@
 				511F71B72D7C298000503E07 /* Frameworks */,
 				511F71B82D7C298000503E07 /* Resources */,
 				51775D552D871937000EFBA0 /* Embed Frameworks */,
+				51D2B3202DAFF83C00D3532C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				51D2B31E2DAFF83C00D3532C /* PBXTargetDependency */,
 			);
 			name = MZMZ;
 			productName = MZMZ;
 			productReference = 511F71BA2D7C298000503E07 /* MZMZ.app */;
 			productType = "com.apple.product-type.application";
+		};
+		51D2B30D2DAFF83900D3532C /* MZMZWidzetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 51D2B3232DAFF83C00D3532C /* Build configuration list for PBXNativeTarget "MZMZWidzetExtension" */;
+			buildPhases = (
+				51D2B30A2DAFF83900D3532C /* Sources */,
+				51D2B30B2DAFF83900D3532C /* Frameworks */,
+				51D2B30C2DAFF83900D3532C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MZMZWidzetExtension;
+			productName = MZMZWidzetExtension;
+			productReference = 51D2B30E2DAFF83900D3532C /* MZMZWidzetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -158,6 +238,9 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					511F71B92D7C298000503E07 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					51D2B30D2DAFF83900D3532C = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -176,6 +259,7 @@
 			projectRoot = "";
 			targets = (
 				511F71B92D7C298000503E07 /* MZMZ */,
+				51D2B30D2DAFF83900D3532C /* MZMZWidzetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -187,6 +271,14 @@
 			files = (
 				511F71CA2D7C298500503E07 /* LaunchScreen.storyboard in Resources */,
 				511F71C72D7C298500503E07 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		51D2B30C2DAFF83900D3532C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51D2B31B2DAFF83C00D3532C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,7 +298,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51D2B30A2DAFF83900D3532C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51D2B3152DAFF83900D3532C /* MZMZWidzetBundle.swift in Sources */,
+				51D2B3192DAFF83900D3532C /* MZMZWidzet.swift in Sources */,
+				51D2B3172DAFF83900D3532C /* MZMZWidzetLiveActivity.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		51D2B31E2DAFF83C00D3532C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 51D2B30D2DAFF83900D3532C /* MZMZWidzetExtension */;
+			targetProxy = 51D2B31D2DAFF83C00D3532C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		511F71C82D7C298500503E07 /* LaunchScreen.storyboard */ = {
@@ -342,6 +452,7 @@
 		511F71CF2D7C298500503E07 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -369,6 +480,7 @@
 		511F71D02D7C298500503E07 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -393,6 +505,60 @@
 			};
 			name = Release;
 		};
+		51D2B3212DAFF83C00D3532C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KPUSDZ4348;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MZMZWidzet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MZMZWidzet;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ.MZMZWidzet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		51D2B3222DAFF83C00D3532C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = KPUSDZ4348;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MZMZWidzet/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MZMZWidzet;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ.MZMZWidzet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -410,6 +576,15 @@
 			buildConfigurations = (
 				511F71CF2D7C298500503E07 /* Debug */,
 				511F71D02D7C298500503E07 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		51D2B3232DAFF83C00D3532C /* Build configuration list for PBXNativeTarget "MZMZWidzetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				51D2B3212DAFF83C00D3532C /* Debug */,
+				51D2B3222DAFF83C00D3532C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
