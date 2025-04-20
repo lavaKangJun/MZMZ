@@ -15,6 +15,7 @@
 		510952842D982F7F00951EE7 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 510952822D982F7F00951EE7 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		518C4C002DA81DD1009792BB /* SearchNavigationWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */; };
 		51BB1F522DAD50B1005993C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51BB1F512DAD50B1005993C6 /* Assets.xcassets */; };
+		51D2B3252DAFFEBE00D3532C /* AddCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3242DAFFEBE00D3532C /* AddCityView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,7 @@
 		510952822D982F7F00951EE7 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNavigationWrapper.swift; sourceTree = "<group>"; };
 		51BB1F512DAD50B1005993C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		51D2B3242DAFFEBE00D3532C /* AddCityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				5109527D2D982F3B00951EE7 /* DustListViewDataModel.swift */,
 				5109527F2D982F4D00951EE7 /* DustListViewModel.swift */,
 				518C4BFF2DA81DD1009792BB /* SearchNavigationWrapper.swift */,
+				51D2B3242DAFFEBE00D3532C /* AddCityView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51D2B3252DAFFEBE00D3532C /* AddCityView.swift in Sources */,
 				510952802D982F4D00951EE7 /* DustListViewModel.swift in Sources */,
 				5109527E2D982F3B00951EE7 /* DustListViewDataModel.swift in Sources */,
 				5109527C2D982F1E00951EE7 /* DustListView.swift in Sources */,

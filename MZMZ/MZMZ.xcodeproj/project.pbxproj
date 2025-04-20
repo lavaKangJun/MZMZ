@@ -122,7 +122,6 @@
 		511F71B12D7C298000503E07 = {
 			isa = PBXGroup;
 			children = (
-				51775D7C2D885E9C000EFBA0 /* DustList */,
 				511F71BC2D7C298000503E07 /* MZMZ */,
 				51D2B3132DAFF83900D3532C /* MZMZWidzet */,
 				511F71BB2D7C298000503E07 /* Products */,
@@ -166,13 +165,6 @@
 				51D2B3112DAFF83900D3532C /* SwiftUI.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		51775D7C2D885E9C000EFBA0 /* DustList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DustList;
 			sourceTree = "<group>";
 		};
 		51D2B3132DAFF83900D3532C /* MZMZWidzet */ = {

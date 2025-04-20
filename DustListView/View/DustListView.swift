@@ -18,13 +18,27 @@ public struct DustListView: View {
     
     public var body: some View {
         SearchNavigationWrapper(searchText: $searchCity) {
-            List(self.dustListModel) { dataModel in
-                listView(dataModel)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
+            Group {
+                List(self.dustListModel) { dataModel in
+                    listView(dataModel)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                }
+                .scrollContentBackground(.hidden)
+                
+                Spacer()
+                
+                Image(systemName: "plus.circle")
+                    .imageScale(.large)
+                    .font(.largeTitle)
+                    .onTapGesture {
+                        print("Tap하고 도시 추가 플로우 태우기")
+                    }
+                
+                Spacer()
+                    .frame(height: 40)
             }
-            .scrollContentBackground(.hidden)
         }
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList

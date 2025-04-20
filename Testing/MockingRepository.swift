@@ -27,7 +27,7 @@ public final class MockingRepository: RepositoryProtocol {
         }
     
     public func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity] {
-        return [TMLocationInfoEntity(  x: 210720.00702229378, y: 448432.0990017229)]
+        return [TMLocationInfoEntity(x: 210720.00702229378, y: 448432.0990017229)]
     }
     
     public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
