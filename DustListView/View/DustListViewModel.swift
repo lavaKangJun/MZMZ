@@ -5,7 +5,7 @@
 //  Created by 강준영 on 2025/03/29.
 //
 
-import Foundation
+import UIKit
 import Combine
 import Domain
 
@@ -15,12 +15,17 @@ public final class DustListViewModel {
     private let repository: RepositoryProtocol
     private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
     private let dustListSubject = CurrentValueSubject<[DustListViewDataModel], Never>([])
+    public var router: DustListRouting?
     
     public var dustListStream: AnyPublisher<[DustListViewDataModel], Never> {
         return self.dustListSubject.eraseToAnyPublisher()
     }
     
-    public init(repository: RepositoryProtocol, locationService: LocationServiceProtocol, usecase: DustListUseCaseProtocol) {
+    public init(
+        repository: RepositoryProtocol,
+        locationService: LocationServiceProtocol,
+        usecase: DustListUseCaseProtocol
+    ) {
         self.locationService = locationService
         self.usecase = usecase
         self.repository = repository
@@ -38,5 +43,9 @@ public final class DustListViewModel {
                 print(error)
             }
         }
+    }
+    
+    public func routeToFindLocation() {
+        self.router?.routeToFindLocation()
     }
 }

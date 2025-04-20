@@ -33,7 +33,7 @@ public struct DustListView: View {
                     .imageScale(.large)
                     .font(.largeTitle)
                     .onTapGesture {
-                        print("Tap하고 도시 추가 플로우 태우기")
+                        viewModel.routeToFindLocation()
                     }
                 
                 Spacer()
