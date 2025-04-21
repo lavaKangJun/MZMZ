@@ -15,30 +15,13 @@ import AddCity
 import Scene
 
 final class MainSceneBuilder {
+    private let dustListSceneBuilder: DustListSceneBuilder
+    
+    init(dustListSceneBuilder: DustListSceneBuilder) {
+        self.dustListSceneBuilder = dustListSceneBuilder
+    }
+    
     func makeMainScene() -> UIViewController {
-        let isTesting = true
-        if isTesting {
-            let repository = MockingRepository()
-            let locationService = MockingLocationService()
-            let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
-            let router = DustListRouter(addCitySceneBuilder: AddCitySceneBuilderImp())
-            let viewModel = DustListViewModel(repository: repository, locationService: locationService, usecase: useCase)
-            let listView = DustListView(viewModel: viewModel)
-            let viewControlelr = UIHostingController(rootView: listView)
-            router.scene = viewControlelr
-            
-            viewModel.router = router
-            return viewControlelr
-        } else {
-            let repository = Repository(remote: Remote())
-            let locationService = LocationService()
-            let useCase = DustListUseCase(repository: repository, locationService: locationService)
-            let router = DustListRouter(addCitySceneBuilder: AddCitySceneBuilderImp())
-            let viewModel = DustListViewModel(repository: repository, locationService: locationService, usecase: useCase)
-            let listView = DustListView(viewModel: viewModel)
-            let viewControlelr = UIHostingController(rootView: listView)
-            router.scene = viewControlelr 
-            return viewControlelr
-        }
+        return self.dustListSceneBuilder.makeDustListScene()
     }
 }

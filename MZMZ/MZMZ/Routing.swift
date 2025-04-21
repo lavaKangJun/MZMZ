@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Scene
+import DustListView
+import AddCity
 
 public protocol Routing {
     func showError()
@@ -26,9 +29,17 @@ final class ApplicationRouter: ApplicationRouting, @unchecked Sendable {
     func closeScene() { }
     
     func setupInitScene() { 
-        let builder = MainSceneBuilder()
+        let builder = MainSceneBuilder(dustListSceneBuilder: self.dustListSceneBuilder())
         
         self.window.rootViewController = builder.makeMainScene()
         self.window.makeKeyAndVisible()
+    }
+    
+    private func dustListSceneBuilder() -> DustListSceneBuilder {
+        return DustListSceneBuilderImp(addCitySceneBuilder: self.addCitySceneBuilder())
+    }
+    
+    private func addCitySceneBuilder() -> AddCitySceneBuilder {
+        return AddCitySceneBuilderImp()
     }
 }

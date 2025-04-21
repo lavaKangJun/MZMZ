@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 import Scene
 
-public final class AddCitySceneBuilderImp: AddCitySceneBuilder  {
+public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
     public init() { }
     
     public func makeAddCityScene() -> UIViewController {
