@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		512AD0012DB931430094A914 /* AddCityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512AD0002DB931430094A914 /* AddCityViewModel.swift */; };
+		512AD0032DB932220094A914 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0022DB932220094A914 /* Domain.framework */; };
+		512AD0042DB932220094A914 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0022DB932220094A914 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D2B34E2DB54D5700D3532C /* AddCity.h in Headers */ = {isa = PBXBuildFile; fileRef = 51D2B34D2DB54D5700D3532C /* AddCity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51D2B3552DB54D7000D3532C /* AddCitySceneBuilderImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3542DB54D7000D3532C /* AddCitySceneBuilderImp.swift */; };
 		51D2B3572DB54DAB00D3532C /* AddCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3562DB54DAB00D3532C /* AddCityView.swift */; };
@@ -21,6 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				512AD0042DB932220094A914 /* Domain.framework in Embed Frameworks */,
 				51D2B35B2DB54DC100D3532C /* Scene.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -29,6 +33,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		512AD0002DB931430094A914 /* AddCityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityViewModel.swift; sourceTree = "<group>"; };
+		512AD0022DB932220094A914 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51D2B34A2DB54D5700D3532C /* AddCity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AddCity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51D2B34D2DB54D5700D3532C /* AddCity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddCity.h; sourceTree = "<group>"; };
 		51D2B3542DB54D7000D3532C /* AddCitySceneBuilderImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCitySceneBuilderImp.swift; sourceTree = "<group>"; };
@@ -41,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				512AD0032DB932220094A914 /* Domain.framework in Frameworks */,
 				51D2B35A2DB54DC100D3532C /* Scene.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,6 +78,7 @@
 				51D2B34D2DB54D5700D3532C /* AddCity.h */,
 				51D2B3542DB54D7000D3532C /* AddCitySceneBuilderImp.swift */,
 				51D2B3562DB54DAB00D3532C /* AddCityView.swift */,
+				512AD0002DB931430094A914 /* AddCityViewModel.swift */,
 			);
 			path = AddCity;
 			sourceTree = "<group>";
@@ -78,6 +86,7 @@
 		51D2B3582DB54DC100D3532C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				512AD0022DB932220094A914 /* Domain.framework */,
 				51D2B3592DB54DC100D3532C /* Scene.framework */,
 			);
 			name = Frameworks;
@@ -166,6 +175,7 @@
 			files = (
 				51D2B3552DB54D7000D3532C /* AddCitySceneBuilderImp.swift in Sources */,
 				51D2B3572DB54DAB00D3532C /* AddCityView.swift in Sources */,
+				512AD0012DB931430094A914 /* AddCityViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

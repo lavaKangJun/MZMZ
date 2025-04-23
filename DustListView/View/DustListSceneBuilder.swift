@@ -21,17 +21,16 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
     }
     
     public func makeDustListScene() -> UIViewController {
-        let isTesting = true
+        let isTesting = false
         if isTesting {
             let repository = MockingRepository()
             let locationService = MockingLocationService()
             let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)
-            let viewModel = DustListViewModel(repository: repository, locationService: locationService, usecase: useCase)
+            let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)
             router.scene = viewControlelr
-            
             viewModel.router = router
             return viewControlelr
         } else {
@@ -39,10 +38,11 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
             let locationService = LocationService()
             let useCase = DustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)
-            let viewModel = DustListViewModel(repository: repository, locationService: locationService, usecase: useCase)
+            let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)
             router.scene = viewControlelr
+            viewModel.router = router
             return viewControlelr
         }
     }

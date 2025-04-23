@@ -12,7 +12,6 @@ import Domain
 public final class DustListViewModel {
     private let locationService: LocationServiceProtocol
     private let usecase: DustListUseCaseProtocol
-    private let repository: RepositoryProtocol
     private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
     private let dustListSubject = CurrentValueSubject<[DustListViewDataModel], Never>([])
     public var router: DustListRouting?
@@ -22,13 +21,11 @@ public final class DustListViewModel {
     }
     
     public init(
-        repository: RepositoryProtocol,
         locationService: LocationServiceProtocol,
         usecase: DustListUseCaseProtocol
     ) {
         self.locationService = locationService
         self.usecase = usecase
-        self.repository = repository
         
         fetchDust()
     }
@@ -38,7 +35,9 @@ public final class DustListViewModel {
             do {
                 guard let location = try await self.usecase.fetchLocation() else { return }
                 guard let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return }
-                self.dustListSubject.send([DustListViewDataModel(mesureDnsty)])
+                await MainActor.run {
+                    self.dustListSubject.send([DustListViewDataModel(mesureDnsty)])
+                }
             } catch {
                 print(error)
             }

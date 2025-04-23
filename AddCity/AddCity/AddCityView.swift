@@ -10,6 +10,11 @@ import SwiftUI
 public struct AddCityView: View {
     @State private var textedCity: String = ""
     @FocusState private var isSearchFocus: Bool
+    private let viewModel: AddCityViewModel
+    
+    init(viewModel: AddCityViewModel) {
+        self.viewModel = viewModel
+    }
     
     public var body: some View {
         ZStack {
@@ -33,12 +38,17 @@ public struct AddCityView: View {
                         .cornerRadius(8)
                     
                     Button("Cancel") {
-                        
+                        textedCity = ""
                     }
                 }
                 .padding(20)
                 
                 Spacer()
+            }
+            .onChange(of: textedCity) { oldValue, newValue in
+                if oldValue != newValue {
+                    viewModel.searchText(newValue)
+                }
             }
         }
     }
