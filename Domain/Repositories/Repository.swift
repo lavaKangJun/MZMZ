@@ -12,4 +12,5 @@ public protocol RepositoryProtocol {
     func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity]
     func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity
     func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity
+    func findLocation(location: String, key: String) async throws -> [SearchLocationEntity]
 }

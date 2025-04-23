@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		512ACFFB2DB927340094A914 /* SearchLocationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512ACFFA2DB927340094A914 /* SearchLocationDTO.swift */; };
 		51775D2A2D87146C000EFBA0 /* Repository.h in Headers */ = {isa = PBXBuildFile; fileRef = 51775D292D87146C000EFBA0 /* Repository.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51775D492D8717A0000EFBA0 /* RepositoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D482D8717A0000EFBA0 /* RepositoryImp.swift */; };
 		51775D4C2D8717B1000EFBA0 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D4B2D8717B1000EFBA0 /* Domain.framework */; };
@@ -33,6 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		512ACFFA2DB927340094A914 /* SearchLocationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationDTO.swift; sourceTree = "<group>"; };
 		51775D262D87146C000EFBA0 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D292D87146C000EFBA0 /* Repository.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Repository.h; sourceTree = "<group>"; };
 		51775D482D8717A0000EFBA0 /* RepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryImp.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 		51775D1C2D87146C000EFBA0 = {
 			isa = PBXGroup;
 			children = (
+				512ACFFA2DB927340094A914 /* SearchLocationDTO.swift */,
 				51E9C27F2D95CA6600C49EE9 /* MesureDnstyDTO.swift */,
 				51E9C27D2D91845200C49EE9 /* TMLocatioDTO.swift */,
 				51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */,
@@ -185,6 +188,7 @@
 				51E9C27E2D91845200C49EE9 /* TMLocatioDTO.swift in Sources */,
 				51E9C27C2D91839100C49EE9 /* MsrstnListDTO.swift in Sources */,
 				51775D492D8717A0000EFBA0 /* RepositoryImp.swift in Sources */,
+				512ACFFB2DB927340094A914 /* SearchLocationDTO.swift in Sources */,
 				51775D832D885FC6000EFBA0 /* Remote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

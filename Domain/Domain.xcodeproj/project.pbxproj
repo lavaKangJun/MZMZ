@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		512ACFFD2DB92C880094A914 /* SearchLocationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512ACFFC2DB92C880094A914 /* SearchLocationEntity.swift */; };
+		512ACFFF2DB92EE90094A914 /* FindLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512ACFFE2DB92EE90094A914 /* FindLocationUseCase.swift */; };
 		51775D3E2D871483000EFBA0 /* Domain.h in Headers */ = {isa = PBXBuildFile; fileRef = 51775D3D2D871483000EFBA0 /* Domain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51775D472D8716A5000EFBA0 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D462D8716A5000EFBA0 /* Repository.swift */; };
 		51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D5B2D871A02000EFBA0 /* DustEntity.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		512ACFFC2DB92C880094A914 /* SearchLocationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationEntity.swift; sourceTree = "<group>"; };
+		512ACFFE2DB92EE90094A914 /* FindLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLocationUseCase.swift; sourceTree = "<group>"; };
 		51775D3A2D871483000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D3D2D871483000EFBA0 /* Domain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Domain.h; sourceTree = "<group>"; };
 		51775D462D8716A5000EFBA0 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
@@ -80,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				51775D5D2D871AE5000EFBA0 /* DustListUseCase.swift */,
+				512ACFFE2DB92EE90094A914 /* FindLocationUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -91,6 +96,7 @@
 				51E9C2772D9045C600C49EE9 /* TMLocationInfoEntity.swift */,
 				51E9C2792D904A6600C49EE9 /* MsrstnEntity.swift */,
 				51E9C2812D95CEA900C49EE9 /* MesureDnsty.swift */,
+				512ACFFC2DB92C880094A914 /* SearchLocationEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -184,7 +190,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				51E9C27A2D904A6600C49EE9 /* MsrstnEntity.swift in Sources */,
+				512ACFFD2DB92C880094A914 /* SearchLocationEntity.swift in Sources */,
 				51775D5E2D871AE5000EFBA0 /* DustListUseCase.swift in Sources */,
+				512ACFFF2DB92EE90094A914 /* FindLocationUseCase.swift in Sources */,
 				51775D5C2D871A02000EFBA0 /* DustEntity.swift in Sources */,
 				51E9C2822D95CEA900C49EE9 /* MesureDnsty.swift in Sources */,
 				51E9C2762D8EF41200C49EE9 /* LocationService.swift in Sources */,

@@ -11,6 +11,12 @@ import Domain
 public final class MockingRepository: RepositoryProtocol {
     public init () { }
     
+    public func findLocation(location: String, key: String) async throws -> [SearchLocationEntity] {
+        return [
+            SearchLocationEntity(addressName: "풍납동", longitude: "210720.00702229378", latitude: "448432.0990017229")
+        ]
+    }
+    
     public func fetchDust() -> [DustEntity] {
         return [
             DustEntity(

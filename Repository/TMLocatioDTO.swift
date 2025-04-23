@@ -7,8 +7,8 @@
 
 import Foundation
 import Domain
-public struct TMLocationDocument: Decodable {
-    public let documents: [TMLocationInfo]
+public struct KakaoResponse<T: Decodable>: Decodable {
+    public let documents: [T]
 }
 
 public struct TMLocationInfo: Decodable {

@@ -28,7 +28,7 @@ public final class Repository: RepositoryProtocol {
         parameters["y"] = "\(locationInfo.latitude)"
         parameters["output_coord"] = "TM"
         
-        let result: TMLocationDocument = try await self.remote.request(header: header, endpoint: .tmLocation, method: .get, parameters: parameters)
+        let result: KakaoResponse<TMLocationInfo> = try await self.remote.request(header: header, endpoint: .tmLocation, method: .get, parameters: parameters)
         return result.documents.map { $0.makeEntity() }
     }
     
@@ -54,5 +54,18 @@ public final class Repository: RepositoryProtocol {
         
         let result: AirKoreaResponse<MesureDnstyList> = try await self.remote.request(header: nil, endpoint: .msrstnAcctoRltmMesureDnsty, method: .get, parameters: parameters)
         return result.response.body.makeEntity(location: stationName)
+    }
+    
+    public func findLocation(location: String, key: String) async throws -> [SearchLocationEntity] {
+        var header = ["Authorization": "KakaoAK \(key)"]
+        header["content-type"] = "application/json"
+        
+        var parameters: [String: Any] = [:]
+        parameters["analyze_type"] = "similar"
+        parameters["query"] = location
+        parameters["size"] = 5
+  
+        let result: KakaoResponse<SearchLocationDTO> = try await self.remote.request(header: header, endpoint: .findLocation, method: .get, parameters: parameters)
+        return result.documents.map { $0.makeEntity() }
     }
 }
