@@ -10,10 +10,10 @@ import SwiftUI
 public struct AddCityView: View {
     @State private var textedCity: String = ""
     @FocusState private var isSearchFocus: Bool
-    private let viewModel: AddCityViewModel
+    @StateObject private var viewModel: AddCityViewModel
     
     init(viewModel: AddCityViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     public var body: some View {
@@ -28,25 +28,34 @@ public struct AddCityView: View {
             VStack {
                 Spacer()
                     .frame(height: 20)
-                
                 HStack {
-                    TextField("도시 검색", text: $textedCity)
-                        .focused($isSearchFocus)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(8)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        
+                        TextField("도시 검색", text: $textedCity)
+                            .focused($isSearchFocus)
+                            .textFieldStyle(PlainTextFieldStyle())
+                    }
+                    .padding(10)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
                     
                     Button("Cancel") {
                         textedCity = ""
+                        viewModel.clearSearch()
                     }
                 }
-                .padding(20)
+                .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
                 
-                Spacer()
+                List(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
+                    Text(cellViewModel.name)
+                        .listRowSeparator(.hidden)
+                }
+                .listStyle(.plain)
             }
             .onChange(of: textedCity) { oldValue, newValue in
-                if oldValue != newValue {
+                if newValue.isEmpty == false, oldValue != newValue {
                     viewModel.searchText(newValue)
                 }
             }

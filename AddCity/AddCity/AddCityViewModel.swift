@@ -9,23 +9,43 @@ import Foundation
 import Combine
 import Domain
 
+public struct CityPresentable {
+    public let name: String
+    public let longitude: String
+    public let latitude: String
+    
+    init(_ entity: SearchLocationEntity) {
+        self.name = entity.addressName
+        self.longitude = entity.longitude
+        self.latitude = entity.latitude
+    }
+}
+
 public final class AddCityViewModel: ObservableObject {
     private let useCase: FindLocationUseCaseProtocol
-    private let locationResult = CurrentValueSubject<[String], Never>([])
-
+    private let locationResult = CurrentValueSubject<[SearchLocationEntity], Never>([])
+    
+    @Published public var cityCellViewModel: [CityPresentable] = []
+    
     init(useCase: FindLocationUseCaseProtocol) {
         self.useCase = useCase
+        
+        self.locationResult
+            .print("locationResult")
+            .map{ $0.map{ CityPresentable($0) }}
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$cityCellViewModel)
     }
-    
-    var locations: AnyPublisher<[String], Never> {
-        return self.locationResult.removeDuplicates().eraseToAnyPublisher()
-    }
-    
+
     func searchText(_ text: String) {
+        guard text.isEmpty == false else { return }
         Task {
             let location = try await useCase.findLocation(location: text)
-            print(location)
-            self.locationResult.send(location.map({ $0.addressName }))
+            self.locationResult.send(location)
         }
+    }
+    
+    func clearSearch() {
+        self.locationResult.send([])
     }
 }
