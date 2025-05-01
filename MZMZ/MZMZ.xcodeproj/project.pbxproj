@@ -17,6 +17,8 @@
 		511F71D42D7C310700503E07 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71D32D7C310700503E07 /* Routing.swift */; };
 		511F71D62D7C317400503E07 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71D52D7C317400503E07 /* Builder.swift */; };
 		511F71D82D7C318A00503E07 /* ApplicationRootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 511F71D72D7C318A00503E07 /* ApplicationRootViewModel.swift */; };
+		512AD0272DC3A03D0094A914 /* CityDetail.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0262DC3A03D0094A914 /* CityDetail.framework */; };
+		512AD0282DC3A03D0094A914 /* CityDetail.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0262DC3A03D0094A914 /* CityDetail.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D532D871936000EFBA0 /* Repository.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D522D871936000EFBA0 /* Repository.framework */; };
 		51775D542D871936000EFBA0 /* Repository.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D522D871936000EFBA0 /* Repository.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D572D871943000EFBA0 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; };
@@ -55,6 +57,7 @@
 			files = (
 				51775D582D871943000EFBA0 /* Domain.framework in Embed Frameworks */,
 				51D2B3612DB54E5C00D3532C /* AddCity.framework in Embed Frameworks */,
+				512AD0282DC3A03D0094A914 /* CityDetail.framework in Embed Frameworks */,
 				510952882D98301C00951EE7 /* DustListView.framework in Embed Frameworks */,
 				51D2B3662DB550E400D3532C /* Scene.framework in Embed Frameworks */,
 				51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */,
@@ -88,6 +91,7 @@
 		511F71D32D7C310700503E07 /* Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		511F71D52D7C317400503E07 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		511F71D72D7C318A00503E07 /* ApplicationRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRootViewModel.swift; sourceTree = "<group>"; };
+		512AD0262DC3A03D0094A914 /* CityDetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CityDetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D522D871936000EFBA0 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D562D871943000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D772D88595B000EFBA0 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +114,7 @@
 			files = (
 				51775D572D871943000EFBA0 /* Domain.framework in Frameworks */,
 				51D2B3602DB54E5C00D3532C /* AddCity.framework in Frameworks */,
+				512AD0272DC3A03D0094A914 /* CityDetail.framework in Frameworks */,
 				510952872D98301C00951EE7 /* DustListView.framework in Frameworks */,
 				51D2B3652DB550E400D3532C /* Scene.framework in Frameworks */,
 				51775D782D88595B000EFBA0 /* Testing.framework in Frameworks */,
@@ -167,6 +172,7 @@
 		51775D512D87192D000EFBA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				512AD0262DC3A03D0094A914 /* CityDetail.framework */,
 				51D2B3642DB550E400D3532C /* Scene.framework */,
 				51D2B35F2DB54E5C00D3532C /* AddCity.framework */,
 				510952862D98301C00951EE7 /* DustListView.framework */,

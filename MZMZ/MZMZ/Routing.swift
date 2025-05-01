@@ -9,6 +9,7 @@ import UIKit
 import Scene
 import DustListView
 import AddCity
+import CityDetail
 
 public protocol Routing {
     func showError()
@@ -40,6 +41,10 @@ final class ApplicationRouter: ApplicationRouting, @unchecked Sendable {
     }
     
     private func addCitySceneBuilder() -> AddCitySceneBuilder {
-        return AddCitySceneBuilderImp()
+        return AddCitySceneBuilderImp(detailCitySceneBuilder: self.detailCitySceneBuilder())
+    }
+    
+    private func detailCitySceneBuilder() -> CityDetailSceneBuilder {
+        return CityDetailSceneBuilderImp()
     }
 }

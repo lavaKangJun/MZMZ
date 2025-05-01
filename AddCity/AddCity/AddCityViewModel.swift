@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import Domain
+import Scene
 
 public struct CityPresentable {
     public let name: String
@@ -24,8 +25,8 @@ public struct CityPresentable {
 public final class AddCityViewModel: ObservableObject {
     private let useCase: FindLocationUseCaseProtocol
     private let locationResult = CurrentValueSubject<[SearchLocationEntity], Never>([])
-    
     @Published public var cityCellViewModel: [CityPresentable] = []
+    public var router: AddCityRouter?
     
     init(useCase: FindLocationUseCaseProtocol) {
         self.useCase = useCase
@@ -47,5 +48,9 @@ public final class AddCityViewModel: ObservableObject {
     
     func clearSearch() {
         self.locationResult.send([])
+    }
+    
+    func routeToCityDetail(_ dependency: CityDetailDependency) {
+        self.router?.routeToCityDetail(dependency: dependency)
     }
 }

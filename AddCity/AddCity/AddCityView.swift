@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Scene
 
 public struct AddCityView: View {
     @State private var textedCity: String = ""
@@ -51,6 +52,14 @@ public struct AddCityView: View {
                 List(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
                     Text(cellViewModel.name)
                         .listRowSeparator(.hidden)
+                        .onTapGesture {
+                            let dependecvy = CityDetailDependency(
+                                name: cellViewModel.name,
+                                longitude: cellViewModel.longitude,
+                                latitude: cellViewModel.latitude
+                            )
+                            viewModel.routeToCityDetail(dependecvy)
+                        }
                 }
                 .listStyle(.plain)
             }
