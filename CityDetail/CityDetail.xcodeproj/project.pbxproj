@@ -13,6 +13,8 @@
 		512AD01F2DC384A70094A914 /* Scene.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD01E2DC384A70094A914 /* Scene.framework */; };
 		512AD0202DC384A70094A914 /* Scene.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD01E2DC384A70094A914 /* Scene.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		512AD0232DC385110094A914 /* CityDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512AD0222DC385110094A914 /* CityDetailViewModel.swift */; };
+		512AD02C2DC8C7BE0094A914 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD02B2DC8C7BE0094A914 /* Domain.framework */; };
+		512AD02D2DC8C7BE0094A914 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD02B2DC8C7BE0094A914 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,6 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				512AD02D2DC8C7BE0094A914 /* Domain.framework in Embed Frameworks */,
 				512AD0202DC384A70094A914 /* Scene.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -36,6 +39,7 @@
 		512AD01B2DC384410094A914 /* CityDetailSceneBuilderImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDetailSceneBuilderImp.swift; sourceTree = "<group>"; };
 		512AD01E2DC384A70094A914 /* Scene.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Scene.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		512AD0222DC385110094A914 /* CityDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDetailViewModel.swift; sourceTree = "<group>"; };
+		512AD02B2DC8C7BE0094A914 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				512AD02C2DC8C7BE0094A914 /* Domain.framework in Frameworks */,
 				512AD01F2DC384A70094A914 /* Scene.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,6 +86,7 @@
 		512AD01D2DC384A70094A914 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				512AD02B2DC8C7BE0094A914 /* Domain.framework */,
 				512AD01E2DC384A70094A914 /* Scene.framework */,
 			);
 			name = Frameworks;

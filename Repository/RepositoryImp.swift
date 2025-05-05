@@ -35,7 +35,7 @@ public final class Repository: RepositoryProtocol {
     public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
         var parameters: [String: Any] = [:]
         parameters["tmX"] = "\(tmX)"
-        parameters["tmY"] = "\(tmX)"
+        parameters["tmY"] = "\(tmY)"
         parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
         parameters["returnType"] = "json"
         parameters["ver"] = "1.1"

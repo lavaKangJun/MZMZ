@@ -25,7 +25,7 @@ public final class DustListUseCase: DustListUseCaseProtocol {
     public func fetchLocation() async throws -> TMLocationInfoEntity? {
         guard let location = self.locationService.getLocation() else { return nil }
         let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
-        return makeTMLocation.first
+        return makeTMLocation.last
     }
     
     public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {

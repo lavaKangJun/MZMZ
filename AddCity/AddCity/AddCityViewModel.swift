@@ -32,7 +32,6 @@ public final class AddCityViewModel: ObservableObject {
         self.useCase = useCase
         
         self.locationResult
-            .print("locationResult")
             .map{ $0.map{ CityPresentable($0) }}
             .receive(on: DispatchQueue.main)
             .assign(to: &$cityCellViewModel)

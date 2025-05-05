@@ -15,9 +15,37 @@ public struct CityDetailView: View {
     }
     
     public var body: some View {
-        VStack {
-            Text(viewModel.dummyData)
-                .font(.headline)
+        ZStack {
+            VStack {
+                if let dataModel = viewModel.dataModel {
+                    Text(dataModel.location)
+                        .font(.headline)
+                    HStack {
+                        Text("미세먼지")
+                        Text(dataModel.dustGradeText)
+                    }
+                    HStack {
+                        Text("초미세먼지")
+                        Text(dataModel.microDustGradeText)
+                    }
+                }
+            }
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Button("추가") { }
+                    
+                    Spacer()
+                        .frame(width: 16)
+                }
+                Spacer()
+            }
+            .padding(.top, 20)
+        }
+        .onAppear {
+            viewModel.fetchCurrentCityDustInfo()
         }
     }
 }

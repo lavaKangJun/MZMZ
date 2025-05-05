@@ -56,7 +56,8 @@ public struct AddCityView: View {
                             let dependecvy = CityDetailDependency(
                                 name: cellViewModel.name,
                                 longitude: cellViewModel.longitude,
-                                latitude: cellViewModel.latitude
+                                latitude: cellViewModel.latitude,
+                                isSearchResult: true
                             )
                             viewModel.routeToCityDetail(dependecvy)
                         }
