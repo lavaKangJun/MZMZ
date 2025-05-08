@@ -35,7 +35,9 @@ public struct CityDetailView: View {
                 HStack {
                     Spacer()
                     
-                    Button("추가") { }
+                    Button("추가") { 
+                        self.viewModel.saveCity()
+                    }
                     
                     Spacer()
                         .frame(width: 16)

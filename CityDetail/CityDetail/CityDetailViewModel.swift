@@ -57,6 +57,7 @@ public final class CityDetailViewModel: ObservableObject {
     private let latitude: String
     private let isSearchResult: Bool
     private let usecase: DustInfoUseCaseProtocol
+    public var router: CityDetailRouting?
     
     @Published var dataModel: CityDetailViewDataModel?
         
@@ -94,6 +95,7 @@ public final class CityDetailViewModel: ObservableObject {
     
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
-        
+        self.usecase.saveDustInfo(location: self.name, longitude: self.longitude, latitude: self.latitude)
+        self.router?.dimisss()
     }
 }

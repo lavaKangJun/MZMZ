@@ -9,10 +9,12 @@ import Foundation
 import Domain
 
 public final class Repository: RepositoryProtocol {
+    private let dataStore: DataStore
     private let remote: RemoteProtocol
     private let airKoreaKey = "WpzhxSjZh2demmdSFRh4E%2BHd%2FHY27TmerkvFVRYMm38NVafozKEVZ%2FxDtfJobyTXI57jVadT%2FBkXAuvy7eqDSQ%3D%3D"
     
-    public init(remote: RemoteProtocol) {
+    public init(dataStore: DataStore, remote: RemoteProtocol) {
+        self.dataStore = dataStore
         self.remote = remote
     }
     
@@ -67,5 +69,19 @@ public final class Repository: RepositoryProtocol {
   
         let result: KakaoResponse<SearchLocationDTO> = try await self.remote.request(header: header, endpoint: .findLocation, method: .get, parameters: parameters)
         return result.documents.map { $0.makeEntity() }
+    }
+    
+    public func getDustInfo() -> [DustStoreEntity] {
+        return self.dataStore.getDustInfo().map{ $0.makeEntity() }
+    }
+    
+    public func setDustInfo(_ entity: DustStoreEntity) {
+        self.dataStore.setDustInfo(
+            DustStoreDTO(
+                location: entity.location,
+                longitude: entity.longitude,
+                latitude: entity.latitude
+            )
+        )
     }
 }

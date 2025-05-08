@@ -19,7 +19,7 @@ public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
     }
     
     public func makeAddCityScene() -> UIViewController {
-        let repository = Repository(remote: Remote())
+        let repository = Repository(dataStore: DataStore.shared, remote: Remote())
         let useCase = FindLocationUseCase(repository: repository)
         let viewModel = AddCityViewModel(useCase: useCase)
         let addCityView = AddCityView(viewModel: viewModel)

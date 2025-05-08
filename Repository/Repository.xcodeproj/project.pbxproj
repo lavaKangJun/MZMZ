@@ -14,6 +14,8 @@
 		51775D4D2D8717B1000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D4B2D8717B1000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D832D885FC6000EFBA0 /* Remote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51775D822D885FC6000EFBA0 /* Remote.swift */; };
 		51775D862D8861BF000EFBA0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 51775D852D8861BF000EFBA0 /* Alamofire */; };
+		518664912DCCF73000450430 /* DustStoreDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518664902DCCF73000450430 /* DustStoreDTO.swift */; };
+		518664952DCCF93D00450430 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518664942DCCF93D00450430 /* DataStore.swift */; };
 		51E9C27C2D91839100C49EE9 /* MsrstnListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */; };
 		51E9C27E2D91845200C49EE9 /* TMLocatioDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C27D2D91845200C49EE9 /* TMLocatioDTO.swift */; };
 		51E9C2802D95CA6600C49EE9 /* MesureDnstyDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E9C27F2D95CA6600C49EE9 /* MesureDnstyDTO.swift */; };
@@ -40,6 +42,8 @@
 		51775D482D8717A0000EFBA0 /* RepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryImp.swift; sourceTree = "<group>"; };
 		51775D4B2D8717B1000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D822D885FC6000EFBA0 /* Remote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Remote.swift; sourceTree = "<group>"; };
+		518664902DCCF73000450430 /* DustStoreDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DustStoreDTO.swift; sourceTree = "<group>"; };
+		518664942DCCF93D00450430 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		51E9C27B2D91839100C49EE9 /* MsrstnListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsrstnListDTO.swift; sourceTree = "<group>"; };
 		51E9C27D2D91845200C49EE9 /* TMLocatioDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMLocatioDTO.swift; sourceTree = "<group>"; };
 		51E9C27F2D95CA6600C49EE9 /* MesureDnstyDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MesureDnstyDTO.swift; sourceTree = "<group>"; };
@@ -61,6 +65,8 @@
 		51775D1C2D87146C000EFBA0 = {
 			isa = PBXGroup;
 			children = (
+				518664942DCCF93D00450430 /* DataStore.swift */,
+				518664902DCCF73000450430 /* DustStoreDTO.swift */,
 				512ACFFA2DB927340094A914 /* SearchLocationDTO.swift */,
 				51E9C27F2D95CA6600C49EE9 /* MesureDnstyDTO.swift */,
 				51E9C27D2D91845200C49EE9 /* TMLocatioDTO.swift */,
@@ -185,11 +191,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				51E9C2802D95CA6600C49EE9 /* MesureDnstyDTO.swift in Sources */,
+				518664952DCCF93D00450430 /* DataStore.swift in Sources */,
 				51E9C27E2D91845200C49EE9 /* TMLocatioDTO.swift in Sources */,
 				51E9C27C2D91839100C49EE9 /* MsrstnListDTO.swift in Sources */,
 				51775D492D8717A0000EFBA0 /* RepositoryImp.swift in Sources */,
 				512ACFFB2DB927340094A914 /* SearchLocationDTO.swift in Sources */,
 				51775D832D885FC6000EFBA0 /* Remote.swift in Sources */,
+				518664912DCCF73000450430 /* DustStoreDTO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

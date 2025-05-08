@@ -93,4 +93,11 @@ public final class MockingRepository: RepositoryProtocol {
             ]
         )
     }
+    
+    public func getDustInfo() -> [DustStoreEntity] {
+        return []
+    }
+    
+    public func setDustInfo(_ entity: DustStoreEntity) {
+    }
 }

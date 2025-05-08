@@ -9,7 +9,9 @@ import Foundation
 
 public protocol DustListUseCaseProtocol {
     func fetchLocation() async throws -> TMLocationInfoEntity?
+    func convertoToTMCoordinate(latitude: Double, longtitude: Double) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
+    func getDustInfo() -> [DustStoreEntity]
 }
 
 public final class DustListUseCase: DustListUseCaseProtocol {
@@ -28,11 +30,20 @@ public final class DustListUseCase: DustListUseCaseProtocol {
         return makeTMLocation.last
     }
     
+    public func convertoToTMCoordinate(latitude: Double, longtitude: Double) async throws -> TMLocationInfoEntity? {
+        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: .init(latitude: latitude, longtitude: longtitude), key: authKey)
+        return makeTMLocation.last
+    }
+    
     public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
         guard let msrstn = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName }).first else {
             return nil
         }
         let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: msrstn)
         return mesureDnstyList.items.first
+    }
+    
+    public func getDustInfo() -> [DustStoreEntity] {
+        return self.repository.getDustInfo()
     }
 }

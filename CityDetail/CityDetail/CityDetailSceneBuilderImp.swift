@@ -16,7 +16,7 @@ final public class CityDetailSceneBuilderImp: CityDetailSceneBuilder {
     
     public func makeCityDetailScene(_ dependency: CityDetailDependency) -> UIViewController {
         let remote = Remote()
-        let repository = Repository(remote: remote)
+        let repository = Repository(dataStore: DataStore.shared, remote: remote)
         let viewModel = CityDetailViewModel(
             name: dependency.name,
             longitude: dependency.longitude,
@@ -24,8 +24,11 @@ final public class CityDetailSceneBuilderImp: CityDetailSceneBuilder {
             isSearchResult: dependency.isSearchResult,
             usecase: DustInfoUseCase(repository: repository)
         )
+        let router = CityDetailRouter()
         let cityDetailView = CityDetailView(viewModel: viewModel)
         let viewController = UIHostingController(rootView: cityDetailView)
+        viewModel.router = router
+        router.scene = viewController
         return viewController
     }
 }

@@ -34,7 +34,7 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
             viewModel.router = router
             return viewControlelr
         } else {
-            let repository = Repository(remote: Remote())
+            let repository = Repository(dataStore: DataStore.shared, remote: Remote())
             let locationService = LocationService()
             let useCase = DustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)
