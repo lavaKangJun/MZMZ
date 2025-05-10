@@ -11,6 +11,7 @@ import Scene
 public protocol AddCityRouting {
     var scene: UIViewController? { get set }
     func routeToCityDetail(dependency: CityDetailDependency)
+    func dismiss()
 }
 
 public final class AddCityRouter: AddCityRouting {
@@ -22,6 +23,10 @@ public final class AddCityRouter: AddCityRouting {
     }
     
     public func routeToCityDetail(dependency: CityDetailDependency) {
-        scene?.present(self.detailCitySceneBuilder.makeCityDetailScene(dependency), animated: true)
+        scene?.present(self.detailCitySceneBuilder.makeCityDetailScene(dependency), animated: false)
+    }
+    
+    public func dismiss() {
+        scene?.dismiss(animated: false)
     }
 }

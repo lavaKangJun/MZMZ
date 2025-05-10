@@ -24,6 +24,9 @@ public struct DustListView: View {
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
+        
+                    Spacer()
+                        .frame(height: 4)
                 }
                 .scrollContentBackground(.hidden)
                 
@@ -42,6 +45,9 @@ public struct DustListView: View {
         }
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList
+        }
+        .onViewWillAppear {
+            viewModel.fetchDust()
         }
     }
     
@@ -65,14 +71,14 @@ public struct DustListView: View {
                 HStack {
                     Text("미세먼지: ")
                         .font(.title3)
-                    Text(dataModel.dustGrade ?? "")
+                    Text(dataModel.dustGradeText)
                         .font(.body)
                 }
                 
                 HStack {
                     Text("초미세먼지: ")
                         .font(.title3)
-                    Text(dataModel.microDustGrade ?? "")
+                    Text(dataModel.microDustGradeText)
                         .font(.body)
                 }
                 

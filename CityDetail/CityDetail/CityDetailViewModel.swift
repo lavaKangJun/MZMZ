@@ -11,12 +11,10 @@ import Domain
 public struct CityDetailViewDataModel {
     let location: String
     let dustDensity: String
-    let dustGrade: String?
     let microDustDensity: String
-    let microDustGrade: String?
     
     var dustGradeText: String {
-        guard let dustGrade, let gradeValue = Int(dustGrade) else { return "" }
+        guard let gradeValue = Int(dustDensity) else { return "" }
         if 0...30 ~= gradeValue {
             return "좋음"
         } else if 31...80 ~= gradeValue {
@@ -30,7 +28,7 @@ public struct CityDetailViewDataModel {
     }
     
     var microDustGradeText: String {
-        guard let microDustGrade, let gradeValue = Int(microDustGrade) else { return "" }
+        guard let gradeValue = Int(microDustDensity) else { return "" }
         if 0...15 ~= gradeValue {
             return "좋음"
         } else if 16...50 ~= gradeValue {
@@ -45,9 +43,7 @@ public struct CityDetailViewDataModel {
     init(location: String, entity: MesureDnstyEntity) {
         self.location = location
         self.dustDensity = entity.pm10Value
-        self.dustGrade = entity.pm10Grade
         self.microDustDensity = entity.pm25Value
-        self.microDustGrade = entity.pm25Grade
     }
 }
 
@@ -88,14 +84,19 @@ public final class CityDetailViewModel: ObservableObject {
             guard let tmX = tmLocation?.x, let tmY = tmLocation?.y else { return }
             guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else { return }
             
-            self.dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo)
-   
+            await MainActor.run {
+                self.dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo)
+            }
         }
     }
     
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
         self.usecase.saveDustInfo(location: self.name, longitude: self.longitude, latitude: self.latitude)
+        self.router?.routeMainView()
+    }
+    
+    func cancel() {
         self.router?.dimisss()
     }
 }

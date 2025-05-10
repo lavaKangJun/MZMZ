@@ -26,17 +26,37 @@ public final class DustListViewModel {
     ) {
         self.locationService = locationService
         self.usecase = usecase
-        
-        fetchDust()
     }
     
     public func fetchDust() {
         Task {
             do {
-                guard let location = try await self.usecase.fetchLocation() else { return }
-                guard let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return }
+//                guard let location = try await self.usecase.fetchLocation() else { return }
+                let dustInfos = self.usecase.getDustInfo()
+          
+                let dataModels = try await withThrowingTaskGroup(of: DustListViewDataModel?.self) { group in
+                    for dustInfo in dustInfos {
+                        group.addTask {
+                            guard let latitude = Double(dustInfo.latitude),
+                                  let longtitude = Double(dustInfo.longitude),
+                                  let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return nil }
+                            return DustListViewDataModel(entity: mesureDnsty, location: dustInfo.location)
+                        }
+                    }
+                    
+                    var result: [DustListViewDataModel] = []
+                    for try await model in group {
+                        if let model = model {
+                            result.append(model)
+                        }
+                    }
+                    return result
+                }
+         
                 await MainActor.run {
-                    self.dustListSubject.send([DustListViewDataModel(mesureDnsty)])
+                    print("dataModels", dataModels)
+                    self.dustListSubject.send(dataModels)
                 }
             } catch {
                 print(error)

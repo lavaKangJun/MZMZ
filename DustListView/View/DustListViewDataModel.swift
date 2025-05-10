@@ -11,15 +11,38 @@ import Domain
 public final class DustListViewDataModel: Identifiable {
     let location: String
     let dustDensity: String
-    let dustGrade: String?
     let microDustDensity: String
-    let microDustGrade: String?
     
-    init(_ entity: MesureDnstyEntity) {
-        self.location = entity.location
+    init(entity: MesureDnstyEntity, location: String) {
+        self.location = location
         self.dustDensity = entity.pm10Value
-        self.dustGrade = entity.pm10Grade
         self.microDustDensity = entity.pm25Value
-        self.microDustGrade = entity.pm25Grade
+    }
+    
+    var dustGradeText: String {
+        guard let gradeValue = Int(dustDensity) else { return "" }
+        if 0...30 ~= gradeValue {
+            return "좋음"
+        } else if 31...80 ~= gradeValue {
+            return "보통"
+        } else if 81...150 ~= gradeValue {
+            return "나쁨"
+        } else {
+            return "매우나쁨"
+        }
+        
+    }
+    
+    var microDustGradeText: String {
+        guard let gradeValue = Int(microDustDensity) else { return "" }
+        if 0...15 ~= gradeValue {
+            return "좋음"
+        } else if 16...50 ~= gradeValue {
+            return "보통"
+        } else if 51...100 ~= gradeValue {
+            return "나쁨"
+        } else {
+            return "매우나쁨"
+        }
     }
 }

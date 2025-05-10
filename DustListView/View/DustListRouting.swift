@@ -22,6 +22,8 @@ public final class DustListRouter: DustListRouting {
     }
     
     public func routeToFindLocation() {
-        scene?.present(addCitySceneBuilder.makeAddCityScene(), animated: true)
+        let view = addCitySceneBuilder.makeAddCityScene()
+        view.modalPresentationStyle = .fullScreen
+        scene?.present(view, animated: true)
     }
 }

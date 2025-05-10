@@ -10,6 +10,7 @@ import UIKit
 public protocol CityDetailRouting {
     var scene: UIViewController? { get set }
     func dimisss()
+    func routeMainView()
 }
 
 public final class CityDetailRouter: CityDetailRouting {
@@ -17,5 +18,10 @@ public final class CityDetailRouter: CityDetailRouting {
     
     public func dimisss() {
         self.scene?.dismiss(animated: false)
+    }
+    public func routeMainView() {
+        // presentingViewController: 현재 위에 있는 부모 뷰컨트롤러
+        guard let presentingVC = self.scene?.presentingViewController?.presentingViewController else { return }
+        presentingVC.dismiss(animated: false)
     }
 }

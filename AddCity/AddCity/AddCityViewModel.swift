@@ -46,7 +46,8 @@ public final class AddCityViewModel: ObservableObject {
     }
     
     func clearSearch() {
-        self.locationResult.send([])
+        //self.locationResult.send([])
+        self.router?.dismiss()
     }
     
     func routeToCityDetail(_ dependency: CityDetailDependency) {
