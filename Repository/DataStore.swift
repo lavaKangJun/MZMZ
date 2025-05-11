@@ -7,7 +7,12 @@
 
 import Foundation
 
-public final class DataStore {
+public protocol DataStorable {
+    func getDustInfo() -> [DustStoreDTO]
+    func setDustInfo(_ info: DustStoreDTO)
+}
+
+public final class DataStore: DataStorable {
     public static let shared = DataStore()
     private var dustInfos: [DustStoreDTO] = []
     
@@ -19,6 +24,5 @@ public final class DataStore {
      
     public func setDustInfo(_ info: DustStoreDTO) {
         self.dustInfos.append(info)
-        print(self.dustInfos)
     }
 }

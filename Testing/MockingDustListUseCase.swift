@@ -32,10 +32,11 @@ public final class MockingDustListUseCase: DustListUseCaseProtocol {
     }
     
     public func convertoToTMCoordinate(latitude: Double, longtitude: Double) async throws -> TMLocationInfoEntity? {
-        return nil
+        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: .init(latitude: latitude, longtitude: longtitude), key: "authKey")
+        return makeTMLocation.last
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
-        return []
+        return repository.getDustInfo()
     }
 }

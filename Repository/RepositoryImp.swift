@@ -9,11 +9,11 @@ import Foundation
 import Domain
 
 public final class Repository: RepositoryProtocol {
-    private let dataStore: DataStore
+    private let dataStore: DataStorable
     private let remote: RemoteProtocol
     private let airKoreaKey = "WpzhxSjZh2demmdSFRh4E%2BHd%2FHY27TmerkvFVRYMm38NVafozKEVZ%2FxDtfJobyTXI57jVadT%2FBkXAuvy7eqDSQ%3D%3D"
     
-    public init(dataStore: DataStore, remote: RemoteProtocol) {
+    public init(dataStore: DataStorable, remote: RemoteProtocol) {
         self.dataStore = dataStore
         self.remote = remote
     }

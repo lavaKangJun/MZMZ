@@ -31,7 +31,6 @@ public final class DustListViewModel {
     public func fetchDust() {
         Task {
             do {
-//                guard let location = try await self.usecase.fetchLocation() else { return }
                 let dustInfos = self.usecase.getDustInfo()
           
                 let dataModels = try await withThrowingTaskGroup(of: DustListViewDataModel?.self) { group in
@@ -41,6 +40,7 @@ public final class DustListViewModel {
                                   let longtitude = Double(dustInfo.longitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
                                   let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return nil }
+                            print(latitude, longtitude, location, mesureDnsty)
                             return DustListViewDataModel(entity: mesureDnsty, location: dustInfo.location)
                         }
                     }

@@ -21,9 +21,10 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
     }
     
     public func makeDustListScene() -> UIViewController {
-        let isTesting = false
+        let isTesting = true
         if isTesting {
-            let repository = MockingRepository()
+            let fakeDataStore = FakeDataStore.shared
+            let repository = MockingRepository(dataStore: fakeDataStore)
             let locationService = MockingLocationService()
             let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)

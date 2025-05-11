@@ -7,9 +7,13 @@
 
 import Foundation
 import Domain
+import Repository
 
 public final class MockingRepository: RepositoryProtocol {
-    public init () { }
+    private let dataStore: DataStorable
+    public init (dataStore: DataStorable) {
+        self.dataStore = dataStore
+    }
     
     public func findLocation(location: String, key: String) async throws -> [SearchLocationEntity] {
         return [
@@ -33,7 +37,7 @@ public final class MockingRepository: RepositoryProtocol {
         }
     
     public func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity] {
-        return [TMLocationInfoEntity(x: 210720.00702229378, y: 448432.0990017229)]
+        return [TMLocationInfoEntity(x: 204071.87806552797, y: 443752.1689259326)]
     }
     
     public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
@@ -41,16 +45,16 @@ public final class MockingRepository: RepositoryProtocol {
             totalCount: 2,
             items: [
                 MsrstnEntity(
-                    stationCode: "735381",
-                    tm: 3.4,
-                    addr: "전북특별자치도 순창군 순창읍 경천로 33 순창군청 3층 옥상",
-                    stationName: "순창읍"
+                    stationCode: "111275",
+                    tm: 2,
+                    addr: "서울 강동구 천호대로 1151 길동사거리 강동성모요양병원 앞)",
+                    stationName: "천호대로"
                 ),
                 MsrstnEntity(
-                    stationCode: "336151",
-                    tm: 16.2,
-                    addr: "전남 담양군 담양읍 면앙정로 730 담양군 농업기술센터 생명농업연구동 뒤편",
-                    stationName: "담양읍"
+                    stationCode: "111264",
+                    tm: 1.6000000000000001,
+                    addr: "서울특별시 서초구 강남대로 201 서초구민회관 앞 중앙차로 (양재동)",
+                    stationName: "강남대로"
                 )
             ]
         )
@@ -64,40 +68,47 @@ public final class MockingRepository: RepositoryProtocol {
             items: [
                 MesureDnstyEntity(
                     location: stationName,
-                    dataTime: "2025-03-29 22:00",
-                    pm10Value: "16",
-                    pm25Value: "5",
-                    pm10Grade: Optional("1"),
-                    pm25Grade: Optional("1"),
+                    dataTime: "2025-05-11 10:00",
+                    pm10Value: "68",
+                    pm25Value: "45",
+                    pm10Grade: Optional("2"),
+                    pm25Grade: Optional("3"),
                     pm10Grade1h: nil,
                     pm25Grade1h: nil,
                     so2Value: "0.002",
-                    coValue: "0.2",
-                    o3Value: "0.040",
-                    no2Value: "0.004"
+                    coValue: "0.6",
+                    o3Value: "0.033",
+                    no2Value: "0.015"
                 ),
                 MesureDnstyEntity(
                     location: stationName,
-                    dataTime: "2025-03-29 21:00",
-                    pm10Value: "23",
-                    pm25Value: "5",
-                    pm10Grade: Optional("1"),
-                    pm25Grade: Optional("1"),
+                    dataTime: "2025-05-11 10:00",
+                    pm10Value: "43",
+                    pm25Value: "23",
+                    pm10Grade: Optional("2"),
+                    pm25Grade: Optional("2"),
                     pm10Grade1h: nil,
                     pm25Grade1h: nil,
                     so2Value: "0.002",
-                    coValue: "0.2",
-                    o3Value: "0.041",
-                    no2Value: "0.004"
+                    coValue: "0.5",
+                    o3Value: "0.043",
+                    no2Value: "0.015"
                 )
             ]
         )
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
-        return []
+        return self.dataStore.getDustInfo().map{ $0.makeEntity() }
     }
     
     public func setDustInfo(_ entity: DustStoreEntity) {
+        self.dataStore.setDustInfo(
+            DustStoreDTO(
+                location: entity.location,
+                longitude: entity.longitude,
+                latitude: entity.latitude
+            )
+        )
     }
 }

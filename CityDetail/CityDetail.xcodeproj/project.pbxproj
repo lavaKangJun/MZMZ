@@ -16,6 +16,8 @@
 		512AD02C2DC8C7BE0094A914 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD02B2DC8C7BE0094A914 /* Domain.framework */; };
 		512AD02D2DC8C7BE0094A914 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD02B2DC8C7BE0094A914 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		518664972DCCFD9200450430 /* CityDetailRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518664962DCCFD9200450430 /* CityDetailRouting.swift */; };
+		51DB33042DD0348D00D24C36 /* Repository.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DB33032DD0348D00D24C36 /* Repository.framework */; };
+		51DB33052DD0348D00D24C36 /* Repository.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51DB33032DD0348D00D24C36 /* Repository.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +29,7 @@
 			files = (
 				512AD02D2DC8C7BE0094A914 /* Domain.framework in Embed Frameworks */,
 				512AD0202DC384A70094A914 /* Scene.framework in Embed Frameworks */,
+				51DB33052DD0348D00D24C36 /* Repository.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +45,7 @@
 		512AD0222DC385110094A914 /* CityDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDetailViewModel.swift; sourceTree = "<group>"; };
 		512AD02B2DC8C7BE0094A914 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		518664962DCCFD9200450430 /* CityDetailRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDetailRouting.swift; sourceTree = "<group>"; };
+		51DB33032DD0348D00D24C36 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +55,7 @@
 			files = (
 				512AD02C2DC8C7BE0094A914 /* Domain.framework in Frameworks */,
 				512AD01F2DC384A70094A914 /* Scene.framework in Frameworks */,
+				51DB33042DD0348D00D24C36 /* Repository.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +94,7 @@
 		512AD01D2DC384A70094A914 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				51DB33032DD0348D00D24C36 /* Repository.framework */,
 				512AD02B2DC8C7BE0094A914 /* Domain.framework */,
 				512AD01E2DC384A70094A914 /* Scene.framework */,
 			);
