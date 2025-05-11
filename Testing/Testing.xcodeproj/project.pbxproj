@@ -16,6 +16,7 @@
 		518B765E2DD0367D00A02002 /* FakeDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B765D2DD0367D00A02002 /* FakeDataStore.swift */; };
 		518B76602DD0388D00A02002 /* Repository.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518B765F2DD0388D00A02002 /* Repository.framework */; };
 		518B76612DD0388D00A02002 /* Repository.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 518B765F2DD0388D00A02002 /* Repository.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		518B76632DD03EB800A02002 /* MockingFindLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518B76622DD03EB800A02002 /* MockingFindLocationUseCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +43,7 @@
 		51775D7E2D885F50000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		518B765D2DD0367D00A02002 /* FakeDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeDataStore.swift; sourceTree = "<group>"; };
 		518B765F2DD0388D00A02002 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		518B76622DD03EB800A02002 /* MockingFindLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockingFindLocationUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +62,8 @@
 		51775D612D8858D9000EFBA0 = {
 			isa = PBXGroup;
 			children = (
+				518B76642DD03EBF00A02002 /* UseCase */,
 				518B765D2DD0367D00A02002 /* FakeDataStore.swift */,
-				5109528B2D9835E500951EE7 /* MockingDustListUseCase.swift */,
 				510952892D9832DE00951EE7 /* MockingLocationService.swift */,
 				51775D752D8858EB000EFBA0 /* MockingRepository.swift */,
 				51775D6D2D8858D9000EFBA0 /* Testing */,
@@ -93,6 +95,15 @@
 				51775D7E2D885F50000EFBA0 /* Domain.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		518B76642DD03EBF00A02002 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				518B76622DD03EB800A02002 /* MockingFindLocationUseCase.swift */,
+				5109528B2D9835E500951EE7 /* MockingDustListUseCase.swift */,
+			);
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,6 +190,7 @@
 				518B765E2DD0367D00A02002 /* FakeDataStore.swift in Sources */,
 				5109528C2D9835E500951EE7 /* MockingDustListUseCase.swift in Sources */,
 				51775D762D8858EB000EFBA0 /* MockingRepository.swift in Sources */,
+				518B76632DD03EB800A02002 /* MockingFindLocationUseCase.swift in Sources */,
 				5109528A2D9832DE00951EE7 /* MockingLocationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

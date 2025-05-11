@@ -11,6 +11,10 @@
 		512AD0032DB932220094A914 /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0022DB932220094A914 /* Domain.framework */; };
 		512AD0042DB932220094A914 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 512AD0022DB932220094A914 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		512AD0252DC39DAC0094A914 /* AddCityRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 512AD0242DC39DAC0094A914 /* AddCityRouting.swift */; };
+		518B76662DD03FD400A02002 /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518B76652DD03FD400A02002 /* Testing.framework */; };
+		518B76672DD03FD400A02002 /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 518B76652DD03FD400A02002 /* Testing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		518B76692DD0400500A02002 /* Repository.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 518B76682DD0400500A02002 /* Repository.framework */; };
+		518B766A2DD0400500A02002 /* Repository.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 518B76682DD0400500A02002 /* Repository.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D2B34E2DB54D5700D3532C /* AddCity.h in Headers */ = {isa = PBXBuildFile; fileRef = 51D2B34D2DB54D5700D3532C /* AddCity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51D2B3552DB54D7000D3532C /* AddCitySceneBuilderImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3542DB54D7000D3532C /* AddCitySceneBuilderImp.swift */; };
 		51D2B3572DB54DAB00D3532C /* AddCityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3562DB54DAB00D3532C /* AddCityView.swift */; };
@@ -25,7 +29,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				518B766A2DD0400500A02002 /* Repository.framework in Embed Frameworks */,
 				512AD0042DB932220094A914 /* Domain.framework in Embed Frameworks */,
+				518B76672DD03FD400A02002 /* Testing.framework in Embed Frameworks */,
 				51D2B35B2DB54DC100D3532C /* Scene.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -37,6 +43,8 @@
 		512AD0002DB931430094A914 /* AddCityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityViewModel.swift; sourceTree = "<group>"; };
 		512AD0022DB932220094A914 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		512AD0242DC39DAC0094A914 /* AddCityRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityRouting.swift; sourceTree = "<group>"; };
+		518B76652DD03FD400A02002 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		518B76682DD0400500A02002 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51D2B34A2DB54D5700D3532C /* AddCity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AddCity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51D2B34D2DB54D5700D3532C /* AddCity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddCity.h; sourceTree = "<group>"; };
 		51D2B3542DB54D7000D3532C /* AddCitySceneBuilderImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCitySceneBuilderImp.swift; sourceTree = "<group>"; };
@@ -49,7 +57,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				518B76692DD0400500A02002 /* Repository.framework in Frameworks */,
 				512AD0032DB932220094A914 /* Domain.framework in Frameworks */,
+				518B76662DD03FD400A02002 /* Testing.framework in Frameworks */,
 				51D2B35A2DB54DC100D3532C /* Scene.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,6 +99,8 @@
 		51D2B3582DB54DC100D3532C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				518B76682DD0400500A02002 /* Repository.framework */,
+				518B76652DD03FD400A02002 /* Testing.framework */,
 				512AD0022DB932220094A914 /* Domain.framework */,
 				51D2B3592DB54DC100D3532C /* Scene.framework */,
 			);
