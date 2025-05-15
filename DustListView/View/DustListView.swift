@@ -21,12 +21,10 @@ public struct DustListView: View {
             Group {
                 List(self.dustListModel) { dataModel in
                     listView(dataModel)
+                        .padding(.bottom, 20)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
-        
-                    Spacer()
-                        .frame(height: 4)
                 }
                 .scrollContentBackground(.hidden)
                 
@@ -52,43 +50,47 @@ public struct DustListView: View {
     }
     
     public func listView(_ dataModel: DustListViewDataModel) -> some View {
-        ZStack {
+        ZStack(alignment: .leading) {
             Color.clear
                 .background(
-                    Image("sunny", bundle: Bundle.current)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .clipped()
-                        .alignmentGuide(.top) { d in d[.top] }
+                    LinearGradient(gradient: Gradient(colors: dataModel.backgroundColor),
+                                   startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
                 )
                 .mask(RoundedRectangle(cornerRadius: 10))
             
-            HStack(alignment: .top) {
+            VStack(alignment: .leading) {
+                Spacer()
+                
                 Text(dataModel.location)
-                    .font(.headline)
+                    .font(Font.system(size: 20, weight: .bold))
+                    .foregroundColor(Color.white)
+                
+                Spacer()
                 
                 HStack {
-                    Text("미세먼지: ")
-                        .font(.title3)
-                    Text(dataModel.dustGradeText)
-                        .font(.body)
-                }
-                
-                HStack {
-                    Text("초미세먼지: ")
-                        .font(.title3)
-                    Text(dataModel.microDustGradeText)
-                        .font(.body)
+                    HStack {
+                        Text("미세먼지:")
+                        Text(dataModel.dustGradeText + " " + "\(dataModel.dustDensity) μg/m3")
+                        
+                    }
+                    .foregroundColor(Color.gray)
+                    .font(Font.system(size: 13, weight: .semibold))
+                    
+                    HStack {
+                        Text("초미세먼지:")
+                        Text(dataModel.microDustGradeText + " " + "\(dataModel.microDustDensity) μg/m3")
+                    }.foregroundColor(Color.gray)
+                        .font(Font.system(size: 13, weight: .semibold))
                 }
                 
                 Spacer()
             }
+            .padding(.horizontal, 20)
         }
-        .frame(height: 80)
+        .frame(height: 100)
         .frame(maxWidth: .infinity)
-        .padding(.horizontal, 10)
-        .cornerRadius(10)
+        .cornerRadius(20)
         .clipped()
     }
 }
