@@ -71,17 +71,17 @@ public final class Repository: RepositoryProtocol {
         return result.documents.map { $0.makeEntity() }
     }
     
-    public func getDustInfo() -> [DustStoreEntity] {
-        return self.dataStore.getDustInfo().map{ $0.makeEntity() }
+    public func getDustInfo() throws -> [DustStoreEntity] {
+        return try self.dataStore.load().map({ $0.makeEntity() })
     }
     
-    public func setDustInfo(_ entity: DustStoreEntity) {
-        self.dataStore.setDustInfo(
-            DustStoreDTO(
-                location: entity.location,
-                longitude: entity.longitude,
-                latitude: entity.latitude
-            )
+    public func setDustInfo(_ entity: DustStoreEntity) throws {
+        try self.dataStore.insertTable(data:
+                                        DustStoreDTO(
+                                            location: entity.location,
+                                            longitude: entity.longitude,
+                                            latitude: entity.latitude
+                                        )
         )
     }
 }

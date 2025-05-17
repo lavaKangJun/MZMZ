@@ -37,6 +37,11 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
     }
     
     public func saveDustInfo(location: String, longitude: String, latitude: String) {
-        self.repository.setDustInfo(DustStoreEntity(location: location, longitude: longitude, latitude: latitude))
+        do {
+            try self.repository.setDustInfo(DustStoreEntity(location: location, longitude: longitude, latitude: latitude))
+        } catch {
+            print("save Error", error)
+        }
+        
     }
 }

@@ -44,6 +44,11 @@ public final class DustListUseCase: DustListUseCaseProtocol {
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
-        return self.repository.getDustInfo()
+        do {
+            return try self.repository.getDustInfo()
+        } catch {
+            print("Load Error", error)
+            return []
+        }
     }
 }

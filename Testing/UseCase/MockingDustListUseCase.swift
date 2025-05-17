@@ -37,6 +37,11 @@ public final class MockingDustListUseCase: DustListUseCaseProtocol {
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
-        return repository.getDustInfo()
+        do {
+            return try repository.getDustInfo()
+        } catch {
+            print("Load Error", error)
+            return []
+        }
     }
 }

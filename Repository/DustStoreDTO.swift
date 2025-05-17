@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public struct DustStoreDTO {
+public struct DustStoreDTO: Equatable, Codable {
     public let location: String
     public let longitude: String
     public let latitude: String

@@ -21,7 +21,7 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
     }
     
     public func makeDustListScene() -> UIViewController {
-        let isTesting = true
+        let isTesting = false
         if isTesting {
             let fakeDataStore = FakeDataStore.shared
             let repository = MockingRepository(dataStore: fakeDataStore)

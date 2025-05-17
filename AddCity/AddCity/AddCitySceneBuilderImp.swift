@@ -20,7 +20,7 @@ public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
     }
     
     public func makeAddCityScene() -> UIViewController {
-        let isTesting = true
+        let isTesting = false
         if isTesting {
             let repository = MockingRepository(dataStore: FakeDataStore.shared)
             let useCase = MockingFindLocationUseCase(repository: repository)

@@ -13,6 +13,6 @@ public protocol RepositoryProtocol {
     func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity
     func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity
     func findLocation(location: String, key: String) async throws -> [SearchLocationEntity]
-    func getDustInfo() -> [DustStoreEntity]
-    func setDustInfo(_ entity: DustStoreEntity)
+    func getDustInfo() throws -> [DustStoreEntity]
+    func setDustInfo(_ entity: DustStoreEntity) throws
 }

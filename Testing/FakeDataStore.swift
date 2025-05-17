@@ -9,6 +9,14 @@ import Foundation
 import Repository
 
 public final class FakeDataStore: DataStorable {
+    public func insertTable(data: DustStoreDTO) throws {
+        
+    }
+    
+    public func load() throws -> [DustStoreDTO] {
+        return []
+    }
+    
     public static let shared = FakeDataStore()
     private var dustInfos: [DustStoreDTO] = [
         DustStoreDTO(
