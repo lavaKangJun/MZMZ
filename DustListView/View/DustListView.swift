@@ -19,17 +19,28 @@ public struct DustListView: View {
     public var body: some View {
         SearchNavigationWrapper(searchText: $searchCity) {
             Group {
-                List(self.dustListModel) { dataModel in
-                    listView(dataModel)
-                        .padding(.bottom, 20)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                        .onTapGesture {
-                            self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
-                        }
+                
+                List {
+                    ForEach(self.dustListModel, id: \.self) { dataModel in
+                        listView(dataModel)
+                            .padding(.bottom, 20)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(Color.clear)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
+                                Button(role: .destructive) {
+                                    viewModel.deleteLocation()
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
+                                }
+                                .tint(.clear)
+                            })
+                            .onTapGesture {
+                                self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
+                            }
+                    }
+
                 }
-                .scrollContentBackground(.hidden)
                 
                 Spacer()
                 

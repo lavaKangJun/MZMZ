@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Domain
 
-public final class DustListViewDataModel: Identifiable {
+public final class DustListViewDataModel: Hashable {
     let location: String
     let dustDensity: String
     let microDustDensity: String
@@ -62,5 +62,13 @@ public final class DustListViewDataModel: Identifiable {
         } else {
             return "매우나쁨"
         }
+    }
+    
+    public static func ==(lhs: DustListViewDataModel, rhs: DustListViewDataModel) -> Bool {
+        return lhs.location == rhs.location
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.location)
     }
 }

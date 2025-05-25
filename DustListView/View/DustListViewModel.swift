@@ -68,6 +68,10 @@ public final class DustListViewModel {
         }
     }
     
+    public func deleteLocation() {
+        
+    }
+    
     public func routeToFindLocation() {
         self.router?.routeToFindLocation()
     }
