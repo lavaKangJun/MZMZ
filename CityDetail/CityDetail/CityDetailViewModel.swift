@@ -7,11 +7,18 @@
 
 import Foundation
 import Domain
+import SwiftUI
 
 public struct CityDetailViewDataModel {
     let location: String
     let dustDensity: String
     let microDustDensity: String
+    
+    init(location: String, entity: MesureDnstyEntity) {
+        self.location = location
+        self.dustDensity = entity.pm10Value
+        self.microDustDensity = entity.pm25Value
+    }
     
     var dustGradeText: String {
         guard let gradeValue = Int(dustDensity) else { return "" }
@@ -40,10 +47,17 @@ public struct CityDetailViewDataModel {
         }
     }
     
-    init(location: String, entity: MesureDnstyEntity) {
-        self.location = location
-        self.dustDensity = entity.pm10Value
-        self.microDustDensity = entity.pm25Value
+    var backgroundColor: [Color] {
+        guard let gradeValue = Int(dustDensity) else { return [Color.clear] }
+        if 0...30 ~= gradeValue {
+            return [Color.blue.opacity(0.5)]
+        } else if 31...80 ~= gradeValue {
+            return [Color.blue.opacity(0.5), Color.black.opacity(0.1)]
+        } else if 81...150 ~= gradeValue {
+            return [Color.blue.opacity(0.5), Color.black.opacity(0.5)]
+        } else {
+            return [Color.blue.opacity(0.3), Color.black.opacity(0.8)]
+        }
     }
 }
 

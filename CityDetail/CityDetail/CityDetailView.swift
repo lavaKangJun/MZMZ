@@ -16,20 +16,42 @@ public struct CityDetailView: View {
     
     public var body: some View {
         ZStack {
-            VStack {
+            backgroundView
+                .ignoresSafeArea()
+            VStack(spacing: 10) {
                 if let dataModel = viewModel.dataModel {
+                    Spacer()
+                    
                     Text(dataModel.location)
-                        .font(.headline)
+                        .font(.system(size: 30, weight: .bold))
+
+                    Spacer()
+                        .frame(height: 50)
+                    
                     HStack {
+                        Image("dust", bundle: Bundle.current)
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                       
                         Text("미세먼지")
                         Text(dataModel.dustGradeText)
                     }
+                    .font(.system(size: 20, weight: .medium))
+                    
                     HStack {
+                        Image("microdust", bundle: Bundle.current)
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                        
                         Text("초미세먼지")
                         Text(dataModel.microDustGradeText)
                     }
+                    .font(.system(size: 20, weight: .medium))
+                    
+                    Spacer()
                 }
             }
+            .foregroundColor(.white)
             
             if viewModel.isSearched {
                 VStack {
@@ -51,5 +73,23 @@ public struct CityDetailView: View {
         .onAppear {
             viewModel.fetchCurrentCityDustInfo()
         }
+    }
+    
+    private var backgroundView: some View {
+        if let colors = viewModel.dataModel?.backgroundColor {
+            return LinearGradient(gradient: Gradient(colors: colors),
+                                  startPoint: .top,
+                                  endPoint: .bottom)
+        } else {
+            return LinearGradient(gradient: Gradient(colors: []),
+                                  startPoint: .top, endPoint: .bottom)
+        }
+    }
+}
+
+class BundleFinder {}
+extension Bundle {
+    static var current: Bundle {
+        return Bundle(for: BundleFinder.self)
     }
 }
