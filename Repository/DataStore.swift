@@ -28,6 +28,7 @@ public final class DataStore: DataStorable {
     private var dustInfos: [DustStoreDTO] = []
     private var dbPointer: OpaquePointer?
     private let databaseName = "mzmz.sqlite.db"
+    private let tableName = "LocationInfo"
     
     private init() {
         self.dbPointer = openDatabase()
@@ -79,7 +80,7 @@ public final class DataStore: DataStorable {
     public func createTable() throws {
         let statement =
         """
-        CREATE TABLE IF NOT EXISTS LocationDust (
+        CREATE TABLE IF NOT EXISTS \(tableName) (
         location TEXT NOT NULL,
         longitude TEXT NOT NULL,
         latitude TEXT NOT NULL,
@@ -104,7 +105,7 @@ public final class DataStore: DataStorable {
         try createTable()
         
         let statement = """
-        INSERT OR REPLACE INTO LocationDust (location, longitude, latitude, createdAt) VALUES ('\(data.location)', '\(data.longitude)', '\(data.latitude)', '\(timestamp)');
+        INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, createdAt) VALUES ('\(data.location)', '\(data.longitude)', '\(data.latitude)', '\(timestamp)');
         """
         
         guard sqlite3_exec(dbPointer, statement, nil, nil, nil) == SQLITE_OK else {
@@ -116,7 +117,7 @@ public final class DataStore: DataStorable {
         try createTable()
         
         let statement = """
-        SELECT * FROM LocationDust ORDER BY createdAt ASC
+        SELECT * FROM \(tableName) ORDER BY createdAt ASC
         """
         
         let loadStatement = try prepareStatement(statement)
