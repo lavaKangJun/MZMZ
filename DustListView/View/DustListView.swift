@@ -25,6 +25,9 @@ public struct DustListView: View {
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
                         .listRowBackground(Color.clear)
+                        .onTapGesture {
+                            self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
+                        }
                 }
                 .scrollContentBackground(.hidden)
                 

@@ -31,20 +31,22 @@ public struct CityDetailView: View {
                 }
             }
             
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button("추가") { 
-                        self.viewModel.saveCity()
+            if viewModel.isSearched {
+                VStack {
+                    HStack {
+                        Spacer()
+                        
+                        Button("추가") {
+                            self.viewModel.saveCity()
+                        }
+                        
+                        Spacer()
+                            .frame(width: 16)
                     }
-                    
                     Spacer()
-                        .frame(width: 16)
                 }
-                Spacer()
+                .padding(.top, 20)
             }
-            .padding(.top, 20)
         }
         .onAppear {
             viewModel.fetchCurrentCityDustInfo()

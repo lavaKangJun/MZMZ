@@ -37,7 +37,8 @@ final class ApplicationRouter: ApplicationRouting, @unchecked Sendable {
     }
     
     private func dustListSceneBuilder() -> DustListSceneBuilder {
-        return DustListSceneBuilderImp(addCitySceneBuilder: self.addCitySceneBuilder())
+        return DustListSceneBuilderImp(addCitySceneBuilder: self.addCitySceneBuilder(),
+                                       cityDetailSceheBuilder: self.detailCitySceneBuilder())
     }
     
     private func addCitySceneBuilder() -> AddCitySceneBuilder {

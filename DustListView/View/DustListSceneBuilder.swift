@@ -15,9 +15,11 @@ import Scene
 
 public final class DustListSceneBuilderImp: DustListSceneBuilder {
     private let addCitySceneBuilder: AddCitySceneBuilder
+    private let cityDetailSceheBuilder: CityDetailSceneBuilder
     
-    public init(addCitySceneBuilder: AddCitySceneBuilder) {
+    public init(addCitySceneBuilder: AddCitySceneBuilder, cityDetailSceheBuilder: CityDetailSceneBuilder) {
         self.addCitySceneBuilder = addCitySceneBuilder
+        self.cityDetailSceheBuilder = cityDetailSceheBuilder
     }
     
     public func makeDustListScene() -> UIViewController {
@@ -27,7 +29,8 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
             let repository = MockingRepository(dataStore: fakeDataStore)
             let locationService = MockingLocationService()
             let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
-            let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)
+            let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder, 
+                                        cityDetailSceneBuilder: self.cityDetailSceheBuilder)
             let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)
@@ -38,7 +41,8 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
             let repository = Repository(dataStore: DataStore.shared, remote: Remote())
             let locationService = LocationService()
             let useCase = DustListUseCase(repository: repository, locationService: locationService)
-            let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder)
+            let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder,
+                                        cityDetailSceneBuilder: self.cityDetailSceheBuilder)
             let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)

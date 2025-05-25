@@ -70,6 +70,10 @@ public final class CityDetailViewModel: ObservableObject {
         self.isSearchResult = isSearchResult
         self.usecase = usecase
     }
+
+    var isSearched: Bool {
+        return self.isSearchResult
+    }
     
     func fetchCurrentCityDustInfo() {
         Task {

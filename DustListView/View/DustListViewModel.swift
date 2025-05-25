@@ -40,7 +40,12 @@ public final class DustListViewModel {
                                   let longtitude = Double(dustInfo.longitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
                                   let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return nil }
-                            return DustListViewDataModel(entity: mesureDnsty, location: dustInfo.location)
+                            return DustListViewDataModel(
+                                entity: mesureDnsty,
+                                location: dustInfo.location,
+                                longtitude: longtitude,
+                                latitude: latitude
+                            )
                         }
                     }
                     
@@ -65,5 +70,9 @@ public final class DustListViewModel {
     
     public func routeToFindLocation() {
         self.router?.routeToFindLocation()
+    }
+    
+    public func routeToDetail(name: String, longitude: Double, latitude: Double) {
+        self.router?.routeToDetail(name: name, longitude: "\(longitude)", latitude: "\(latitude)")
     }
 }

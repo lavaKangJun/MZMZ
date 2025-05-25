@@ -13,11 +13,15 @@ public final class DustListViewDataModel: Identifiable {
     let location: String
     let dustDensity: String
     let microDustDensity: String
+    let longtitude: Double
+    let latitude: Double
     
-    init(entity: MesureDnstyEntity, location: String) {
+    init(entity: MesureDnstyEntity, location: String, longtitude: Double, latitude: Double) {
         self.location = location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
+        self.longtitude = longtitude
+        self.latitude = latitude
     }
     
     var dustGradeText: String {
