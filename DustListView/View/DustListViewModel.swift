@@ -32,34 +32,30 @@ public final class DustListViewModel {
         Task {
             do {
                 let dustInfos = self.usecase.getDustInfo()
-                print(dustInfos)
-                let dataModels = try await withThrowingTaskGroup(of: DustListViewDataModel?.self) { group in
-                    for dustInfo in dustInfos {
+                let dataModels = try await withThrowingTaskGroup(of: (Int, DustListViewDataModel?).self) { group in
+                    for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask {
                             guard let latitude = Double(dustInfo.latitude),
                                   let longtitude = Double(dustInfo.longitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return nil }
-                            return DustListViewDataModel(
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, nil) }
+                            return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
                                 longtitude: longtitude,
-                                latitude: latitude
+                                latitude: latitude)
                             )
                         }
                     }
                     
-                    var result: [DustListViewDataModel] = []
+                    var result: [(Int, DustListViewDataModel?)] = []
                     for try await model in group {
-                        if let model = model {
-                            result.append(model)
-                        }
+                        result.append(model)
                     }
-                    return result
+                    return result.sorted(by: { $0.0 < $1.0 }).compactMap({ $0.1 })
                 }
          
                 await MainActor.run {
-                    print("dataModels", dataModels)
                     self.dustListSubject.send(dataModels)
                 }
             } catch {
@@ -70,7 +66,6 @@ public final class DustListViewModel {
     
     public func deleteLocation(_ locaion: String) {
         let result = self.usecase.deleteDustInfo(location: locaion)
-        print("deleteLocation", result)
     }
     
     public func routeToFindLocation() {

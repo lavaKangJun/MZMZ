@@ -145,6 +145,8 @@ public final class DataStore: DataStorable {
             let location = String(cString: sqlite3_column_text(loadStatement, 0))
             let longitude = String(cString: sqlite3_column_text(loadStatement, 1))
             let latitude =  String(cString: sqlite3_column_text(loadStatement, 2))
+            let timeStamp = sqlite3_column_int(loadStatement, 3)
+            print(location, timeStamp)
             dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude))
             result = sqlite3_step(loadStatement)
         }
