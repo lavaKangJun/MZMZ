@@ -13,6 +13,7 @@ public protocol DataStorable {
     func setDustInfo(_ info: DustStoreDTO)
     func insertTable(data: DustStoreDTO) throws
     func load() throws -> [DustStoreDTO]
+    func delete(location: String) throws -> Bool
 }
 
 public enum SQLiteError: Error {
@@ -113,11 +114,28 @@ public final class DataStore: DataStorable {
         }
     }
     
+    public func delete(location: String) throws -> Bool {
+        let statement = """
+        DELETE FROM \(tableName) WHERE location == '\(location)'
+        """
+        
+        let deleteStatement = try prepareStatement(statement)
+        let result = sqlite3_step(deleteStatement)
+  
+        sqlite3_finalize(deleteStatement)
+        
+        if result == SQLITE_DONE {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     public func load() throws -> [DustStoreDTO] {
         try createTable()
         
         let statement = """
-        SELECT * FROM \(tableName) ORDER BY createdAt ASC
+        SELECT * FROM \(tableName) ORDER BY createdAt DESC
         """
         
         let loadStatement = try prepareStatement(statement)

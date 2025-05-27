@@ -12,6 +12,7 @@ public protocol DustListUseCaseProtocol {
     func convertoToTMCoordinate(latitude: Double, longtitude: Double) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
     func getDustInfo() -> [DustStoreEntity]
+    func deleteDustInfo(location: String) -> Bool
 }
 
 public final class DustListUseCase: DustListUseCaseProtocol {
@@ -50,5 +51,15 @@ public final class DustListUseCase: DustListUseCaseProtocol {
             print("Load Error", error)
             return []
         }
+    }
+    
+    public func deleteDustInfo(location: String) -> Bool {
+        do {
+            return try self.repository.deleteDustInfo(location: location)
+        } catch {
+            print("delete fail", error)
+            return false
+        }
+        
     }
 }

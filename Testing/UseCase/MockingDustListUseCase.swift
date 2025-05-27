@@ -44,4 +44,8 @@ public final class MockingDustListUseCase: DustListUseCaseProtocol {
             return []
         }
     }
+    
+    public func deleteDustInfo(location: String) -> Bool {
+        return false
+    }
 }

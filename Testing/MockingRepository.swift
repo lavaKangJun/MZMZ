@@ -111,4 +111,8 @@ public final class MockingRepository: RepositoryProtocol {
             )
         )
     }
+    
+    public func deleteDustInfo(location: String) throws -> Bool {
+        return false
+    }
 }

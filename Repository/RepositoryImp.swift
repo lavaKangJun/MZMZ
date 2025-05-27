@@ -84,4 +84,8 @@ public final class Repository: RepositoryProtocol {
                                         )
         )
     }
+    
+    public func deleteDustInfo(location: String) throws -> Bool {
+        try self.dataStore.delete(location: location)
+    }
 }

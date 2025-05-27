@@ -32,7 +32,7 @@ public final class DustListViewModel {
         Task {
             do {
                 let dustInfos = self.usecase.getDustInfo()
-          
+                print(dustInfos)
                 let dataModels = try await withThrowingTaskGroup(of: DustListViewDataModel?.self) { group in
                     for dustInfo in dustInfos {
                         group.addTask {
@@ -68,8 +68,9 @@ public final class DustListViewModel {
         }
     }
     
-    public func deleteLocation() {
-        
+    public func deleteLocation(_ locaion: String) {
+        let result = self.usecase.deleteDustInfo(location: locaion)
+        print("deleteLocation", result)
     }
     
     public func routeToFindLocation() {

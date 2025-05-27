@@ -15,4 +15,5 @@ public protocol RepositoryProtocol {
     func findLocation(location: String, key: String) async throws -> [SearchLocationEntity]
     func getDustInfo() throws -> [DustStoreEntity]
     func setDustInfo(_ entity: DustStoreEntity) throws
+    func deleteDustInfo(location: String) throws -> Bool 
 }

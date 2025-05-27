@@ -29,7 +29,7 @@ public struct DustListView: View {
                             .listRowBackground(Color.clear)
                             .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
                                 Button(role: .destructive) {
-                                    viewModel.deleteLocation()
+                                    viewModel.deleteLocation(dataModel.location)
                                 } label: {
                                     Label("삭제", systemImage: "trash")
                                 }

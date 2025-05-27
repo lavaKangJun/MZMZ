@@ -9,14 +9,6 @@ import Foundation
 import Repository
 
 public final class FakeDataStore: DataStorable {
-    public func insertTable(data: DustStoreDTO) throws {
-        
-    }
-    
-    public func load() throws -> [DustStoreDTO] {
-        return []
-    }
-    
     public static let shared = FakeDataStore()
     private var dustInfos: [DustStoreDTO] = [
         DustStoreDTO(
@@ -39,5 +31,17 @@ public final class FakeDataStore: DataStorable {
     
     public func setDustInfo(_ info: DustStoreDTO) {
         self.dustInfos.append(info)
+    }
+    
+    public func insertTable(data: DustStoreDTO) throws {
+        
+    }
+    
+    public func load() throws -> [DustStoreDTO] {
+        return []
+    }
+    
+    public func delete(location: String) throws -> Bool {
+        return false
     }
 }
