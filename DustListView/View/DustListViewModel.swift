@@ -14,10 +14,15 @@ public final class DustListViewModel {
     private let usecase: DustListUseCaseProtocol
     private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
     private let dustListSubject = CurrentValueSubject<[DustListViewDataModel], Never>([])
+    private let errorSubject = PassthroughSubject<String, Never>()
     public var router: DustListRouting?
     
     public var dustListStream: AnyPublisher<[DustListViewDataModel], Never> {
         return self.dustListSubject.eraseToAnyPublisher()
+    }
+    
+    public var errorStream: AnyPublisher<String, Never> {
+        return self.errorSubject.eraseToAnyPublisher()
     }
     
     public init(
@@ -59,6 +64,7 @@ public final class DustListViewModel {
                     self.dustListSubject.send(dataModels)
                 }
             } catch {
+                self.errorSubject.send(error.localizedDescription)
                 print(error)
             }
         }

@@ -11,15 +11,16 @@ public struct DustListView: View {
     private let viewModel: DustListViewModel
     @State private var dustListModel: [DustListViewDataModel] = []
     @State private var searchCity = ""
+    @State private var errorMessage = ""
+    @State private var showErrorAlert = false
     
     public init(viewModel: DustListViewModel) {
         self.viewModel = viewModel
     }
     
     public var body: some View {
-        SearchNavigationWrapper(searchText: $searchCity) {
+        NavigationView {
             Group {
-                
                 List {
                     ForEach(self.dustListModel, id: \.self) { dataModel in
                         listView(dataModel)
@@ -55,8 +56,20 @@ public struct DustListView: View {
                     .frame(height: 40)
             }
         }
+        .navigationTitle("미세먼지")
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList
+        }
+        .onReceive(viewModel.errorStream) { message in
+            self.errorMessage = message
+            self.showErrorAlert = true
+        }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("fetch error"),
+                message: Text(errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
         }
         .onViewWillAppear {
             viewModel.fetchDust()
