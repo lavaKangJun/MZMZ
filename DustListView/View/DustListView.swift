@@ -19,7 +19,9 @@ public struct DustListView: View {
     }
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
+            Spacer()
+            
             Group {
                 List {
                     ForEach(self.dustListModel, id: \.self) { dataModel in
@@ -40,7 +42,6 @@ public struct DustListView: View {
                                 self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
                             }
                     }
-
                 }
                 
                 Spacer()
@@ -55,8 +56,10 @@ public struct DustListView: View {
                 Spacer()
                     .frame(height: 40)
             }
+            .navigationTitle("미세먼지")
+            .navigationBarTitleDisplayMode(.large)
         }
-        .navigationTitle("미세먼지")
+        .background(Color.white)
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList
         }
