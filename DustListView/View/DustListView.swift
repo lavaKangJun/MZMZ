@@ -26,10 +26,10 @@ public struct DustListView: View {
                 List {
                     ForEach(self.dustListModel, id: \.self) { dataModel in
                         listView(dataModel)
+                            .listRowBackground(Color.clear)
                             .padding(.bottom, 20)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
-                            .listRowBackground(Color.clear)
                             .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
                                 Button(role: .destructive) {
                                     viewModel.deleteLocation(dataModel.location)
@@ -43,7 +43,8 @@ public struct DustListView: View {
                             }
                     }
                 }
-                
+                .scrollContentBackground(.hidden)
+                .background(Color.white)
                 Spacer()
                 
                 Image(systemName: "plus.circle")
@@ -59,7 +60,6 @@ public struct DustListView: View {
             .navigationTitle("미세먼지")
             .navigationBarTitleDisplayMode(.large)
         }
-        .background(Color.white)
         .onReceive(viewModel.dustListStream) { dustList in
             self.dustListModel = dustList
         }
