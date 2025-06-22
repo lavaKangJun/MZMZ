@@ -13,11 +13,41 @@ public struct CityDetailViewDataModel {
     let location: String
     let dustDensity: String
     let microDustDensity: String
+    var dustGrade: Int = 0
+    var microDustGrade: Int = 0
     
     init(location: String, entity: MesureDnstyEntity) {
         self.location = location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
+        self.dustGrade = translateDustGrade(dustDensity)
+        self.microDustGrade = translateMicroDustGrade(microDustDensity)
+    }
+    
+    private func translateDustGrade(_ value: String) -> Int {
+        guard let gradeValue = Int(value) else { return 0 }
+        if 0...30 ~= gradeValue {
+            return 0
+        } else if 31...80 ~= gradeValue {
+            return 1
+        } else if 81...150 ~= gradeValue {
+            return 2
+        } else {
+            return 3
+        }
+    }
+    
+    private func translateMicroDustGrade(_ value: String) -> Int {
+        guard let gradeValue = Int(value) else { return 0 }
+        if 0...15 ~= gradeValue {
+            return 0
+        } else if 16...50 ~= gradeValue {
+            return 1
+        } else if 50...100 ~= gradeValue {
+            return 2
+        } else {
+            return 3
+        }
     }
     
     var dustGradeText: String {
@@ -48,14 +78,16 @@ public struct CityDetailViewDataModel {
     }
     
     var backgroundColor: [Color] {
-        guard let gradeValue = Int(dustDensity) else { return [Color.clear] }
-        if 0...30 ~= gradeValue {
+        let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
+        print(self.location, self.dustGrade, self.microDustGrade)
+        switch grade {
+        case 0:
             return [Color.blue.opacity(0.5)]
-        } else if 31...80 ~= gradeValue {
+        case 1:
             return [Color.blue.opacity(0.5), Color.black.opacity(0.1)]
-        } else if 81...150 ~= gradeValue {
+        case 2:
             return [Color.blue.opacity(0.5), Color.black.opacity(0.5)]
-        } else {
+        default:
             return [Color.blue.opacity(0.3), Color.black.opacity(0.8)]
         }
     }
