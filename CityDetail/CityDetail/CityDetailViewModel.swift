@@ -79,7 +79,6 @@ public struct CityDetailViewDataModel {
     
     var backgroundColor: [Color] {
         let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
-        print(self.location, self.dustGrade, self.microDustGrade)
         switch grade {
         case 0:
             return [Color.blue.opacity(0.5)]

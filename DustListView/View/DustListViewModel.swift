@@ -37,13 +37,13 @@ public final class DustListViewModel {
         Task {
             do {
                 let dustInfos = self.usecase.getDustInfo()
-                let dataModels = try await withThrowingTaskGroup(of: (Int, DustListViewDataModel?).self) { group in
+                let dataModels = try await withThrowingTaskGroup(of: (Int, DustListViewDataModel).self) { group in
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask {
                             guard let latitude = Double(dustInfo.latitude),
-                                  let longtitude = Double(dustInfo.longitude),
+                                  let longtitude = Double(dustInfo.latitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, nil) }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, longtitude: Double(dustInfo.latitude) ?? 0, latitude: Double(dustInfo.latitude) ?? 0)) }
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
@@ -53,19 +53,20 @@ public final class DustListViewModel {
                         }
                     }
                     
-                    var result: [(Int, DustListViewDataModel?)] = []
+                    var result: [(Int, DustListViewDataModel)] = []
                     for try await model in group {
                         result.append(model)
                     }
-                    return result.sorted(by: { $0.0 < $1.0 }).compactMap({ $0.1 })
+                    return result.sorted(by: { $0.0 < $1.0 }).map({ $0.1 })
                 }
          
                 await MainActor.run {
                     self.dustListSubject.send(dataModels)
                 }
             } catch {
-                self.errorSubject.send(error.localizedDescription)
-                print(error)
+                await MainActor.run {
+                    self.errorSubject.send(error.localizedDescription)
+                }
             }
         }
     }

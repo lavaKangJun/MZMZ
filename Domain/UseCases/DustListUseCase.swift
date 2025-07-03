@@ -37,11 +37,20 @@ public final class DustListUseCase: DustListUseCaseProtocol {
     }
     
     public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
-        guard let msrstn = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName }).first else {
-            return nil
+        let msrstns = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName })
+        for index in 0..<msrstns.count {
+            if let firstStation = msrstns[safe: index] {
+                let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: firstStation)
+                if 
+                    mesureDnstyList.items.first?.pm10Value != "-",
+                    mesureDnstyList.items.first?.pm25Value != "-" {
+                    return mesureDnstyList.items.first
+                } else {
+                    continue
+                }
+            }
         }
-        let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: msrstn)
-        return mesureDnstyList.items.first
+        return nil
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
@@ -61,5 +70,11 @@ public final class DustListUseCase: DustListUseCaseProtocol {
             return false
         }
         
+    }
+}
+
+extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }

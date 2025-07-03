@@ -28,6 +28,16 @@ public final class DustListViewDataModel: Hashable {
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
     }
     
+    init(location: String, longtitude: Double, latitude: Double) {
+        self.location = location
+        self.dustDensity = "-1"
+        self.microDustDensity = "-1"
+        self.longtitude = longtitude
+        self.latitude = latitude
+        self.dustGrade = translateDustGrade(dustDensity)
+        self.microDustGrade = translateMicroDustGrade(microDustDensity)
+    }
+    
     private func translateDustGrade(_ value: String) -> Int {
         guard let gradeValue = Int(value) else { return 0 }
         if 0...30 ~= gradeValue {
@@ -81,7 +91,6 @@ extension DustListViewDataModel {
     
     var backgroundColor: [Color] {
         let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
-        print(self.location, self.dustGrade, self.microDustGrade)
         switch grade {
         case 0:
             return [Color.blue.opacity(0.5)]

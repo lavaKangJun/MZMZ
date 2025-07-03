@@ -98,19 +98,25 @@ public struct DustListView: View {
                 
                 Spacer()
                 
-                HStack {
+                if dataModel.dustDensity != "-" {
                     HStack {
-                        Text("미세먼지:")
-                        Text(dataModel.dustGradeText + " " + "\(dataModel.dustDensity) μg/m3")
+                        HStack {
+                            Text("미세먼지:")
+                            Text(dataModel.dustGradeText + " " + "\(dataModel.dustDensity) μg/m3")
+                            
+                        }
+                        .foregroundColor(Color.gray)
+                        .font(Font.system(size: 13, weight: .semibold))
                         
+                        HStack {
+                            Text("초미세먼지:")
+                            Text(dataModel.microDustGradeText + " " + "\(dataModel.microDustDensity) μg/m3")
+                        }.foregroundColor(Color.gray)
+                            .font(Font.system(size: 13, weight: .semibold))
                     }
-                    .foregroundColor(Color.gray)
-                    .font(Font.system(size: 13, weight: .semibold))
-                    
-                    HStack {
-                        Text("초미세먼지:")
-                        Text(dataModel.microDustGradeText + " " + "\(dataModel.microDustDensity) μg/m3")
-                    }.foregroundColor(Color.gray)
+                } else {
+                    Text("점검중")
+                        .foregroundColor(Color.red)
                         .font(Font.system(size: 13, weight: .semibold))
                 }
                 
