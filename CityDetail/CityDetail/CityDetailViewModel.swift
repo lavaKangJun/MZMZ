@@ -24,9 +24,19 @@ public struct CityDetailViewDataModel {
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
     }
     
+    init(location: String) {
+        self.location = location
+        self.dustDensity = "-1"
+        self.microDustDensity = "-1"
+        self.dustGrade = translateDustGrade(dustDensity)
+        self.microDustGrade = translateMicroDustGrade(microDustDensity)
+    }
+    
     private func translateDustGrade(_ value: String) -> Int {
         guard let gradeValue = Int(value) else { return 0 }
-        if 0...30 ~= gradeValue {
+        if gradeValue == -1 {
+            return -1
+        } else  if 0...30 ~= gradeValue {
             return 0
         } else if 31...80 ~= gradeValue {
             return 1
@@ -39,7 +49,9 @@ public struct CityDetailViewDataModel {
     
     private func translateMicroDustGrade(_ value: String) -> Int {
         guard let gradeValue = Int(value) else { return 0 }
-        if 0...15 ~= gradeValue {
+        if gradeValue == -1{
+            return -1
+        } else  if 0...15 ~= gradeValue {
             return 0
         } else if 16...50 ~= gradeValue {
             return 1
@@ -52,7 +64,9 @@ public struct CityDetailViewDataModel {
     
     var dustGradeText: String {
         guard let gradeValue = Int(dustDensity) else { return "" }
-        if 0...30 ~= gradeValue {
+        if gradeValue == -1 {
+          return "점검중"
+        } else if 0...30 ~= gradeValue {
             return "좋음"
         } else if 31...80 ~= gradeValue {
             return "보통"
@@ -66,7 +80,9 @@ public struct CityDetailViewDataModel {
     
     var microDustGradeText: String {
         guard let gradeValue = Int(microDustDensity) else { return "" }
-        if 0...15 ~= gradeValue {
+        if gradeValue == -1 {
+          return "점검중"
+        } else if 0...15 ~= gradeValue {
             return "좋음"
         } else if 16...50 ~= gradeValue {
             return "보통"
@@ -80,6 +96,8 @@ public struct CityDetailViewDataModel {
     var backgroundColor: [Color] {
         let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
         switch grade {
+        case -1:
+            return [Color.gray.opacity(0.5)]
         case 0:
             return [Color.blue.opacity(0.5)]
         case 1:
@@ -131,7 +149,10 @@ public final class CityDetailViewModel: ObservableObject {
             let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
             
             guard let tmX = tmLocation?.x, let tmY = tmLocation?.y else { return }
-            guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else { return }
+            guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else { 
+                self.dataModel = CityDetailViewDataModel(location: self.name)
+                return
+            }
             
             await MainActor.run {
                 self.dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo)
