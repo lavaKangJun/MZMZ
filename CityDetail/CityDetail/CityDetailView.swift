@@ -35,6 +35,7 @@ public struct CityDetailView: View {
                        
                         Text("미세먼지")
                         Text(dataModel.dustGradeText)
+                        Text(dataModel.dustDensity + " μg/m3")
                     }
                     .font(.system(size: 20, weight: .medium))
                     
@@ -45,6 +46,7 @@ public struct CityDetailView: View {
                         
                         Text("초미세먼지")
                         Text(dataModel.microDustGradeText)
+                        Text(dataModel.microDustDensity + " μg/m3")
                     }
                     .font(.system(size: 20, weight: .medium))
                     
