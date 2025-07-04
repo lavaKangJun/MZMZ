@@ -99,7 +99,7 @@ public struct DustListView: View {
                 
                 HStack {
                     HStack {
-                        Text(dataModel.dustIsInspect ? "" : "미세먼지:")
+                        Text("미세먼지:")
                         Text(dataModel.dustGradeText + (dataModel.dustIsInspect ? "" : " " + "\(dataModel.dustDensity) μg/m3"))
                         
                     }
@@ -107,7 +107,7 @@ public struct DustListView: View {
                     .font(Font.system(size: 13, weight: .semibold))
                     
                     HStack {
-                        Text(dataModel.microIsInspect ? "" : "초미세먼지:")
+                        Text("초미세먼지:")
                         Text(dataModel.microDustGradeText + (dataModel.microIsInspect ? "" : " " + "\(dataModel.microDustDensity) μg/m3"))
                     }.foregroundColor(Color.gray)
                         .font(Font.system(size: 13, weight: .semibold))
