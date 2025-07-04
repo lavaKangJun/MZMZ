@@ -40,7 +40,9 @@ public final class DustListViewDataModel: Hashable {
     
     private func translateDustGrade(_ value: String) -> Int {
         guard let gradeValue = Int(value) else { return 0 }
-        if 0...30 ~= gradeValue {
+        if -1 == gradeValue {
+            return -1
+        } else if 0...30 ~= gradeValue {
             return 0
         } else if 31...80 ~= gradeValue {
             return 1
@@ -53,7 +55,9 @@ public final class DustListViewDataModel: Hashable {
     
     private func translateMicroDustGrade(_ value: String) -> Int {
         guard let gradeValue = Int(value) else { return 0 }
-        if 0...15 ~= gradeValue {
+        if -1 == gradeValue {
+            return -1
+        } else if 0...15 ~= gradeValue {
             return 0
         } else if 16...50 ~= gradeValue {
             return 1
@@ -76,9 +80,19 @@ extension DustListViewDataModel {
 }
 
 extension DustListViewDataModel {
+    var dustIsInspect: Bool {
+        return self.dustGrade == -1
+    }
+    
+    var microIsInspect: Bool {
+        return self.microDustGrade == -1
+    }
+    
     var dustGradeText: String {
         guard let gradeValue = Int(dustDensity) else { return "" }
-        if 0...30 ~= gradeValue {
+        if gradeValue == -1 {
+          return "점검중"
+        } else if 0...30 ~= gradeValue {
             return "좋음"
         } else if 31...80 ~= gradeValue {
             return "보통"
@@ -92,6 +106,8 @@ extension DustListViewDataModel {
     var backgroundColor: [Color] {
         let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
         switch grade {
+        case -1:
+            return [Color.gray.opacity(0.5)]
         case 0:
             return [Color.blue.opacity(0.5)]
         case 1:
@@ -105,7 +121,9 @@ extension DustListViewDataModel {
     
     var microDustGradeText: String {
         guard let gradeValue = Int(microDustDensity) else { return "" }
-        if 0...15 ~= gradeValue {
+        if gradeValue == -1 {
+            return "점검중"
+        } else if 0...15 ~= gradeValue {
             return "좋음"
         } else if 16...50 ~= gradeValue {
             return "보통"
