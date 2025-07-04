@@ -26,11 +26,10 @@ public struct DustListView: View {
                 List {
                     ForEach(self.dustListModel, id: \.self) { dataModel in
                         listView(dataModel)
-                            .listRowBackground(Color.clear)
                             .padding(.bottom, 20)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
                                 Button(role: .destructive) {
                                     viewModel.deleteLocation(dataModel.location)
                                 } label: {
