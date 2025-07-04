@@ -41,9 +41,9 @@ public final class DustListViewModel {
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask {
                             guard let latitude = Double(dustInfo.latitude),
-                                  let longtitude = Double(dustInfo.latitude),
+                                  let longtitude = Double(dustInfo.longitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, longtitude: Double(dustInfo.latitude) ?? 0, latitude: Double(dustInfo.latitude) ?? 0)) }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, longtitude: Double(dustInfo.longitude) ?? 0, latitude: Double(dustInfo.latitude) ?? 0)) }
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
