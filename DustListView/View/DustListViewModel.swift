@@ -72,7 +72,10 @@ public final class DustListViewModel {
     }
     
     public func deleteLocation(_ locaion: String) {
-        let result = self.usecase.deleteDustInfo(location: locaion)
+        let _ = self.usecase.deleteDustInfo(location: locaion)
+        var current = self.dustListSubject.value
+        current.removeAll(where: { $0.location == locaion })
+        self.dustListSubject.send(current)
     }
     
     public func routeToFindLocation() {
