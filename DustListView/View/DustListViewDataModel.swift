@@ -107,13 +107,13 @@ extension DustListViewDataModel {
         let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
         switch grade {
         case -1:
-            return [Color.gray.opacity(0.5)]
+            return [Color.gray.opacity(0.6)]
         case 0:
             return [Color.blue.opacity(0.5)]
         case 1:
-            return [Color.blue.opacity(0.5), Color.black.opacity(0.1)]
+            return [Color.blue.opacity(0.5), Color.black.opacity(0.2)]
         case 2:
-            return [Color.blue.opacity(0.5), Color.black.opacity(0.5)]
+            return [Color.blue.opacity(0.5), Color.black.opacity(0.6)]
         default:
             return [Color.blue.opacity(0.3), Color.black.opacity(0.8)]
         }

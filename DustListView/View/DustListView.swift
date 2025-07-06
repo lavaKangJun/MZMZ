@@ -20,61 +20,67 @@ public struct DustListView: View {
     
     public var body: some View {
         NavigationStack {
-            Spacer()
-            
-            Group {
-                List {
-                    ForEach(self.dustListModel, id: \.self) { dataModel in
-                        listView(dataModel)
-                            .padding(.bottom, 20)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
-                            .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
-                                Button(role: .destructive) {
-                                    viewModel.deleteLocation(dataModel.location)
-                                } label: {
-                                    Label("삭제", systemImage: "trash")
-                                }
-                                .tint(.clear)
-                            })
-                            .onTapGesture {
-                                self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
+            ZStack {
+                Color(uiColor: UIColor(red: 250/255, green: 244/255, blue: 192/255, alpha: 1))
+                    .ignoresSafeArea()
+                VStack {
+                    Spacer()
+                    
+                    Group {
+                        List {
+                            ForEach(self.dustListModel, id: \.self) { dataModel in
+                                listView(dataModel)
+                                    .padding(.bottom, 20)
+                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowBackground(Color.clear)
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                                        Button(role: .destructive) {
+                                            viewModel.deleteLocation(dataModel.location)
+                                        } label: {
+                                            Label("삭제", systemImage: "trash")
+                                        }
+                                        .tint(.clear)
+                                    })
+                                    .onTapGesture {
+                                        self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
+                                    }
                             }
+                        }
+                        .scrollContentBackground(.hidden)
+                        Spacer()
+                        
+                        Image(systemName: "plus.circle")
+                            .imageScale(.large)
+                            .font(.largeTitle)
+                            .onTapGesture {
+                                viewModel.routeToFindLocation()
+                            }
+                        
+                        Spacer()
+                            .frame(height: 40)
                     }
+                    .navigationTitle("미세먼지")
+                    .navigationBarTitleDisplayMode(.large)
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.white)
-                Spacer()
-                
-                Image(systemName: "plus.circle")
-                    .imageScale(.large)
-                    .font(.largeTitle)
-                    .onTapGesture {
-                        viewModel.routeToFindLocation()
-                    }
-                
-                Spacer()
-                    .frame(height: 40)
+                .onReceive(viewModel.dustListStream) { dustList in
+                    self.dustListModel = dustList
+                }
+                .onReceive(viewModel.errorStream) { message in
+                    self.errorMessage = message
+                    self.showErrorAlert = true
+                }
+                .alert(isPresented: $showErrorAlert) {
+                    Alert(
+                        title: Text("fetch error"),
+                        message: Text(errorMessage),
+                        dismissButton: .default(Text("확인"))
+                    )
+                }
+                .onViewWillAppear {
+                    viewModel.fetchDust()
+                }
             }
-            .navigationTitle("미세먼지")
-            .navigationBarTitleDisplayMode(.large)
-        }
-        .onReceive(viewModel.dustListStream) { dustList in
-            self.dustListModel = dustList
-        }
-        .onReceive(viewModel.errorStream) { message in
-            self.errorMessage = message
-            self.showErrorAlert = true
-        }
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("fetch error"),
-                message: Text(errorMessage),
-                dismissButton: .default(Text("확인"))
-            )
-        }
-        .onViewWillAppear {
-            viewModel.fetchDust()
         }
     }
     

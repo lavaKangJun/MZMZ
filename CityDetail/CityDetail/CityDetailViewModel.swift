@@ -149,8 +149,10 @@ public final class CityDetailViewModel: ObservableObject {
             let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
             
             guard let tmX = tmLocation?.x, let tmY = tmLocation?.y else { return }
-            guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else { 
-                self.dataModel = CityDetailViewDataModel(location: self.name)
+            guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
+                await MainActor.run {
+                    self.dataModel = CityDetailViewDataModel(location: self.name)
+                }
                 return
             }
             
