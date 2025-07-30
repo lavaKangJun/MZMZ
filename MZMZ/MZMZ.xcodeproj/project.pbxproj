@@ -92,6 +92,8 @@
 		511F71D52D7C317400503E07 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 		511F71D72D7C318A00503E07 /* ApplicationRootViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRootViewModel.swift; sourceTree = "<group>"; };
 		512AD0262DC3A03D0094A914 /* CityDetail.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CityDetail.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5166021F2E3A53C5005B9267 /* MZMZWidzetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MZMZWidzetExtension.entitlements; sourceTree = "<group>"; };
+		516602202E3A53DD005B9267 /* MZMZ.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MZMZ.entitlements; sourceTree = "<group>"; };
 		51775D522D871936000EFBA0 /* Repository.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Repository.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D562D871943000EFBA0 /* Domain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Domain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		51775D772D88595B000EFBA0 /* Testing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Testing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 		511F71B12D7C298000503E07 = {
 			isa = PBXGroup;
 			children = (
+				5166021F2E3A53C5005B9267 /* MZMZWidzetExtension.entitlements */,
 				511F71BC2D7C298000503E07 /* MZMZ */,
 				51D2B3132DAFF83900D3532C /* MZMZWidzet */,
 				511F71BB2D7C298000503E07 /* Products */,
@@ -156,6 +159,7 @@
 		511F71BC2D7C298000503E07 /* MZMZ */ = {
 			isa = PBXGroup;
 			children = (
+				516602202E3A53DD005B9267 /* MZMZ.entitlements */,
 				511F71BD2D7C298000503E07 /* AppDelegate.swift */,
 				511F71BF2D7C298000503E07 /* SceneDelegate.swift */,
 				511F71C62D7C298500503E07 /* Assets.xcassets */,
@@ -465,6 +469,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MZMZ/MZMZ.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KPUSDZ4348;
@@ -481,6 +487,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -493,6 +500,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MZMZ/MZMZ.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KPUSDZ4348;
@@ -509,6 +518,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -520,6 +530,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MZMZWidzetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KPUSDZ4348;
@@ -535,6 +547,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ.MZMZWidzet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -547,6 +560,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MZMZWidzetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KPUSDZ4348;
@@ -562,6 +577,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = Junyoung.MZMZ.MZMZWidzet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -42,12 +42,7 @@ public final class DataStore: DataStorable {
     private func openDatabase() -> OpaquePointer? {
         var dbPointer: OpaquePointer?
         do {
-            let filePath = try FileManager.default.url(
-                for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: false
-            ).path()
+            guard let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.junyoung.mzmz") else { return nil }
             
             if sqlite3_open("\(filePath)/\(databaseName)", &dbPointer) != SQLITE_OK {
                 print("Fail create DB")

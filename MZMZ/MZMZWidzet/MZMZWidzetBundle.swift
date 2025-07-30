@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct MZMZWidzetBundle: WidgetBundle {
     var body: some Widget {
-        MZMZWidzet()
-        MZMZWidzetLiveActivity()
+        MZMZWidzet() // 잠금 화면 위젯
+//        MZMZWidzetLiveActivity() //홈화면 위젯
     }
 }
