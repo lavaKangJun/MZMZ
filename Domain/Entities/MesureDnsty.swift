@@ -90,7 +90,7 @@ public struct MesureDnstyEntity {
     }
     
     public var dustGradeText: String {
-        let gradeValue = Int(translateDustGrade(self.pm10Value))
+        guard let gradeValue = Int(self.pm10Value) else { return "점검중" }
         if gradeValue == -1 {
             return "점검중"
         } else if 0...30 ~= gradeValue {
@@ -105,7 +105,7 @@ public struct MesureDnstyEntity {
     }
     
     public var microDustGradeText: String {
-        let gradeValue = Int(translateMicroDustGrade(self.pm25Value))
+        guard let gradeValue = Int(self.pm25Value) else { return "점검중" }
         if gradeValue == -1 {
             return "점검중"
         } else if 0...15 ~= gradeValue {

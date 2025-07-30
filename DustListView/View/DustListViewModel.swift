@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import Domain
+import WidgetKit
 
 public final class DustListViewModel {
     private let locationService: LocationServiceProtocol
@@ -63,6 +64,8 @@ public final class DustListViewModel {
                 await MainActor.run {
                     self.dustListSubject.send(dataModels)
                 }
+                
+                WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
             } catch {
                 await MainActor.run {
                     self.errorSubject.send(error.localizedDescription)
@@ -76,6 +79,8 @@ public final class DustListViewModel {
         var current = self.dustListSubject.value
         current.removeAll(where: { $0.location == locaion })
         self.dustListSubject.send(current)
+        
+        WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
     }
     
     public func routeToFindLocation() {

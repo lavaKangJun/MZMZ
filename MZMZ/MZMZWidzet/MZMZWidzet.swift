@@ -14,23 +14,20 @@ import DustListView
 
 struct Provider: TimelineProvider {
     private let usecase: DustListUseCaseProtocol
-    private let dustListSubject = CurrentValueSubject<[SimpleEntry], Never>([])
     
     init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
     }
     
-    public var dustListStream: AnyPublisher<[SimpleEntry], Never> {
-        return self.dustListSubject.eraseToAnyPublisher()
-    }
-    
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(location: "loaction", dustText: "좋음", microText: "나쁨")
+        let location = LocationInfo(location: "loaction", dustText: "좋음", microText: "나쁨")
+        return SimpleEntry(items: [location])
     }
 
     // 빠르게 보일 임시 데이터 제공
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(location: "천호동", dustText: "좋음", microText: "나쁨")
+        let location = LocationInfo(location: "천호동", dustText: "좋음", microText: "나쁨")
+        let entry = SimpleEntry(items: [location])
         completion(entry)
     }
 
@@ -38,27 +35,27 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         Task {
             do {
-                var result: [SimpleEntry] = []
+                var items: [LocationInfo] = []
                 let dustInfos = self.usecase.getDustInfo()
-                let dataModels = try await withThrowingTaskGroup(of: SimpleEntry.self) { group in
+                let dataModels = try await withThrowingTaskGroup(of: LocationInfo.self) { group in
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask {
                             guard let latitude = Double(dustInfo.latitude),
                                   let longtitude = Double(dustInfo.longitude),
                                   let location = try await self.usecase.convertoToTMCoordinate(latitude: latitude, longtitude: longtitude),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return SimpleEntry(location: dustInfo.location, dustText: "", microText: "") }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return LocationInfo(location: dustInfo.location, dustText: "", microText: "") }
                             
-                            return SimpleEntry(location: dustInfo.location, dustText: mesureDnsty.dustGradeText, microText: mesureDnsty.microDustGradeText)
+                            return LocationInfo(location: dustInfo.location, dustText: mesureDnsty.dustGradeText, microText: mesureDnsty.microDustGradeText)
                         }
                     }
                     
                     for try await model in group {
                         print("result", model)
-                        result.append(model)
+                        items.append(model)
                     }
-                    return result.first
+                    return items
                 }
-                let timeline = Timeline(entries: result, policy: .atEnd)
+                let timeline = Timeline(entries: [SimpleEntry(items: items)], policy: .after(Date().addingTimeInterval(600)))
                 completion(timeline)
          
             } catch {
@@ -70,13 +67,22 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
+    let items: [LocationInfo]
+    
+    init(items: [LocationInfo]) {
+        self.date = Date()
+        self.items = items
+    }
+}
+
+struct LocationInfo: Identifiable {
+    let id = UUID()
     let location: String
     let dustText: String
     let microText: String
     
     init(location: String, dustText: String, microText: String) {
-        self.date = Date()
-        self.location = location
+        self.location = String(location.split(separator: " ").last ?? "")
         self.dustText = dustText
         self.microText = microText
     }
@@ -88,11 +94,16 @@ struct MZMZWidzetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        VStack {
-            Text(entry.location)
-            Text("미세먼지: \(entry.dustText)")
-            Text("초미세먼지: \(entry.microText)")
+        VStack(alignment: .leading, spacing: 5) {
+            ForEach(entry.items) { info in
+                HStack {
+                    Text(info.location)
+                    Text("미세: \(info.dustText)")
+                    Text("초미세: \(info.microText)")
+                }
+            }
         }
+        .font(Font.system(size: 11, weight: .semibold))
     }
 }
 
@@ -120,12 +131,12 @@ struct MZMZWidzet: Widget {
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")
-        .supportedFamilies([.accessoryRectangular, .accessoryInline])
+        .supportedFamilies([.accessoryRectangular])
     }
 }
 
 #Preview(as: .systemSmall) {
     MZMZWidzet()
 } timeline: {
-    SimpleEntry(location: "천호동", dustText: "", microText: "")
+    SimpleEntry(items: [LocationInfo(location: "천호동", dustText: "", microText: "")])
 }
