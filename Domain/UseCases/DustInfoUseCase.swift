@@ -27,13 +27,18 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
     }
     
     public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
-        let msrstn = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items
-        guard let stationName = msrstn.map({ $0.stationName }).first
-        else {
-            return nil
+        let msrstns = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName })
+        for index in 0..<msrstns.count {
+            if let firstStation = msrstns[safe: index] {
+                let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: firstStation)
+                if let mesureDnsty = mesureDnstyList.items.first(where: { ($0.pm10Value != "-") && ($0.pm25Value != "-") }) {
+                    return mesureDnsty
+                } else {
+                    continue
+                }
+            }
         }
-        let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: stationName)
-        return mesureDnstyList.items.first
+        return nil
     }
     
     public func saveDustInfo(location: String, longitude: String, latitude: String) {

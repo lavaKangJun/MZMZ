@@ -41,10 +41,8 @@ public final class DustListUseCase: DustListUseCaseProtocol {
         for index in 0..<msrstns.count {
             if let firstStation = msrstns[safe: index] {
                 let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: firstStation)
-                if 
-                    mesureDnstyList.items.first?.pm10Value != "-",
-                    mesureDnstyList.items.first?.pm25Value != "-" {
-                    return mesureDnstyList.items.first
+                if let mesureDnsty = mesureDnstyList.items.first(where: { ($0.pm10Value != "-") && ($0.pm25Value != "-") }) {
+                    return mesureDnsty
                 } else {
                     continue
                 }

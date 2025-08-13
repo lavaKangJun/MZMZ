@@ -25,6 +25,12 @@
 		51775D582D871943000EFBA0 /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51775D782D88595B000EFBA0 /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; };
 		51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D772D88595B000EFBA0 /* Testing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5194599D2E4CC4D900046D2C /* Domain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; };
+		5194599E2E4CC4D900046D2C /* Domain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D562D871943000EFBA0 /* Domain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		519459A02E4CC4DD00046D2C /* Repository.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D522D871936000EFBA0 /* Repository.framework */; };
+		519459A12E4CC4DD00046D2C /* Repository.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 51775D522D871936000EFBA0 /* Repository.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		519459A22E4CC4ED00046D2C /* DustListView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510952862D98301C00951EE7 /* DustListView.framework */; };
+		519459A32E4CC4ED00046D2C /* DustListView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 510952862D98301C00951EE7 /* DustListView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		51D2B3102DAFF83900D3532C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D2B30F2DAFF83900D3532C /* WidgetKit.framework */; };
 		51D2B3122DAFF83900D3532C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D2B3112DAFF83900D3532C /* SwiftUI.framework */; };
 		51D2B3152DAFF83900D3532C /* MZMZWidzetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D2B3142DAFF83900D3532C /* MZMZWidzetBundle.swift */; };
@@ -62,6 +68,19 @@
 				51D2B3662DB550E400D3532C /* Scene.framework in Embed Frameworks */,
 				51775D792D88595C000EFBA0 /* Testing.framework in Embed Frameworks */,
 				51775D542D871936000EFBA0 /* Repository.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5194599F2E4CC4DA00046D2C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				519459A12E4CC4DD00046D2C /* Repository.framework in Embed Frameworks */,
+				5194599E2E4CC4D900046D2C /* Domain.framework in Embed Frameworks */,
+				519459A32E4CC4ED00046D2C /* DustListView.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,7 +147,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				519459A02E4CC4DD00046D2C /* Repository.framework in Frameworks */,
+				5194599D2E4CC4D900046D2C /* Domain.framework in Frameworks */,
 				51D2B3122DAFF83900D3532C /* SwiftUI.framework in Frameworks */,
+				519459A22E4CC4ED00046D2C /* DustListView.framework in Frameworks */,
 				51D2B3102DAFF83900D3532C /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,6 +253,7 @@
 				51D2B30A2DAFF83900D3532C /* Sources */,
 				51D2B30B2DAFF83900D3532C /* Frameworks */,
 				51D2B30C2DAFF83900D3532C /* Resources */,
+				5194599F2E4CC4DA00046D2C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
