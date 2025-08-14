@@ -2,27 +2,27 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:CityDetail/CityDetail.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:AddCity/AddCity.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Scene/Scene.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:DustListView/DustListView.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Testing/Testing.xcodeproj">
+      location = "group:CityDetail/CityDetail.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Domain/Domain.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Repository/Repository.xcodeproj">
+      location = "group:DustListView/DustListView.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:MZMZ/MZMZ.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Repository/Repository.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Scene/Scene.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Testing/Testing.xcodeproj">
    </FileRef>
 </Workspace>
