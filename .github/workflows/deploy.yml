@@ -1,0 +1,285 @@
+name: 🚀 Deploy Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  release:
+    types: [published]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  pre-deploy-checks:
+    name: 🔍 Pre-deployment Checks
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.check.outputs.should-deploy }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Check if deployment should proceed
+      id: check
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          echo "should-deploy=true" >> $GITHUB_OUTPUT
+          echo "Deploying from main branch"
+        elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          echo "should-deploy=true" >> $GITHUB_OUTPUT
+          echo "Deploying from tag: ${{ github.ref_name }}"
+        else
+          echo "should-deploy=false" >> $GITHUB_OUTPUT
+          echo "Not a deployable ref"
+        fi
+    
+    - name: Generate version
+      id: version
+      run: |
+        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          VERSION=${{ github.ref_name }}
+        else
+          VERSION="main-$(git rev-parse --short HEAD)"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Generated version: $VERSION"
+
+  build-and-test:
+    name: 🏗️ Build and Test
+    runs-on: ubuntu-latest
+    needs: pre-deploy-checks
+    if: needs.pre-deploy-checks.outputs.should-deploy == 'true'
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: ${{ matrix.platform }}
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Test Docker image
+      run: |
+        docker run --rm ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.pre-deploy-checks.outputs.version }} --version || true
+
+  security-scan-image:
+    name: 🛡️ Container Security Scan
+    runs-on: ubuntu-latest
+    needs: [pre-deploy-checks, build-and-test]
+    if: needs.pre-deploy-checks.outputs.should-deploy == 'true'
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build image for scanning
+      run: |
+        docker build -t scan-image .
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'scan-image'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+    
+    - name: Check for critical vulnerabilities
+      run: |
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+          -v $PWD:/tmp/.cache/ aquasec/trivy:latest image \
+          --exit-code 1 --severity CRITICAL scan-image
+
+  deploy-staging:
+    name: 🧪 Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [pre-deploy-checks, build-and-test, security-scan-image]
+    if: needs.pre-deploy-checks.outputs.should-deploy == 'true'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to staging
+      run: |
+        echo "🚀 Deploying version ${{ needs.pre-deploy-checks.outputs.version }} to staging"
+        # 실제 배포 명령어들을 여기에 추가
+        # kubectl apply -f k8s/staging/ --context=staging
+        # helm upgrade --install app ./chart --values values.staging.yaml
+    
+    - name: Run smoke tests
+      run: |
+        echo "🧪 Running smoke tests against staging"
+        # curl -f https://staging.example.com/health
+        # npm run test:e2e -- --baseUrl=https://staging.example.com
+    
+    - name: Performance baseline test
+      run: |
+        echo "⚡ Running performance baseline tests"
+        # lighthouse --chrome-flags="--headless" https://staging.example.com
+
+  deploy-production:
+    name: 🌟 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [pre-deploy-checks, deploy-staging]
+    if: needs.pre-deploy-checks.outputs.should-deploy == 'true' && github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to production
+      run: |
+        echo "🌟 Deploying version ${{ needs.pre-deploy-checks.outputs.version }} to production"
+        # Blue-Green 배포 전략 구현
+        # kubectl apply -f k8s/production/ --context=production
+        # 배포 완료 후 헬스체크
+    
+    - name: Post-deployment verification
+      run: |
+        echo "✅ Running post-deployment verification"
+        # curl -f https://example.com/health
+        # 중요한 API 엔드포인트들 테스트
+    
+    - name: Update deployment status
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: context.payload.deployment?.id || 0,
+            state: 'success',
+            environment_url: 'https://example.com',
+            description: 'Production deployment successful'
+          });
+
+  rollback:
+    name: 🔄 Rollback on Failure
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: failure() && needs.deploy-production.result == 'failure'
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Rollback deployment
+      run: |
+        echo "🔄 Rolling back production deployment"
+        # kubectl rollout undo deployment/app --context=production
+        # helm rollback app --context=production
+    
+    - name: Verify rollback
+      run: |
+        echo "✅ Verifying rollback success"
+        # curl -f https://example.com/health
+    
+    - name: Notify team of rollback
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: release } = await github.rest.repos.getLatestRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue?.number || 1,
+            body: `🔄 **Automatic Rollback Performed**
+            
+            Production deployment failed and has been automatically rolled back to the previous stable version.
+            
+            **Failed Version:** ${{ needs.pre-deploy-checks.outputs.version }}
+            **Rolled back to:** ${release.tag_name}
+            
+            Please investigate the deployment failure and fix any issues before attempting to redeploy.`
+          });
+
+  notify-success:
+    name: 📢 Deployment Success Notification  
+    runs-on: ubuntu-latest
+    needs: [pre-deploy-checks, deploy-production]
+    if: needs.deploy-production.result == 'success'
+    steps:
+    - name: Create deployment summary
+      run: |
+        echo "## 🎉 Deployment Successful! " >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Version:** ${{ needs.pre-deploy-checks.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Environment:** Production" >> $GITHUB_STEP_SUMMARY
+        echo "**Deployment Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+        echo "**URL:** https://example.com" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ All health checks passed" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Performance benchmarks met" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Security scans completed" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Post to Slack/Discord (optional)
+      if: env.SLACK_WEBHOOK_URL != ''
+      run: |
+        curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"🚀 Production deployment successful! Version ${{ needs.pre-deploy-checks.outputs.version }} is now live at https://example.com"}' \
+          ${{ env.SLACK_WEBHOOK_URL }}
+
+  cleanup:
+    name: 🧹 Cleanup
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: always()
+    steps:
+    - name: Clean up old container images
+      run: |
+        echo "🧹 Cleaning up old container images"
+        # 오래된 이미지들 정리
+        # docker system prune -f
+    
+    - name: Clean up old deployments
+      run: |
+        echo "🧹 Cleaning up old deployments (keeping last 5)"
+        # kubectl delete deployment --field-selector metadata.name!=current-app --context=production

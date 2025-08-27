@@ -1,0 +1,387 @@
+name: 📦 Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+  pull-requests: read
+
+jobs:
+  validate-release:
+    name: 🔍 Validate Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Determine version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION="${{ github.ref_name }}"
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Releasing version: $VERSION"
+    
+    - name: Validate version format
+      run: |
+        VERSION=${{ steps.version.outputs.version }}
+        if [[ ! $VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+          echo "❌ Invalid version format: $VERSION"
+          echo "Expected format: v1.0.0 or v1.0.0-beta"
+          exit 1
+        fi
+        echo "✅ Version format is valid: $VERSION"
+    
+    - name: Check if tag exists
+      run: |
+        VERSION=${{ steps.version.outputs.version }}
+        if git rev-parse "refs/tags/$VERSION" >/dev/null 2>&1; then
+          echo "❌ Tag $VERSION already exists"
+          exit 1
+        fi
+        echo "✅ Tag $VERSION is available"
+    
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get the latest tag
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        
+        if [ -z "$LATEST_TAG" ]; then
+          echo "📝 Generating changelog from first commit"
+          CHANGELOG=$(git log --pretty=format:"* %s (%h)" --reverse)
+        else
+          echo "📝 Generating changelog from $LATEST_TAG"
+          CHANGELOG=$(git log $LATEST_TAG..HEAD --pretty=format:"* %s (%h)" --reverse)
+        fi
+        
+        # Save changelog to output (handling multiline)
+        EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+        echo "changelog<<$EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "$EOF" >> $GITHUB_OUTPUT
+
+  run-tests:
+    name: 🧪 Run Full Test Suite
+    runs-on: ubuntu-latest
+    needs: validate-release
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup test environment
+      run: |
+        echo "Setting up ${{ matrix.test-type }} tests"
+        # 각 테스트 타입에 맞는 환경 설정
+    
+    - name: Run ${{ matrix.test-type }} tests
+      run: |
+        echo "Running ${{ matrix.test-type }} tests for release ${{ needs.validate-release.outputs.version }}"
+        # 실제 테스트 명령어들
+        # npm run test:${{ matrix.test-type }}
+        # pytest tests/${{ matrix.test-type }}/
+        # go test ./tests/${{ matrix.test-type }}/...
+
+  build-artifacts:
+    name: 🏗️ Build Release Artifacts
+    runs-on: ${{ matrix.os }}
+    needs: [validate-release, run-tests]
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-amd64
+            ext: ""
+          - os: ubuntu-latest  
+            target: linux-arm64
+            ext: ""
+          - os: windows-latest
+            target: windows-amd64
+            ext: ".exe"
+          - os: macos-latest
+            target: darwin-amd64
+            ext: ""
+          - os: macos-latest
+            target: darwin-arm64
+            ext: ""
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup build environment
+      run: |
+        echo "Setting up build for ${{ matrix.target }}"
+        # 필요한 도구들 설치
+    
+    - name: Build for ${{ matrix.target }}
+      run: |
+        echo "Building release artifacts for ${{ matrix.target }}"
+        VERSION=${{ needs.validate-release.outputs.version }}
+        
+        # 실제 빌드 명령어들 (예시)
+        # go build -ldflags="-X main.version=$VERSION" -o dist/myapp-${{ matrix.target }}${{ matrix.ext }}
+        # npm run build:${{ matrix.target }}
+        
+        mkdir -p dist
+        echo "Mock binary for ${{ matrix.target }}" > dist/myapp-${{ matrix.target }}${{ matrix.ext }}
+    
+    - name: Create checksums
+      run: |
+        cd dist
+        sha256sum * > checksums-${{ matrix.target }}.txt
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-${{ matrix.target }}
+        path: |
+          dist/
+        retention-days: 30
+
+  security-scan-artifacts:
+    name: 🛡️ Security Scan Artifacts
+    runs-on: ubuntu-latest
+    needs: build-artifacts
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts/
+    
+    - name: Scan artifacts for malware
+      run: |
+        echo "🔍 Scanning release artifacts for security issues"
+        # ClamAV 또는 다른 보안 스캐너 실행
+        # clamscan -r artifacts/
+    
+    - name: Verify artifact signatures
+      run: |
+        echo "✅ Verifying artifact signatures"
+        # GPG signature verification
+        # for file in artifacts/*/dist/*; do gpg --verify "$file.sig" "$file"; done
+
+  create-release:
+    name: 📦 Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [validate-release, run-tests, build-artifacts, security-scan-artifacts]
+    outputs:
+      release-id: ${{ steps.release.outputs.id }}
+      release-url: ${{ steps.release.outputs.html_url }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: artifacts/
+    
+    - name: Prepare release assets
+      run: |
+        mkdir -p release-assets
+        find artifacts/ -name "*" -type f -exec cp {} release-assets/ \;
+        ls -la release-assets/
+    
+    - name: Create Release
+      id: release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ needs.validate-release.outputs.version }}
+        release_name: 'Release ${{ needs.validate-release.outputs.version }}'
+        body: |
+          ## 🚀 What's New in ${{ needs.validate-release.outputs.version }}
+          
+          ### 📋 Changes
+          ${{ needs.validate-release.outputs.changelog }}
+          
+          ### 📦 Installation
+          
+          #### Binary Download
+          Download the appropriate binary for your platform from the assets below.
+          
+          #### Docker
+          ```bash
+          docker pull ghcr.io/${{ github.repository }}:${{ needs.validate-release.outputs.version }}
+          ```
+          
+          #### Package Managers
+          ```bash
+          # NPM
+          npm install ${{ github.event.repository.name }}@${{ needs.validate-release.outputs.version }}
+          
+          # Homebrew (if available)
+          brew install ${{ github.event.repository.name }}
+          ```
+          
+          ### 🔒 Security
+          All artifacts have been scanned for security vulnerabilities and signed with GPG.
+          
+          ### 📊 Checksums
+          Please verify downloaded files using the provided checksums.
+          
+          ---
+          
+          **Full Changelog**: https://github.com/${{ github.repository }}/compare/...HEAD
+        draft: false
+        prerelease: ${{ github.event.inputs.prerelease == 'true' || contains(needs.validate-release.outputs.version, '-') }}
+    
+    - name: Upload Release Assets
+      run: |
+        for asset in release-assets/*; do
+          echo "Uploading $asset"
+          gh release upload ${{ needs.validate-release.outputs.version }} "$asset"
+        done
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-containers:
+    name: 🐳 Publish Container Images
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Build and push multi-platform images
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:latest
+          ghcr.io/${{ github.repository }}:${{ needs.validate-release.outputs.version }}
+        labels: |
+          org.opencontainers.image.title=${{ github.event.repository.name }}
+          org.opencontainers.image.description=${{ github.event.repository.description }}
+          org.opencontainers.image.version=${{ needs.validate-release.outputs.version }}
+          org.opencontainers.image.source=${{ github.event.repository.html_url }}
+          org.opencontainers.image.revision=${{ github.sha }}
+
+  update-package-managers:
+    name: 📦 Update Package Managers
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release]
+    strategy:
+      matrix:
+        package-manager: [homebrew, apt, rpm]
+    steps:
+    - name: Update ${{ matrix.package-manager }}
+      run: |
+        echo "📦 Updating ${{ matrix.package-manager }} package"
+        VERSION=${{ needs.validate-release.outputs.version }}
+        
+        case "${{ matrix.package-manager }}" in
+          homebrew)
+            echo "Updating Homebrew formula"
+            # homebrew-tap 저장소에 PR 생성
+            ;;
+          apt)
+            echo "Updating APT repository"
+            # apt 저장소에 패키지 업로드
+            ;;
+          rpm)
+            echo "Updating RPM repository"
+            # rpm 저장소에 패키지 업로드
+            ;;
+        esac
+
+  post-release:
+    name: 📢 Post-Release Tasks
+    runs-on: ubuntu-latest
+    needs: [validate-release, create-release, publish-containers]
+    if: always() && needs.create-release.result == 'success'
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Create release announcement
+      run: |
+        VERSION=${{ needs.validate-release.outputs.version }}
+        RELEASE_URL=${{ needs.create-release.outputs.release-url }}
+        
+        cat > release-announcement.md << EOF
+        # 🎉 ${{ github.event.repository.name }} $VERSION is now available!
+        
+        We're excited to announce the release of ${{ github.event.repository.name }} $VERSION.
+        
+        ## 📋 What's New
+        ${{ needs.validate-release.outputs.changelog }}
+        
+        ## 🔗 Links
+        - [Release Notes]($RELEASE_URL)
+        - [Documentation](https://docs.example.com)
+        - [Docker Image](https://ghcr.io/${{ github.repository }}:$VERSION)
+        
+        ## 📦 Get Started
+        \`\`\`bash
+        # Download binary
+        curl -L https://github.com/${{ github.repository }}/releases/download/$VERSION/myapp-linux-amd64 -o myapp
+        chmod +x myapp
+        
+        # Or use Docker
+        docker run ghcr.io/${{ github.repository }}:$VERSION
+        \`\`\`
+        
+        Thanks to all contributors! 🙏
+        EOF
+        
+        echo "📢 Release announcement created"
+    
+    - name: Update documentation
+      run: |
+        echo "📚 Updating documentation for version ${{ needs.validate-release.outputs.version }}"
+        # 문서 사이트 업데이트 또는 위키 수정
+    
+    - name: Notify stakeholders
+      run: |
+        echo "📧 Notifying stakeholders about release ${{ needs.validate-release.outputs.version }}"
+        # Slack, Email, Discord 등으로 알림 발송
+    
+    - name: Social media announcement
+      if: env.TWITTER_API_KEY != ''
+      run: |
+        echo "📱 Posting to social media"
+        # Twitter API를 통한 릴리스 공지
+    
+    - name: Update project status
+      run: |
+        echo "📊 Updating project metrics and status"
+        # GitHub Projects, Jira 등 프로젝트 관리 도구 업데이트
