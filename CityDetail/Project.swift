@@ -10,7 +10,6 @@ import ProjectDescriptionHelpers
 
 let project = Project.framework(
     name: "CityDetail",
-    resources: ["Resources/**"],
     packages: [],
     dependencies: [
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),

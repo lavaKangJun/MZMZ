@@ -8,6 +8,7 @@
 import UIKit
 import Scene
 
+@MainActor
 public protocol DustListRouting {
     var scene: UIViewController? { get set}
     func routeToFindLocation()

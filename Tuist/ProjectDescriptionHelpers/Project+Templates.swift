@@ -13,12 +13,12 @@ extension Project {
         platform: Platform,
         dependencies: [TargetDependency]
     ) -> Project {
-        var targets = makeAppTargets(
+        let targets = makeAppTargets(
             name: name,
             platform: platform,
             dependencies: dependencies
         )
-        var extensionTarget = makeAppExtensionTargets(
+        let extensionTarget = makeAppExtensionTargets(
             appName: name,
             extensionName: "WidzetExtension",
             infoPlist: [
@@ -36,12 +36,17 @@ extension Project {
                 .project(target: "DustListView", path: .relativeToCurrentFile("../../DustListView"))
             ]
         )
+        
         return Project(name: name,
                        organizationName: organizationName,
                        options: .options(
-                           disableBundleAccessors: true,
-                           disableSynthesizedResourceAccessors: true
+                        disableBundleAccessors: true,
+                        disableSynthesizedResourceAccessors: true
                        ),
+                       settings: .settings( base: [
+                        "SWIFT_VERSION": "6.0",
+                        "SWIFT_STRICT_CONCURRENCY": "minimal"
+                       ]),
                        targets: targets + extensionTarget)
     }
     
@@ -55,11 +60,12 @@ extension Project {
         
         let targetName = "\(appName)\(extensionName)"
         
-        let target = Target(
+        return [.target(
             name: targetName,
-            destinations: .iOS,
+            destinations: [.iPhone, .iPad],
             product: .appExtension,
             bundleId: "\(organizationName).\(appName).\(extensionName)",
+            deploymentTargets: .iOS("18.0"),
             infoPlist: .extendingDefault(with: infoPlist),
             sources: [
                 "AppExtensions/\(targetName)/Sources/**"
@@ -70,14 +76,11 @@ extension Project {
             entitlements: Entitlements.file(path: "AppExtensions/\(targetName)/\(targetName).entitlements"),
             dependencies: dependencies,
             settings: .settings(configurations: [])
-        )
-        
-        return [target]
+        )]
     }
     
     public static func framework(
         name: String,
-        resources: ResourceFileElements? = nil,
         packages: [Package],
         dependencies: [TargetDependency]
     ) -> Project {
@@ -85,20 +88,67 @@ extension Project {
             name: name,
             organizationName: organizationName,
             packages: packages,
+            settings: .settings( base: [
+             "SWIFT_VERSION": "6.0",
+             "PRODUCT_NAME": "\(name)",
+             "PRODUCT_MODULE_NAME": "\(name)",
+             "DEFINES_MODULE": "YES",
+             "SWIFT_STRICT_CONCURRENCY": "minimal"
+            ]),
             targets: [
-                Target(
-                    name: name,
-                    destinations: .iOS,
-                    product: .framework,
-                    bundleId: "\(organizationName).\(name)",
-                    infoPlist: .extendingDefault(with: [:]),
-                    sources: ["Sources/**"],
-                    resources: resources,
-                    dependencies: dependencies
-                )
+                .target(name: name,
+                        destinations: [.iPhone, .iPad],
+                        product: .framework,
+                        bundleId: "\(organizationName).\(name)",
+                        deploymentTargets: .iOS("18.0"),
+                        infoPlist: .extendingDefault(with: [:]),
+                        sources: ["Sources/**"],
+                        resources: ["Resources/**"],
+                        dependencies: dependencies
+                       )
             ]
         )
     }
+    
+    public static func frameworkWithTest(
+        name: String,
+        packages: [Package],
+        dependencies: [TargetDependency]
+    ) -> Project {
+        return  Project(
+            name: name,
+            organizationName: organizationName,
+            packages: packages,
+            settings: .settings( base: [
+             "SWIFT_VERSION": "6.0",
+             "SWIFT_STRICT_CONCURRENCY": "minimal" 
+            ]),
+            targets: [
+                .target(
+                    name: name,
+                    destinations: [.iPhone, .iPad],
+                    product: .framework,
+                    bundleId: "\(organizationName).\(name)",
+                    deploymentTargets: .iOS("18.0"),
+                    infoPlist: .extendingDefault(with: [:]),
+                    sources: ["Sources/**"],
+                    resources: ["Resources/**"],
+                    dependencies: dependencies
+                ),
+                .target(
+                name: "\(name)Tests",
+                destinations: [.iPhone, .iPad],
+                product: .unitTests,
+                bundleId: "\(organizationName).\(name)Tests",
+                deploymentTargets: .iOS("18.0"),
+                infoPlist: .default,
+                sources: ["Sources/Tests/**"],
+                resources: ["Resources/**"],
+                dependencies: dependencies
+            )]
+        )
+    }
+    
     // MARK: - Private
 
     /// Helper function to create a framework target and an associated unit test target
@@ -106,17 +156,17 @@ extension Project {
         name: String,
         dependencies: [TargetDependency] = []
     ) -> [Target] {
-        let sources = Target(
+        return [.target(
             name: name,
-            destinations: .iOS,
+            destinations: [.iPhone, .iPad],
             product: .framework,
             bundleId: "\(organizationName).\(name)",
+            deploymentTargets: .iOS("18.0"),
             infoPlist: .default,
             sources: ["Sources/**"],
             resources: ["Resources/**"],
-            dependencies: dependencies
-        )
-        return [sources]
+            dependencies: dependencies)
+        ]
     }
 
     /// Helper function to create the application target and the unit test target.
@@ -135,18 +185,16 @@ extension Project {
             "NSLocationAlwaysAndWhenInUseUsageDescription": "위치 정보 접근 허용이 필요합니다."
         ]
 
-        let mainTarget = Target(
-            name: name,
-            destinations: .iOS,
-            product: .app,
-            bundleId: "\(organizationName).\(name)",
-            infoPlist: .extendingDefault(with: infoPlist),
-            sources: ["Sources/**"],
-            resources: ["Resources/**"],
-            entitlements: Entitlements.file(path: "./MZMZ.entitlements"),
-            dependencies: dependencies
-        )
-
-        return [mainTarget]
+        return [.target(name: name,
+                        destinations: [.iPhone, .iPad],
+                        product: .app,
+                        bundleId: "\(organizationName).\(name)",
+                        deploymentTargets: .iOS("18.0"),
+                        infoPlist: .extendingDefault(with: infoPlist),
+                        sources: ["Sources/**"],
+                        resources: ["Resources/**"],
+                        entitlements: Entitlements.file(path: "./MZMZ.entitlements"),
+                        dependencies: dependencies)
+        ]
     }
 }

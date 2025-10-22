@@ -16,7 +16,7 @@ let project = Project.app(
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
         .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),
-        .project(target: "Testing", path: .relativeToCurrentFile("../Testing")),
+        .project(target: "MZMZTesting", path: .relativeToCurrentFile("../MZMZTesting")),
         .project(target: "AddCity", path: .relativeToCurrentFile("../AddCity")),
         .project(target: "CityDetail", path: .relativeToCurrentFile("../CityDetail")),
         .project(target: "DustListView", path: .relativeToCurrentFile("../DustListView"))

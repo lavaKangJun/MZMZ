@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct DustStoreEntity {
+public struct DustStoreEntity: Sendable {
     public let location: String
     public let longitude: String
     public let latitude: String

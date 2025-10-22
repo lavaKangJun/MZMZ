@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Domain
 
-public final class DustListViewDataModel: Hashable {
+public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     let location: String
     let dustDensity: String
     let microDustDensity: String

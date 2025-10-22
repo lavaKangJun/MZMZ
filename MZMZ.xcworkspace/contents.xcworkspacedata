@@ -17,12 +17,12 @@
       location = "group:MZMZ/MZMZ.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:MZMZTesting/MZMZTesting.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Repository/Repository.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Scene/Scene.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Testing/Testing.xcodeproj">
    </FileRef>
 </Workspace>

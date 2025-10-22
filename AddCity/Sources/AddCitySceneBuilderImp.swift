@@ -10,7 +10,7 @@ import SwiftUI
 import Domain
 import Repository
 import Scene
-import Testing
+import MZMZTesting
 
 public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
     private let detailCitySceneBuilder: CityDetailSceneBuilder

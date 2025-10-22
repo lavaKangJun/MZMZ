@@ -9,7 +9,7 @@ import Foundation
 import Repository
 
 public final class FakeDataStore: DataStorable {
-    public static let shared = FakeDataStore()
+    nonisolated(unsafe) public static let shared = FakeDataStore()
     private var dustInfos: [DustStoreDTO] = [
         DustStoreDTO(
             location: "풍납2동",

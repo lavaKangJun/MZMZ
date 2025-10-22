@@ -36,12 +36,12 @@ public enum RemoteAPIMethod {
     }
 }
 
-public protocol RemoteProtocol {
+public protocol RemoteProtocol: Sendable {
     func request<T: Decodable>(
         header: [String : String]?,
         endpoint: Endpoint,
         method: RemoteAPIMethod,
-        parameters: [String : Any]
+        parameters: [String : String]
     ) async throws -> T
 }
 
@@ -54,7 +54,7 @@ public final class Remote: RemoteProtocol {
         header: [String : String]?,
         endpoint: Endpoint,
         method: RemoteAPIMethod,
-        parameters: [String : Any]
+        parameters: [String : String]
     ) async throws -> T {
         let dataTask = self.session.request(
             endpoint.rawValue,

@@ -8,13 +8,14 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.framework(
+let project = Project.frameworkWithTest(
     name: "DustListView",
-    resources: ["Resources/**"],
     packages: [],
     dependencies: [
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
-        .project(target: "Scene", path: .relativeToCurrentFile("../Scene"))
+        .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),
+        .project(target: "MZMZTesting", path: .relativeToCurrentFile("../MZMZTesting")),
+        .sdk(name: "Testing", type: .framework)
     ]
 )

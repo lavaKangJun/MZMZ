@@ -25,7 +25,7 @@ public final class Repository: RepositoryProtocol {
     public func formatTMCoordinate(locationInfo: LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity] {
         var header = ["Authorization": "KakaoAK \(key)"]
         header["content-type"] = "application/json"
-        var parameters: [String: Any] = [:]
+        var parameters: [String: String] = [:]
         parameters["x"] = locationInfo.longtitude
         parameters["y"] = locationInfo.latitude
         parameters["output_coord"] = "TM"
@@ -36,7 +36,7 @@ public final class Repository: RepositoryProtocol {
     }
     
     public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
-        var parameters: [String: Any] = [:]
+        var parameters: [String: String] = [:]
         parameters["tmX"] = "\(tmX)"
         parameters["tmY"] = "\(tmY)"
         parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
@@ -48,7 +48,7 @@ public final class Repository: RepositoryProtocol {
     }
     
     public func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity {
-        var parameters: [String: Any] = [:]
+        var parameters: [String: String] = [:]
         parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
         parameters["returnType"] = "json"
         parameters["ver"] = "1.1"
@@ -63,10 +63,10 @@ public final class Repository: RepositoryProtocol {
         var header = ["Authorization": "KakaoAK \(key)"]
         header["content-type"] = "application/json"
         
-        var parameters: [String: Any] = [:]
+        var parameters: [String: String] = [:]
         parameters["analyze_type"] = "similar"
         parameters["query"] = location
-        parameters["size"] = 5
+        parameters["size"] = "5"
   
         let result: KakaoResponse<SearchLocationDTO> = try await self.remote.request(header: header, endpoint: .findLocation, method: .get, parameters: parameters)
         return result.documents.map { $0.makeEntity() }

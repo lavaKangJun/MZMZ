@@ -25,7 +25,7 @@ public enum SQLiteError: Error {
 }
 
 public final class DataStore: DataStorable {
-    public static let shared = DataStore()
+    @MainActor public static let shared = DataStore()
     private var dustInfos: [DustStoreDTO] = []
     private var dbPointer: OpaquePointer?
     private let databaseName = "mzmz.sqlite.db"

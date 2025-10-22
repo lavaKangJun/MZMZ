@@ -9,7 +9,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.framework(
-    name: "Testing",
+    name: "MZMZTesting",
     packages: [],
     dependencies: [
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),

@@ -13,7 +13,7 @@ let workspace = Workspace(
         "MZMZ",
         "Repository",
         "Domain",
-        "Testing",
+        "MZMZTesting",
         "DustListView",
         "Scene",
         "AddCity",

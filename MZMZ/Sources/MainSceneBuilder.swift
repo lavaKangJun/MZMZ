@@ -9,7 +9,7 @@ import UIKit
 import Domain
 import Repository
 import SwiftUI
-import Testing
+import MZMZTesting
 import DustListView
 import AddCity
 import Scene

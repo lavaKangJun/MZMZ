@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import Combine
+@preconcurrency import Combine
 import Domain
 import WidgetKit
 
-public final class DustListViewModel {
+public final class DustListViewModel: @unchecked Sendable   {
     private let locationService: LocationServiceProtocol
     private let usecase: DustListUseCaseProtocol
     private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
@@ -35,12 +35,13 @@ public final class DustListViewModel {
     }
     
     public func fetchDust() {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             do {
                 let dustInfos = self.usecase.getDustInfo()
                 let dataModels = try await withThrowingTaskGroup(of: (Int, DustListViewDataModel).self) { group in
                     for (index, dustInfo) in dustInfos.enumerated() {
-                        group.addTask {
+                        group.addTask { [dustInfo] in
                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
                                   let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, longtitude: dustInfo.longitude, latitude: dustInfo.latitude)) }
@@ -60,14 +61,14 @@ public final class DustListViewModel {
                     return result.sorted(by: { $0.0 < $1.0 }).map({ $0.1 })
                 }
          
-                await MainActor.run {
-                    self.dustListSubject.send(dataModels)
+                await MainActor.run { [weak self] in
+                    self?.dustListSubject.send(dataModels)
                 }
                 
                 WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
             } catch {
-                await MainActor.run {
-                    self.errorSubject.send(error.localizedDescription)
+                await MainActor.run { [weak self] in
+                    self?.errorSubject.send(error.localizedDescription)
                 }
             }
         }
@@ -82,10 +83,12 @@ public final class DustListViewModel {
         WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
     }
     
+    @MainActor
     public func routeToFindLocation() {
         self.router?.routeToFindLocation()
     }
     
+    @MainActor
     public func routeToDetail(name: String, longitude: String, latitude: String) {
         self.router?.routeToDetail(name: name, longitude: longitude, latitude: latitude)
     }

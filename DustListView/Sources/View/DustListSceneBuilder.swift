@@ -9,11 +9,11 @@ import UIKit
 import SwiftUI
 import Domain
 import Scene
-import Testing
+import MZMZTesting
 import Repository
 import Scene
 
-public final class DustListSceneBuilderImp: DustListSceneBuilder {
+public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder {
     private let addCitySceneBuilder: AddCitySceneBuilder
     private let cityDetailSceheBuilder: CityDetailSceneBuilder
     
@@ -22,6 +22,7 @@ public final class DustListSceneBuilderImp: DustListSceneBuilder {
         self.cityDetailSceheBuilder = cityDetailSceheBuilder
     }
     
+    @MainActor
     public func makeDustListScene() -> UIViewController {
         let isTesting = false
         if isTesting {
