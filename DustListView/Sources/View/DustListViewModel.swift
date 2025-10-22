@@ -11,7 +11,6 @@ import Domain
 import WidgetKit
 
 public final class DustListViewModel: @unchecked Sendable   {
-    private let locationService: LocationServiceProtocol
     private let usecase: DustListUseCaseProtocol
     private let authKey = "16f1ed764daa4d2c4d6e3f0d25269ca5"
     private let dustListSubject = CurrentValueSubject<[DustListViewDataModel], Never>([])
@@ -26,11 +25,7 @@ public final class DustListViewModel: @unchecked Sendable   {
         return self.errorSubject.eraseToAnyPublisher()
     }
     
-    public init(
-        locationService: LocationServiceProtocol,
-        usecase: DustListUseCaseProtocol
-    ) {
-        self.locationService = locationService
+    public init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
     }
     

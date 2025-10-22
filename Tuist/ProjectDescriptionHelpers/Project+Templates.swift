@@ -121,7 +121,8 @@ extension Project {
             packages: packages,
             settings: .settings( base: [
              "SWIFT_VERSION": "6.0",
-             "SWIFT_STRICT_CONCURRENCY": "minimal" 
+             "SWIFT_STRICT_CONCURRENCY": "minimal",
+             "DEFINES_MODULE": "YES"
             ]),
             targets: [
                 .target(

@@ -32,7 +32,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
             let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder, 
                                         cityDetailSceneBuilder: self.cityDetailSceheBuilder)
-            let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
+            let viewModel = DustListViewModel(usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)
             router.scene = viewControlelr
@@ -44,7 +44,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
             let useCase = DustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder,
                                         cityDetailSceneBuilder: self.cityDetailSceheBuilder)
-            let viewModel = DustListViewModel(locationService: locationService, usecase: useCase)
+            let viewModel = DustListViewModel(usecase: useCase)
             let listView = DustListView(viewModel: viewModel)
             let viewControlelr = UIHostingController(rootView: listView)
             router.scene = viewControlelr
