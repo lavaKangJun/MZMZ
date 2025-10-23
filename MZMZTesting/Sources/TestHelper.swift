@@ -13,6 +13,8 @@ nonisolated(unsafe) private var containerKey = "container"
 public protocol TestDouble {
     func called(name: String, verify: @escaping (Any) -> Void)
     func verify(name: String, args: Any?)
+    func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object)
+    func resolve<Object>(_ type: Object.Type, name: String) -> Object?
 }
 
 extension TestDouble {
@@ -34,6 +36,14 @@ extension TestDouble {
         }
     }
     
+    func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
+        self.container.register(type, name: name, provider: provider)
+    }
+    
+    func resolve<Object>(_ type: Object.Type, name: String) -> Object? {
+        self.container.resolve(type, name: name)
+    }
+    
     public func called(name: String, verify: @escaping (Any) -> Void) {
         self.container.called(name: name, verify: verify)
     }
@@ -46,14 +56,26 @@ extension TestDouble {
 
 final class DIContainer {
     typealias Verify = (Any?) -> Void
-    private var container: [String: Verify] = [:]
+    typealias Provier = () -> Any
+    private var verifyContainer: [String: Verify] = [:]
+    private var providerContainer: [String: Provier] = [:]
+    
+    func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
+        self.providerContainer[name] = provider
+    }
+    
+    func resolve<Object>(_ type: Object.Type, name: String) -> Object? {
+        let provider = providerContainer[name]
+        let value = provider?()
+        return value as? Object
+    }
     
     func called(name: String, verify: @escaping (Any) -> Void) {
-        self.container[name] = verify
+        self.verifyContainer[name] = verify
     }
     
     func verify(name: String, args: Any?) {
-        let verify = self.container[name]
+        let verify = self.verifyContainer[name]
         verify?(args)
     }
 }
