@@ -5,7 +5,7 @@
 //  Created by 강준영 on 10/21/25.
 //  Copyright © 2025 Junyoung. All rights reserved.
 //
-import UIKit
+import Foundation
 import Testing
 import Combine
 import Repository
@@ -79,35 +79,5 @@ struct DustListViewModelTests {
         
         // Assert
         #expect(called == true, "routeToDetailView")
-    }
-
-//    private func waitActionResult<T>(from publisher: AnyPublisher<T, Never>) async throws -> T {
-//        try await withCheckedThrowingContinuation { continuation in
-//            var cancellable: AnyCancellable?
-//            cancellable = publisher
-//                .setFailureType(to: Error.self)
-//                .timeout(.seconds(3), scheduler: DispatchQueue.main, options: nil, customError:nil)
-//                .sink(receiveCompletion: { completion in
-//                    if case let .failure(error) = completion {
-//                        continuation.resume(throwing: error)
-//                    }
-//                }, receiveValue: { value in
-//                    nonisolated(unsafe) let result = value
-//                    continuation.resume(returning: result)
-//                    cancellable?.cancel()
-//                })
-//        }
-//    }
-}
-
-class SpyRouting: DustListRouting, TestDouble {
-    var scene: UIViewController?
-    
-    func routeToFindLocation() {
-        self.verify(name: "routeToFindLocation", args: nil)
-    }
-    
-    func routeToDetail(name: String, longitude: String, latitude: String) {
-        self.verify(name: "routeToDetail", args: name)
     }
 }
