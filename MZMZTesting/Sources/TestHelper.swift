@@ -36,11 +36,11 @@ extension TestDouble {
         }
     }
     
-    func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
+    public func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
         self.container.register(type, name: name, provider: provider)
     }
     
-    func resolve<Object>(_ type: Object.Type, name: String) -> Object? {
+    public func resolve<Object>(_ type: Object.Type, name: String) -> Object? {
         self.container.resolve(type, name: name)
     }
     

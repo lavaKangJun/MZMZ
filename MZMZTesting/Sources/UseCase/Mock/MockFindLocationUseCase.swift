@@ -9,8 +9,8 @@
 import Foundation
 import Domain
 
-public final class MockFindLocationUseCase: FindLocationUseCaseProtocol {
-    public func findLocation(location: String) async throws -> [Domain.SearchLocationEntity] {
-        
+public final class MockFindLocationUseCase: FindLocationUseCaseProtocol, TestDouble {
+    public func findLocation(location: String) async throws -> [SearchLocationEntity] {
+        self.resolve([SearchLocationEntity].self, name: "findLocation") ?? []
     }
 }
