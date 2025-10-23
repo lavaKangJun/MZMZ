@@ -22,8 +22,8 @@ public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
     public func makeAddCityScene() -> UIViewController {
         let isTesting = false
         if isTesting {
-            let repository = MockingRepository(dataStore: FakeDataStore.shared)
-            let useCase = MockingFindLocationUseCase(repository: repository)
+            let repository = StubRepository(dataStore: FakeDataStore.shared)
+            let useCase = StubFindLocationUseCase(repository: repository)
             let viewModel = AddCityViewModel(useCase: useCase)
             let addCityView = AddCityView(viewModel: viewModel)
             let router = AddCityRouter(detailCitySceneBuilder: self.detailCitySceneBuilder)

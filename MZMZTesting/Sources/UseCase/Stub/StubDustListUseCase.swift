@@ -1,5 +1,5 @@
 //
-//  MockingDustListUseCase.swift
+//  StubDustListUseCase.swift
 //  Testing
 //
 //  Created by 강준영 on 2025/03/29.
@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public final class MockingDustListUseCase: DustListUseCaseProtocol {
+public final class StubDustListUseCase: DustListUseCaseProtocol {
     private let repository: RepositoryProtocol
     private let locationService: LocationServiceProtocol
     
@@ -46,6 +46,6 @@ public final class MockingDustListUseCase: DustListUseCaseProtocol {
     }
     
     public func deleteDustInfo(location: String) -> Bool {
-        return false
+        return true
     }
 }

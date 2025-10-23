@@ -27,9 +27,9 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
         let isTesting = false
         if isTesting {
             let fakeDataStore = FakeDataStore.shared
-            let repository = MockingRepository(dataStore: fakeDataStore)
-            let locationService = MockingLocationService()
-            let useCase = MockingDustListUseCase(repository: repository, locationService: locationService)
+            let repository = StubRepository(dataStore: fakeDataStore)
+            let locationService = StubLocationService()
+            let useCase = StubDustListUseCase(repository: repository, locationService: locationService)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder, 
                                         cityDetailSceneBuilder: self.cityDetailSceheBuilder)
             let viewModel = DustListViewModel(usecase: useCase)

@@ -27,15 +27,17 @@ struct DustListViewModelTests {
     }
     
     init() {
-        mockRepository = MockingRepository(dataStore: FakeDataStore.shared)
-        mocekService = MockingLocationService()
-        mockUsecase = MockingDustListUseCase(repository: mockRepository, locationService: mocekService)
+        mockRepository = StubRepository(dataStore: FakeDataStore.shared)
+        mocekService = StubLocationService()
+        mockUsecase = StubDustListUseCase(repository: mockRepository, locationService: mocekService)
         viewModel = DustListViewModel(usecase: mockUsecase)
         viewModel.router = SpyRouting()
     }
     
     // struct라 teardown같은 코드는 필요없음
     
+    // Mocking으로 다시만들어야함 내가 만든건 mock이 아니라 fake임
+// 근데 UI작업할 때는 fake가 필요하긴함... 기존 객체를 fake로 만들고 mock을 하나 더 만들어야 할듯?
     @Test("미세먼지 정보를 가져오는 테스트")
     mutating func fetchDustTest() async throws {
         // Arrange

@@ -1,5 +1,5 @@
 //
-//  MockingRepository.swift
+//  StubRepository.swift
 //  Testing
 //
 //  Created by 강준영 on 2025/03/17.
@@ -9,7 +9,7 @@ import Foundation
 import Domain
 import Repository
 
-public final class MockingRepository: RepositoryProtocol {
+public final class StubRepository: RepositoryProtocol {
     private let dataStore: DataStorable
     public init (dataStore: DataStorable) {
         self.dataStore = dataStore
@@ -113,6 +113,6 @@ public final class MockingRepository: RepositoryProtocol {
     }
     
     public func deleteDustInfo(location: String) throws -> Bool {
-        return false
+        return true
     }
 }

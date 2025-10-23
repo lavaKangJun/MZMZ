@@ -1,5 +1,5 @@
 //
-//  MockingFindLocationUseCase.swift
+//  StubFindLocationUseCase.swift
 //  Testing
 //
 //  Created by 강준영 on 2025/05/11.
@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public final class MockingFindLocationUseCase: FindLocationUseCaseProtocol {
+public final class StubFindLocationUseCase: FindLocationUseCaseProtocol {
     private let repository: RepositoryProtocol
     
     public init(repository: RepositoryProtocol) {

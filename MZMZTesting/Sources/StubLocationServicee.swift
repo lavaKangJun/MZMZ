@@ -1,5 +1,5 @@
 //
-//  MockingLocationService.swift
+//  StubLocationService.swift
 //  Testing
 //
 //  Created by 강준영 on 2025/03/29.
@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public class MockingLocationService: LocationServiceProtocol {
+public class StubLocationService: LocationServiceProtocol {
     
     public init() { }
     
