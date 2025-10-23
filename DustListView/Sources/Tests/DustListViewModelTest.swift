@@ -5,7 +5,7 @@
 //  Created by 강준영 on 10/21/25.
 //  Copyright © 2025 Junyoung. All rights reserved.
 //
-import Foundation
+import UIKit
 import Testing
 import Combine
 import Repository
@@ -17,17 +17,21 @@ import MZMZTesting
 // Suite: 테스트 그룹화 함
 @Suite("DustListViewModel Tests")
 struct DustListViewModelTests {
-    let mockRepository: RepositoryProtocol
-    let mocekService: LocationServiceProtocol
-    let mockUsecase: DustListUseCaseProtocol
-    let viewModel: DustListViewModel
-    var cancellables: Set<AnyCancellable> = []
+    private let mockRepository: RepositoryProtocol
+    private let mocekService: LocationServiceProtocol
+    private let mockUsecase: DustListUseCaseProtocol
+    private let viewModel: DustListViewModel
+    private var cancellables: Set<AnyCancellable> = []
+    private var spyRouter: SpyRouting? {
+        return self.viewModel.router as? SpyRouting
+    }
     
     init() {
         mockRepository = MockingRepository(dataStore: FakeDataStore.shared)
         mocekService = MockingLocationService()
         mockUsecase = MockingDustListUseCase(repository: mockRepository, locationService: mocekService)
         viewModel = DustListViewModel(usecase: mockUsecase)
+        viewModel.router = SpyRouting()
     }
     
     // struct라 teardown같은 코드는 필요없음
@@ -45,7 +49,38 @@ struct DustListViewModelTests {
         
         viewModel.fetchDust()
     }
-//
+    
+    @MainActor @Test("지역 찾는 뷰 라우팅 테스트")
+    func testRouteToFindLocationView() {
+        // Arrange
+        var called = false
+        self.spyRouter?.called(name: "routeToFindLocation") { _ in
+            called = true
+        }
+        // Act
+        self.viewModel.routeToFindLocation()
+        
+        // Assert
+        #expect(called == true, "routeToFindLocationView")
+    }
+    
+    @MainActor @Test("상세뷰로 라우팅 테스트")
+    func testRouteToDetailView() {
+        // Arrange
+        var called = false
+        self.spyRouter?.called(name: "routeToDetail") { location in
+            if (location as? String) == "강원도" {
+                called = true
+            }
+        }
+        
+        // Act
+        self.viewModel.routeToDetail(name: "강원도", longitude: "123.456", latitude: "789.123")
+        
+        // Assert
+        #expect(called == true, "routeToDetailView")
+    }
+
 //    private func waitActionResult<T>(from publisher: AnyPublisher<T, Never>) async throws -> T {
 //        try await withCheckedThrowingContinuation { continuation in
 //            var cancellable: AnyCancellable?
@@ -65,3 +100,14 @@ struct DustListViewModelTests {
 //    }
 }
 
+class SpyRouting: DustListRouting, TestDouble {
+    var scene: UIViewController?
+    
+    func routeToFindLocation() {
+        self.verify(name: "routeToFindLocation", args: nil)
+    }
+    
+    func routeToDetail(name: String, longitude: String, latitude: String) {
+        self.verify(name: "routeToDetail", args: name)
+    }
+}
