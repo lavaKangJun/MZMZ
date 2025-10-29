@@ -537,6 +537,15 @@ jobs:
           echo "✅ Quality gate passed - All checks successful"
         fi
     
+    - name: Check if any job failed
+      id: check-failure
+      run: |
+        if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]]; then
+          echo "has_failure=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_failure=false" >> $GITHUB_OUTPUT
+        fi
+    
     - name: Post status to PR
       if: github.event_name == 'pull_request'
       uses: actions/github-script@v6
@@ -552,8 +561,8 @@ jobs:
             comment.user.type === 'Bot' && comment.body.includes('🚦 Quality Gate')
           );
           
-          const status = '${{ contains(needs.*.result, ''failure'') }}' === 'true' ? 
-            '❌ **FAILED**' : '✅ **PASSED**';
+          const hasFailed = '${{ steps.check-failure.outputs.has_failure }}' === 'true';
+          const status = hasFailed ? '❌ **FAILED**' : '✅ **PASSED**';
           
           const body = `## 🚦 Quality Gate Status: ${status}
           
@@ -567,9 +576,9 @@ jobs:
           - 🛡️ Security Scan: ${{ needs.security-scan.result }}
           - 📊 Code Quality: ${{ needs.code-quality.result }}
           
-          ${status === '✅ **PASSED**' ? 
-            '🎉 All quality checks passed! Ready to merge.' : 
-            '⚠️ Some checks failed. Please review and fix the issues before merging.'
+          ${hasFailed ? 
+            '⚠️ Some checks failed. Please review and fix the issues before merging.' :
+            '🎉 All quality checks passed! Ready to merge.'
           }`;
           
           if (botComment) {
