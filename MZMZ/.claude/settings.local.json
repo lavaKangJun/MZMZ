@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Read(/Users/kangjun-young/MZMZ/.github/workflows/**)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(gh pr:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "ask": [],

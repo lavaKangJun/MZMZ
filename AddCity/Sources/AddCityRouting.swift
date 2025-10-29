@@ -14,7 +14,7 @@ public protocol AddCityRouting {
     func dismiss()
 }
 
-public final class AddCityRouter: AddCityRouting {
+public final class AddCityRouter: @preconcurrency AddCityRouting {
     public var scene: UIViewController?
     public let detailCitySceneBuilder: CityDetailSceneBuilder
     
@@ -22,11 +22,14 @@ public final class AddCityRouter: AddCityRouting {
         self.detailCitySceneBuilder = detailCitySceneBuilder
     }
     
+    @MainActor
     public func routeToCityDetail(dependency: CityDetailDependency) {
         scene?.present(self.detailCitySceneBuilder.makeCityDetailScene(dependency), animated: false)
     }
     
+    @MainActor
     public func dismiss() {
         scene?.dismiss(animated: false)
     }
+    
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 //@unchecked Sendable은 매우 신중하게 사용해야 하는 기능입니다.
 //Swift의 동시성 모델에서는 Sendable 프로토콜을 사용해 여러 스레드 간에 안전하게 전달될 수 있는 타입을 정의합니다.
 //기본적으로 Swift 컴파일러는 타입이 Sendable을 준수하는지 자동으로 검사합니다.
@@ -21,7 +20,7 @@ import Foundation
 final class ApplicationRootViewModel: @unchecked Sendable {
     var router: ApplicationRouter?
     
-    func prepareInitialScene() {
+    @MainActor func prepareInitialScene() {
         self.router?.setupInitScene()
     }
 }

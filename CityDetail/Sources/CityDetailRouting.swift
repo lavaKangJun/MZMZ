@@ -13,13 +13,13 @@ public protocol CityDetailRouting {
     func routeMainView()
 }
 
-public final class CityDetailRouter: CityDetailRouting {
+public final class CityDetailRouter: @preconcurrency CityDetailRouting {
     public var scene: UIViewController?
     
-    public func dimisss() {
+    @MainActor public func dimisss() {
         self.scene?.dismiss(animated: false)
     }
-    public func routeMainView() {
+    @MainActor public func routeMainView() {
         // presentingViewController: 현재 위에 있는 부모 뷰컨트롤러
         guard let presentingVC = self.scene?.presentingViewController?.presentingViewController else { return }
         presentingVC.dismiss(animated: false)

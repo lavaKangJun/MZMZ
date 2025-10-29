@@ -11,7 +11,7 @@ public protocol DustListUseCaseProtocol {
     func fetchLocation() async throws -> TMLocationInfoEntity?
     func convertoToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
-    func getDustInfo() -> [DustStoreEntity]
+    func getDustInfo() throws -> [DustStoreEntity]
     func deleteDustInfo(location: String) -> Bool
 }
 
@@ -51,12 +51,12 @@ public final class DustListUseCase: DustListUseCaseProtocol {
         return nil
     }
     
-    public func getDustInfo() -> [DustStoreEntity] {
+    public func getDustInfo() throws -> [DustStoreEntity] {
         do {
             return try self.repository.getDustInfo()
         } catch {
             print("Load Error", error)
-            return []
+            throw error
         }
     }
     

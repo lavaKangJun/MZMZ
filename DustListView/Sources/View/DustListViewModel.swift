@@ -30,10 +30,9 @@ public final class DustListViewModel: @unchecked Sendable   {
     }
     
     public func fetchDust() {
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             do {
-                let dustInfos = self.usecase.getDustInfo()
+                let dustInfos = try self.usecase.getDustInfo()
                 let dataModels = try await withThrowingTaskGroup(of: (Int, DustListViewDataModel).self) { group in
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask { [dustInfo] in
@@ -70,7 +69,12 @@ public final class DustListViewModel: @unchecked Sendable   {
     }
     
     public func deleteLocation(_ locaion: String) {
-        let _ = self.usecase.deleteDustInfo(location: locaion)
+        let result = self.usecase.deleteDustInfo(location: locaion)
+        guard result == true else {
+            self.errorSubject.send("delete fail")
+            return
+        }
+        
         var current = self.dustListSubject.value
         current.removeAll(where: { $0.location == locaion })
         self.dustListSubject.send(current)

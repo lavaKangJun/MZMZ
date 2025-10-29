@@ -110,7 +110,7 @@ public struct CityDetailViewDataModel {
     }
 }
 
-public final class CityDetailViewModel: ObservableObject {
+public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     private let name: String
     private let longitude: String
     private let latitude: String

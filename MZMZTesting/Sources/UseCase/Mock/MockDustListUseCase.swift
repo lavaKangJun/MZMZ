@@ -10,6 +10,8 @@ import Foundation
 import Domain
 
 public final class MockDustListUseCase: DustListUseCaseProtocol, TestDouble {
+    public init() { }
+    
     public func fetchLocation() async throws -> TMLocationInfoEntity? {
         resolve(TMLocationInfoEntity.self, name: "fetchLocation")
     }
@@ -22,8 +24,8 @@ public final class MockDustListUseCase: DustListUseCaseProtocol, TestDouble {
         resolve(MesureDnstyEntity.self, name: "fetchMesureDnsty")
     }
     
-    public func getDustInfo() -> [DustStoreEntity] {
-        resolve([DustStoreEntity].self, name: "getDustInfo") ?? []
+    public func getDustInfo() throws -> [DustStoreEntity] {
+        try resolveWithThrows([DustStoreEntity].self, name: "getDustInfo") ?? []
     }
     
     public func deleteDustInfo(location: String) -> Bool {
