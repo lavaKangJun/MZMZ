@@ -17,7 +17,7 @@ jobs:
         curl -Ls https://install.tuist.io | bash
         export PATH="$PATH:$HOME/.tuist/bin"
         
-     - name: Add Tuist to PATH
+    - name: Add Tuist to PATH
       run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
 
     # 2️⃣ 프로젝트 생성 (workspace, scheme 자동 생성)
