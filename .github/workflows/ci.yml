@@ -552,7 +552,7 @@ jobs:
             comment.user.type === 'Bot' && comment.body.includes('🚦 Quality Gate')
           );
           
-          const status = '${{ contains(needs.*.result, "failure") }}' === 'true' ? 
+          const status = '${{ contains(needs.*.result, ''failure'') }}' === 'true' ? 
             '❌ **FAILED**' : '✅ **PASSED**';
           
           const body = `## 🚦 Quality Gate Status: ${status}
