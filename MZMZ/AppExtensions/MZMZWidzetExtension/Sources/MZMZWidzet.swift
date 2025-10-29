@@ -10,9 +10,9 @@ import SwiftUI
 import Combine
 import Domain
 import Repository
-import DustListView
+//import DustListView
 
-struct Provider: TimelineProvider {
+struct Provider: TimelineProvider, @unchecked Sendable {
     private let usecase: DustListUseCaseProtocol
     
     init(usecase: DustListUseCaseProtocol) {
@@ -32,11 +32,11 @@ struct Provider: TimelineProvider {
     }
 
     // 실제 데이터 fetch해서 보여주는 부분
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    nonisolated func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<Entry>) -> ()) {
         Task {
             do {
                 var items: [LocationInfo] = []
-                let dustInfos = self.usecase.getDustInfo()
+                let dustInfos = try self.usecase.getDustInfo()
                 let dataModels = try await withThrowingTaskGroup(of: LocationInfo.self) { group in
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask {
