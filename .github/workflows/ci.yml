@@ -13,7 +13,7 @@ jobs:
 
     # 1️⃣ Tuist 설치
     - name: Install Tuist (brew)
-    run: |
+      run: |
         brew update
         brew tap tuist/tuist
         brew install tuist
