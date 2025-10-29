@@ -13,6 +13,9 @@ nonisolated(unsafe) private var containerKey = "container"
 public protocol TestDouble {
     func called(name: String, verify: @escaping (Any) -> Void)
     func verify(name: String, args: Any?)
+    func registerWithThrows<Object>(_ type: Object.Type, name: String, provider: @escaping () throws -> Object)
+    func resolveWithThrows<Object>(_ type: Object.Type, name: String) throws -> Object?
+    
     func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object)
     func resolve<Object>(_ type: Object.Type, name: String) -> Object?
 }
@@ -36,6 +39,14 @@ extension TestDouble {
         }
     }
     
+    public func registerWithThrows<Object>(_ type: Object.Type, name: String, provider: @escaping () throws -> Object) {
+        self.container.registerWithThrows(type, name: name, provider: provider)
+    }
+    
+    public func resolveWithThrows<Object>(_ type: Object.Type, name: String) throws -> Object? {
+        try self.container.resolveWithThrows(type, name: name)
+    }
+    
     public func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
         self.container.register(type, name: name, provider: provider)
     }
@@ -56,9 +67,21 @@ extension TestDouble {
 
 final class DIContainer {
     typealias Verify = (Any?) -> Void
+    typealias ThrowsProvier = () throws -> Any
     typealias Provier = () -> Any
     private var verifyContainer: [String: Verify] = [:]
     private var providerContainer: [String: Provier] = [:]
+    private var throwsProviderContainer: [String: ThrowsProvier] = [:]
+    
+    func registerWithThrows<Object>(_ type: Object.Type, name: String, provider: @escaping () throws -> Object) {
+        self.throwsProviderContainer[name] = provider
+    }
+    
+    func resolveWithThrows<Object>(_ type: Object.Type, name: String) throws -> Object? {
+        let provider = throwsProviderContainer[name]
+        let value = try provider?()
+        return value as? Object
+    }
     
     func register<Object>(_ type: Object.Type, name: String, provider: @escaping () -> Object) {
         self.providerContainer[name] = provider
