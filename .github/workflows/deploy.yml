@@ -1,17 +1,20 @@
-name: 🚀 Deploy Pipeline
+# iOS 프로젝트용 배포 파이프라인 비활성화
+# Docker 기반 배포가 필요 없는 iOS 프로젝트이므로 주석처리
 
-on:
-  push:
-    branches: [ main ]
-    tags: [ 'v*' ]
-  release:
-    types: [published]
+# name: 🚀 Deploy Pipeline
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+# on:
+#   push:
+#     branches: [ main ]
+#     tags: [ 'v*' ]
+#   release:
+#     types: [published]
 
-jobs:
+# env:
+#   REGISTRY: ghcr.io
+#   IMAGE_NAME: ${{ github.repository }}
+
+# jobs:
   pre-deploy-checks:
     name: 🔍 Pre-deployment Checks
     runs-on: ubuntu-latest

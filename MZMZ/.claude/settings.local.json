@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/kangjun-young/MZMZ/.github/workflows/**)",
+      "Bash(grep:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/kangjun-young/MZMZ"
+    ]
+  }
+}
