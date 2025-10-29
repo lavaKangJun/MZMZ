@@ -21,13 +21,16 @@ jobs:
     - name: Add Tuist to PATH
       run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
 
-    - name: Clean up old Package.resolved
+    - name: Clean workspace completely
       run: |
-        find . -type f -name "Package.resolved" -delete
-   
+        rm -rf *.xcodeproj
+        rm -rf *.xcworkspace
+        rm -rf .package.resolved
+        rm -rf **/Package.resolved
+        
     # 2️⃣ 프로젝트 생성 (workspace, scheme 자동 생성)
     - name: Generate Xcode project with Tuist
-      run: tuist generate --no-open
+      run: tuist generate --no-open --no-binary-cache
 
     # 3️⃣ 실제 빌드
     - name: Build project
