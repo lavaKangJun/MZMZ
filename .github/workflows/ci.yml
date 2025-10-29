@@ -37,7 +37,7 @@ jobs:
       run: |
         xcodebuild -workspace MZMZ.xcworkspace \
                    -scheme "MZMZ" \
-                   -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0' \
+                   -destination 'platform=iOS Simulator,name=iPhone 15' \
                    clean build
 
     # 4️⃣ 메인 테스트 실행
@@ -46,8 +46,7 @@ jobs:
         xcodebuild test \
                    -workspace MZMZ.xcworkspace \
                    -scheme "MZMZ" \
-                   -destination 'generic/platform=iOS Simulator' \
-                   clean build
+                   -destination 'platform=iOS Simulator,name=iPhone 15'
 
     # 5️⃣ 다른 테스트 타깃 실행
     - name: Run DustListView tests
