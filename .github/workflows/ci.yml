@@ -10,21 +10,37 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
-    
+
+    # 1️⃣ Tuist 설치
+    - name: Install Tuist
+      run: |
+        curl -Ls https://install.tuist.io | bash
+        export PATH="$PATH:$HOME/.tuist/bin"
+        
+     - name: Add Tuist to PATH
+      run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
+
+    # 2️⃣ 프로젝트 생성 (workspace, scheme 자동 생성)
+    - name: Generate Xcode project with Tuist
+      run: tuist generate --no-open
+
+    # 3️⃣ 실제 빌드
     - name: Build project
       run: |
         xcodebuild -workspace MZMZ.xcworkspace \
                    -scheme "MZMZ" \
                    -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0' \
                    clean build
-    
+
+    # 4️⃣ 메인 테스트 실행
     - name: Run MZMZ tests
       run: |
         xcodebuild test \
                    -workspace MZMZ.xcworkspace \
                    -scheme "MZMZ" \
                    -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0'
-    
+
+    # 5️⃣ 다른 테스트 타깃 실행
     - name: Run DustListView tests
       run: |
         xcodebuild test \
