@@ -22,7 +22,7 @@ public struct CityPresentable {
     }
 }
 
-public final class AddCityViewModel: ObservableObject {
+public final class AddCityViewModel: ObservableObject, @unchecked Sendable {
     private let useCase: FindLocationUseCaseProtocol
     private let locationResult = CurrentValueSubject<[SearchLocationEntity], Never>([])
     @Published public var cityCellViewModel: [CityPresentable] = []
@@ -45,12 +45,12 @@ public final class AddCityViewModel: ObservableObject {
         }
     }
     
-    func clearSearch() {
+    @MainActor func clearSearch() {
         //self.locationResult.send([])
         self.router?.dismiss()
     }
     
-    func routeToCityDetail(_ dependency: CityDetailDependency) {
+    @MainActor func routeToCityDetail(_ dependency: CityDetailDependency) {
         self.router?.routeToCityDetail(dependency: dependency)
     }
 }

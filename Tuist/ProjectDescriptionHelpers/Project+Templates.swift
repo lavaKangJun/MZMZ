@@ -47,7 +47,8 @@ extension Project {
                         "SWIFT_VERSION": "6.0",
                         "SWIFT_STRICT_CONCURRENCY": "minimal"
                        ]),
-                       targets: targets + extensionTarget)
+                       targets: targets + extensionTarget,
+                       resourceSynthesizers: [])
     }
     
     public static func makeAppExtensionTargets(
@@ -106,7 +107,8 @@ extension Project {
                         resources: ["Resources/**"],
                         dependencies: dependencies
                        )
-            ]
+            ],
+            resourceSynthesizers: []
         )
     }
     
@@ -143,10 +145,11 @@ extension Project {
                 bundleId: "\(organizationName).\(name)Tests",
                 deploymentTargets: .iOS("18.0"),
                 infoPlist: .default,
-                sources: ["Sources/Tests/**"],
+                sources: ["Tests/**"],
                 resources: ["Resources/**"],
                 dependencies: dependencies
-            )]
+            )],
+            resourceSynthesizers: []
         )
     }
     

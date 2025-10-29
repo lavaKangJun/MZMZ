@@ -10,24 +10,40 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
-    
+
+    # 1️⃣ Tuist 설치
+    - name: Install Tuist (brew)
+      run: |
+        brew update
+        brew tap tuist/tuist
+        brew install tuist
+        
+    - name: Add Tuist to PATH
+      run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
+
+    - name: Clean workspace completely
+      run: |
+        rm -rf *.xcodeproj
+        rm -rf *.xcworkspace
+        rm -rf .package.resolved
+        rm -rf **/Package.resolved
+        
+    # 2️⃣ 프로젝트 생성 (workspace, scheme 자동 생성)
+    - name: Generate Xcode project with Tuist
+      run: tuist generate --no-open --no-binary-cache
+
+    # 3️⃣ 실제 빌드
     - name: Build project
       run: |
         xcodebuild -workspace MZMZ.xcworkspace \
-                   -scheme MZMZ \
-                   -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0' \
+                   -scheme "MZMZ" \
+                   -destination 'platform=iOS Simulator,OS=18.6,name=iPhone 16' \
                    clean build
-    
-    - name: Run MZMZ tests
-      run: |
-        xcodebuild test \
-                   -workspace MZMZ.xcworkspace \
-                   -scheme MZMZ \
-                   -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0'
-    
+
+    # 5️⃣ 다른 테스트 타깃 실행
     - name: Run DustListView tests
       run: |
         xcodebuild test \
                    -workspace MZMZ.xcworkspace \
                    -scheme DustListView \
-                   -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.0'
+                   -destination 'platform=iOS Simulator,OS=18.6,name=iPhone 16'

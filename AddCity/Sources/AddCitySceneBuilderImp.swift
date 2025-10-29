@@ -12,13 +12,14 @@ import Repository
 import Scene
 import MZMZTesting
 
-public final class AddCitySceneBuilderImp: AddCitySceneBuilder {
+public final class AddCitySceneBuilderImp: @preconcurrency AddCitySceneBuilder {
     private let detailCitySceneBuilder: CityDetailSceneBuilder
     
     public init(detailCitySceneBuilder: CityDetailSceneBuilder) {
         self.detailCitySceneBuilder = detailCitySceneBuilder
     }
     
+    @MainActor
     public func makeAddCityScene() -> UIViewController {
         let isTesting = false
         if isTesting {

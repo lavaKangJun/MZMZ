@@ -129,10 +129,3 @@ public struct DustListView: View {
         .clipped()
     }
 }
-
-class BundleFinder {}
-extension Bundle {
-    static var current: Bundle {
-        return Bundle(for: BundleFinder.self)
-    }
-}

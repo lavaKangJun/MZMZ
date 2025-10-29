@@ -21,7 +21,7 @@ protocol ApplicationRouting: Routing {
     func setupInitScene()
 }
 
-final class ApplicationRouter: ApplicationRouting, @unchecked Sendable {
+final class ApplicationRouter: @preconcurrency ApplicationRouting, @unchecked Sendable {
     var window: UIWindow!
     
     // TODO
@@ -29,7 +29,7 @@ final class ApplicationRouter: ApplicationRouting, @unchecked Sendable {
     func showToast() { }
     func closeScene() { }
     
-    func setupInitScene() { 
+    @MainActor func setupInitScene() { 
         let builder = MainSceneBuilder(dustListSceneBuilder: self.dustListSceneBuilder())
         
         self.window.rootViewController = builder.makeMainScene()

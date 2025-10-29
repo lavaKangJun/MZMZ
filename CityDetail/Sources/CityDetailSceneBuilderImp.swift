@@ -10,11 +10,11 @@ import Scene
 import Domain
 import Repository
 
-final public class CityDetailSceneBuilderImp: CityDetailSceneBuilder {
+final public class CityDetailSceneBuilderImp: @preconcurrency CityDetailSceneBuilder {
     
     public init() { }
     
-    public func makeCityDetailScene(_ dependency: CityDetailDependency) -> UIViewController {
+    @MainActor public func makeCityDetailScene(_ dependency: CityDetailDependency) -> UIViewController {
         let remote = Remote()
         let repository = Repository(dataStore: DataStore.shared, remote: remote)
         let viewModel = CityDetailViewModel(

@@ -29,7 +29,7 @@ public struct CityDetailView: View {
                         .frame(height: 50)
                     
                     HStack {
-                        Image("dust", bundle: Bundle.current)
+                        Image("dust", bundle: Bundle.module)
                             .resizable()
                             .frame(width: 40, height: 40)
                        
@@ -40,7 +40,7 @@ public struct CityDetailView: View {
                     .font(.system(size: 20, weight: .medium))
                     
                     HStack {
-                        Image("microdust", bundle: Bundle.current)
+                        Image("microdust", bundle: Bundle.module)
                             .resizable()
                             .frame(width: 40, height: 40)
                         
@@ -86,12 +86,5 @@ public struct CityDetailView: View {
             return LinearGradient(gradient: Gradient(colors: []),
                                   startPoint: .top, endPoint: .bottom)
         }
-    }
-}
-
-class BundleFinder {}
-extension Bundle {
-    static var current: Bundle {
-        return Bundle(for: BundleFinder.self)
     }
 }
