@@ -1,8 +1,9 @@
 ## MZMZ
-원하는 지역의 미세먼지 정보를 보여주는 미세먼지 앱
-
+- 원하는 지역의 미세먼지 정보를 보여주는 미세먼지 앱
+  
 ### 프로젝트 구조
-클린아키텍쳐 적용
+- Actions를 통해 CI 구성
+- 클린아키텍쳐 적용
 <img width="725" height="443" alt="graph" src="https://github.com/user-attachments/assets/35d2b33e-7ef5-4860-9e00-565b69108f0f" />
 
 #### Domain
@@ -21,3 +22,4 @@ Repository의 실체 구현 프레임 워크로, Remote/Local 에서 데이터�
 #### MZMZ
 살제 MZMZ앱 프로젝트로 모든 프레임 워크들을 의존함.
 홈 화면 위젯 기능을 포함.
+
