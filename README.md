@@ -2,7 +2,7 @@
 원하는 지역의 미세먼지 정보를 보여주는 미세먼지 앱
 
 ### Tech stack
-Clean Architecture, SwiftUI, async/await, Swift Testing, Combine, Tuist, GitHub Actions
+Clean Architecture, SwiftUI, async/await, Swift Testing, Combine, Tuist, GitHub Actions, Claude
   
 ### 프로젝트 구조
 - 클린아키텍쳐 적용
