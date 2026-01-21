@@ -188,7 +188,7 @@ class DustListViewModelTests {
         }
         
         // Act
-        self.viewModel.routeToDetail(name: "강원도", longitude: "123.456", latitude: "789.123")
+        self.viewModel.routeToDetail(name: "강원도", station: "강원도",  longitude: "123.456", latitude: "789.123")
         
         // Assert
         #expect(called == true, "routeToDetailView")
@@ -202,7 +202,7 @@ class SpyRouting: DustListRouting, TestDouble {
         self.verify(name: "routeToFindLocation", args: nil)
     }
     
-    func routeToDetail(name: String, longitude: String, latitude: String) {
+    func routeToDetail(name: String, station: String?, longitude: String, latitude: String) {
         self.verify(name: "routeToDetail", args: name)
     }
 }
