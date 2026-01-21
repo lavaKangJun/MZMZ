@@ -7,19 +7,19 @@ on:
 jobs:
   ios-build-test:
     name: Build and Test
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v4
 
-    # 1️⃣ Tuist 설치
-    - name: Install Tuist (brew)
-      run: |
-        brew update
-        brew tap tuist/tuist
-        brew install tuist
-        
-    - name: Add Tuist to PATH
-      run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
+    # 1️⃣ Tuist 설치 (self-hosted runner에는 이미 설치되어 있음)
+    # - name: Install Tuist (brew)
+    #   run: |
+    #     brew update
+    #     brew tap tuist/tuist
+    #     brew install tuist
+    #     
+    # - name: Add Tuist to PATH
+    #   run: echo "$HOME/.tuist/bin" >> $GITHUB_PATH
 
     - name: Clean workspace completely
       run: |
@@ -37,7 +37,7 @@ jobs:
       run: |
         xcodebuild -workspace MZMZ.xcworkspace \
                    -scheme "MZMZ" \
-                   -destination 'platform=iOS Simulator,OS=18.6,name=iPhone 16' \
+                   -destination 'platform=iOS Simulator,name=iPhone 16' \
                    clean build
 
     # 5️⃣ 다른 테스트 타깃 실행
@@ -46,4 +46,4 @@ jobs:
         xcodebuild test \
                    -workspace MZMZ.xcworkspace \
                    -scheme DustListView \
-                   -destination 'platform=iOS Simulator,OS=18.6,name=iPhone 16'
+                   -destination 'platform=iOS Simulator,name=iPhone 16'
