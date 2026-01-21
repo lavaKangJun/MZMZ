@@ -19,7 +19,9 @@ class AICodeReviewer:
             print("Error: Missing required API keys")
             sys.exit(1)
         
-        self.github = Github(self.github_token)
+        from github import Auth
+        auth = Auth.Token(self.github_token)
+        self.github = Github(auth=auth)
         self.anthropic = Anthropic(api_key=self.anthropic_api_key)
         self.repo = self.github.get_repo(self.repo_name)
         self.pr = self.repo.get_pull(self.pr_number)
@@ -202,7 +204,7 @@ class AICodeReviewer:
         # Long Method 검사
         methods = re.findall(r'(def\s+\w+.*?(?=\n(?:def|class|$)))', content, re.DOTALL)
         for method in methods:
-            if len(method.split('\n')) > self.code_smells['long_method']:
+            if len(method.split('\n')) > self.code_smells['long_method']['threshold']:
                 method_name = re.search(r'def\s+(\w+)', method).group(1)
                 line_count = len(method.split('\n'))
                 smells.append(f"🔧 **Long Method**: {method_name} 메서드가 너무 깁니다 ({line_count}줄). Extract Method 리팩터링을 고려해주세요.")
@@ -211,7 +213,7 @@ class AICodeReviewer:
         param_matches = re.findall(r'def\s+\w+\(([^)]*)\)', content)
         for params in param_matches:
             param_count = len([p.strip() for p in params.split(',') if p.strip() and p.strip() != 'self'])
-            if param_count > self.code_smells['long_parameter_list']:
+            if param_count > self.code_smells['long_parameter_list']['threshold']:
                 smells.append(f"🔧 **Long Parameter List**: 매개변수가 {param_count}개입니다. Parameter Object 패턴을 사용해주세요.")
         
         # Feature Envy 검사 (긴 메서드 체인)
@@ -226,7 +228,7 @@ class AICodeReviewer:
         # Large Class 검사
         class_matches = re.findall(r'(class\s+\w+.*?(?=\nclass|$))', content, re.DOTALL)
         for class_content in class_matches:
-            if len(class_content.split('\n')) > self.code_smells['large_class']:
+            if len(class_content.split('\n')) > self.code_smells['large_class']['threshold']:
                 class_name = re.search(r'class\s+(\w+)', class_content).group(1)
                 smells.append(f"🔧 **Large Class**: {class_name} 클래스가 너무 큽니다. Extract Class 리팩터링을 고려해주세요.")
         
@@ -388,7 +390,7 @@ class AICodeReviewer:
         
         try:
             response = self.anthropic.messages.create(
-                model="claude-3-opus-20240229",
+                model="claude-3-5-sonnet-20241022",
                 max_tokens=3000,
                 temperature=0,
                 messages=[
