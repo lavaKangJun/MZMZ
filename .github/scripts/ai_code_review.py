@@ -390,7 +390,7 @@ class AICodeReviewer:
         
         try:
             response = self.anthropic.messages.create(
-                model="claude-3-5-sonnet-20241022",
+                model="claude-3-5-sonnet-20241218",
                 max_tokens=3000,
                 temperature=0,
                 messages=[
