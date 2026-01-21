@@ -18,12 +18,16 @@ jobs:
         git config --global http.lowSpeedTime 999999
         git config --global http.version HTTP/1.1
         git config --global protocol.version 1
+        
+    - name: Clean workspace before checkout
+      run: rm -rf ./* ./.[!.]* 2>/dev/null || true
     
     - uses: actions/checkout@v4
       with:
         fetch-depth: 1
         token: ${{ secrets.GITHUB_TOKEN }}
-        clean: false
+        clean: true
+        ref: ${{ github.event.pull_request.head.sha }}
 
     # 1️⃣ Tuist 설치 (self-hosted runner에는 이미 설치되어 있음)
     # - name: Install Tuist (brew)
