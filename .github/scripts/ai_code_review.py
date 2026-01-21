@@ -232,6 +232,36 @@ class AICodeReviewer:
         
         return smells
     
+    def suggest_structural_improvements(self, content, file_path):
+        """구조적 개선사항을 제안"""
+        improvements = []
+        
+        # 파일 확장자에 따른 언어별 분석
+        file_ext = os.path.splitext(file_path)[1].lower()
+        
+        if file_ext in ['.swift', '.m']:
+            # Swift/Objective-C 분석
+            if 'import UIKit' in content and 'class' in content:
+                if len(content.split('\n')) > 200:
+                    improvements.append("📐 **Architecture**: 뷰 컨트롤러가 너무 큽니다. MVVM 패턴 적용을 고려해보세요.")
+            
+            # SwiftUI 분석
+            if 'import SwiftUI' in content:
+                if 'var body: some View' in content and len(content.split('\n')) > 100:
+                    improvements.append("🧩 **SwiftUI**: View가 복잡합니다. 작은 컴포넌트로 분리를 고려해보세요.")
+        
+        elif file_ext in ['.py']:
+            # Python 분석
+            if 'import django' in content or 'from django' in content:
+                improvements.append("🏗️ **Django**: Fat Model, Thin View 패턴을 따르고 있는지 확인해보세요.")
+        
+        elif file_ext in ['.js', '.ts']:
+            # JavaScript/TypeScript 분석
+            if 'useState' in content and content.count('useState') > 5:
+                improvements.append("⚛️ **React**: 상태가 많습니다. Context API나 상태 관리 라이브러리 사용을 고려해보세요.")
+        
+        return improvements
+    
     def _has_corresponding_tests(self, file_path):
         """해당 파일에 대응하는 테스트 파일이 있는지 확인"""
         base_name = os.path.splitext(os.path.basename(file_path))[0]
