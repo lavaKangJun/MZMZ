@@ -204,7 +204,8 @@ class AICodeReviewer:
         for method in methods:
             if len(method.split('\n')) > self.code_smells['long_method']:
                 method_name = re.search(r'def\s+(\w+)', method).group(1)
-                smells.append(f"🔧 **Long Method**: {method_name} 메서드가 너무 깁니다 ({len(method.split('\n'))}줄). Extract Method 리팩터링을 고려해주세요.")
+                line_count = len(method.split('\n'))
+                smells.append(f"🔧 **Long Method**: {method_name} 메서드가 너무 깁니다 ({line_count}줄). Extract Method 리팩터링을 고려해주세요.")
         
         # Long Parameter List 검사
         param_matches = re.findall(r'def\s+\w+\(([^)]*)\)', content)
