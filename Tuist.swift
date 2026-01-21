@@ -1,7 +1,7 @@
 import ProjectDescription
 
 let config = Config(
-    compatibleXcodeVersions: .exact("16.4"),
+    compatibleXcodeVersions: .exact("26.2"),
     plugins: [
         .local(path: .relativeToManifest("../Plugins/MZMZ")),
     ]
