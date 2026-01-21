@@ -9,16 +9,21 @@ jobs:
     name: Build and Test
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
     - name: Configure Git
       run: |
         git config --global http.postBuffer 524288000
         git config --global http.maxRequestBuffer 100M
         git config --global core.compression 0
+        git config --global http.lowSpeedLimit 0
+        git config --global http.lowSpeedTime 999999
+        git config --global http.version HTTP/1.1
+        git config --global protocol.version 1
+    
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        token: ${{ secrets.GITHUB_TOKEN }}
+        clean: false
 
     # 1️⃣ Tuist 설치 (self-hosted runner에는 이미 설치되어 있음)
     # - name: Install Tuist (brew)
@@ -36,6 +41,9 @@ jobs:
         rm -rf *.xcworkspace
         rm -rf .package.resolved
         rm -rf **/Package.resolved
+        rm -rf Derived
+        rm -rf .tuist
+        tuist clean
         
     # 2️⃣ 프로젝트 생성 (workspace, scheme 자동 생성)
     - name: Generate Xcode project with Tuist
