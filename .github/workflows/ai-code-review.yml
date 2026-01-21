@@ -1,42 +1,39 @@
-# AI Code Review 워크플로우 비활성화
-# 필요시 아래 주석을 해제하여 다시 활성화할 수 있습니다.
+name: AI Code Review
 
-# name: AI Code Review
+on:
+  pull_request:
+    types: [opened, synchronize]
 
-# on:
-#   pull_request:
-#     types: [opened, synchronize]
-
-# jobs:
-#   code-review:
-#     runs-on: ubuntu-latest
-    
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-#       with:
-#         fetch-depth: 0
-    
-#     - name: Setup Python
-#       uses: actions/setup-python@v4
-#       with:
-#         python-version: '3.11'
-    
-#     - name: Install dependencies
-#       run: |
-#         pip install anthropic pygithub requests
-    
-#     - name: Get changed files
-#       id: changed-files
-#       uses: tj-actions/changed-files@v40
-#       with:
-#         separator: ','
-    
-#     - name: Run AI Code Review
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-#         PR_NUMBER: ${{ github.event.pull_request.number }}
-#         CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-#       run: |
-#         python .github/scripts/ai_code_review.py
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+   
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+   
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+   
+    - name: Install dependencies
+      run: |
+        pip install anthropic pygithub requests
+   
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v40
+      with:
+        separator: ','
+   
+    - name: Run AI Code Review
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      run: |
+        python .github/scripts/ai_code_review.py
