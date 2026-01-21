@@ -43,7 +43,13 @@ public struct DustListView: View {
                                         .tint(.clear)
                                     })
                                     .onTapGesture {
-                                        self.viewModel.routeToDetail(name: dataModel.location, longitude: dataModel.longtitude, latitude: dataModel.latitude)
+                                        self.viewModel
+                                            .routeToDetail(
+                                                name: dataModel.location,
+                                                station: dataModel.station,
+                                                longitude: dataModel.longtitude,
+                                                latitude: dataModel.latitude
+                                            )
                                     }
                             }
                         }

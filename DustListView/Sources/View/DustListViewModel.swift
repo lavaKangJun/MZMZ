@@ -38,7 +38,7 @@ public final class DustListViewModel: @unchecked Sendable   {
                         group.addTask { [dustInfo] in
                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, longtitude: dustInfo.longitude, latitude: dustInfo.latitude)) }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, station: nil, longtitude: dustInfo.longitude, latitude: dustInfo.latitude)) }
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
@@ -88,7 +88,12 @@ public final class DustListViewModel: @unchecked Sendable   {
     }
     
     @MainActor
-    public func routeToDetail(name: String, longitude: String, latitude: String) {
-        self.router?.routeToDetail(name: name, longitude: longitude, latitude: latitude)
+    public func routeToDetail(
+        name: String,
+        station: String?,
+        longitude: String,
+        latitude: String
+    ) {
+        self.router?.routeToDetail(name: name, station: station, longitude: longitude, latitude: latitude)
     }
 }
