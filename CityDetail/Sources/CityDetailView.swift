@@ -51,6 +51,10 @@ public struct CityDetailView: View {
                     .font(.system(size: 20, weight: .medium))
                     
                     Spacer()
+                    
+                    Text("관측소: \(dataModel.station ?? "")")
+                    
+                    Spacer()
                 }
             }
             .foregroundColor(.white)

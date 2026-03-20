@@ -19,6 +19,7 @@ final public class CityDetailSceneBuilderImp: @preconcurrency CityDetailSceneBui
         let repository = Repository(dataStore: DataStore.shared, remote: remote)
         let viewModel = CityDetailViewModel(
             name: dependency.name,
+            station: dependency.station,
             longitude: dependency.longitude,
             latitude: dependency.latitude,
             isSearchResult: dependency.isSearchResult,

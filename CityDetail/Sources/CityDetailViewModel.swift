@@ -11,6 +11,7 @@ import SwiftUI
 
 public struct CityDetailViewDataModel {
     let location: String
+    let station: String?
     let dustDensity: String
     let microDustDensity: String
     var dustGrade: Int = 0
@@ -18,6 +19,7 @@ public struct CityDetailViewDataModel {
     
     init(location: String, entity: MesureDnstyEntity) {
         self.location = location
+        self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
         self.dustGrade = translateDustGrade(dustDensity)
@@ -26,6 +28,7 @@ public struct CityDetailViewDataModel {
     
     init(location: String) {
         self.location = location
+        self.station = nil
         self.dustDensity = "-1"
         self.microDustDensity = "-1"
         self.dustGrade = translateDustGrade(dustDensity)
@@ -112,6 +115,7 @@ public struct CityDetailViewDataModel {
 
 public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     private let name: String
+    private let station: String?
     private let longitude: String
     private let latitude: String
     private let isSearchResult: Bool
@@ -122,12 +126,14 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         
     init(
         name: String,
+        station: String?,
         longitude: String,
         latitude: String,
         isSearchResult: Bool,
         usecase: DustInfoUseCaseProtocol
     ) {
         self.name = name
+        self.station = station
         self.longitude = longitude
         self.latitude = latitude
         self.isSearchResult = isSearchResult

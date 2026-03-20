@@ -55,6 +55,7 @@ public struct AddCityView: View {
                         .onTapGesture {
                             let dependecvy = CityDetailDependency(
                                 name: cellViewModel.name,
+                                station: nil,
                                 longitude: cellViewModel.longitude,
                                 latitude: cellViewModel.latitude,
                                 isSearchResult: true

@@ -11,6 +11,7 @@ import Domain
 
 public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     let location: String
+    let station: String?
     let dustDensity: String
     let microDustDensity: String
     let longtitude: String
@@ -20,6 +21,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     
     init(entity: MesureDnstyEntity, location: String, longtitude: String, latitude: String) {
         self.location = location
+        self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
         self.longtitude = longtitude
@@ -28,8 +30,9 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
     }
     
-    init(location: String, longtitude: String, latitude: String) {
+    init(location: String, station: String?, longtitude: String, latitude: String) {
         self.location = location
+        self.station = station
         self.dustDensity = "-1"
         self.microDustDensity = "-1"
         self.longtitude = longtitude

@@ -10,16 +10,19 @@ import SwiftUI
 
 public struct CityDetailDependency {
     public let name: String
+    public let station: String?
     public let longitude: String
     public let latitude: String
     public let isSearchResult: Bool
     public init(
         name: String,
+        station: String?,
         longitude: String,
         latitude: String,
         isSearchResult: Bool
     ) {
         self.name = name
+        self.station = station
         self.longitude = longitude
         self.latitude = latitude
         self.isSearchResult = isSearchResult
