@@ -107,12 +107,21 @@ public final class StubRepository: RepositoryProtocol {
             DustStoreDTO(
                 location: entity.location,
                 longitude: entity.longitude,
-                latitude: entity.latitude
+                latitude: entity.latitude,
+                isFavorite: entity.isFavorite
             )
         )
     }
     
     public func deleteDustInfo(location: String) throws -> Bool {
         return true
+    }
+    
+    public func updateFavorite(location: String, isFavorite: Bool) throws {
+        
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
+        return false
     }
 }

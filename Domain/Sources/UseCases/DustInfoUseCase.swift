@@ -10,7 +10,9 @@ import Foundation
 public protocol DustInfoUseCaseProtocol {
     func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
-    func saveDustInfo(location: String, longitude: String, latitude: String)
+    func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool)
+    func updateFavorite(location: String, isFavorite: Bool) throws
+    func getFavoriteStatus(location: String) throws -> Bool
 }
 
 public final class DustInfoUseCase: DustInfoUseCaseProtocol {
@@ -41,12 +43,25 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
         return nil
     }
     
-    public func saveDustInfo(location: String, longitude: String, latitude: String) {
+    public func saveDustInfo(
+        location: String,
+        longitude: String,
+        latitude: String,
+        isFavorite: Bool
+    ) {
         do {
-            try self.repository.setDustInfo(DustStoreEntity(location: location, longitude: longitude, latitude: latitude))
+            try self.repository.setDustInfo(DustStoreEntity(location: location, longitude: longitude, latitude: latitude, isFavorite: isFavorite))
         } catch {
             print("save Error", error)
         }
         
+    }
+    
+    public func updateFavorite(location: String, isFavorite: Bool) throws {
+        try self.repository.updateFavorite(location: location, isFavorite: isFavorite)
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
+        try self.repository.getFavoriteStatus(location: location)
     }
 }
