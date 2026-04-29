@@ -14,6 +14,8 @@ public protocol DataStorable {
     func insertTable(data: DustStoreDTO) throws
     func load() throws -> [DustStoreDTO]
     func delete(location: String) throws -> Bool
+    func setFavorite(location: String, isFavorite: Bool) throws
+    func getFavoriteStatus(location: String) throws -> Bool
 }
 
 public enum SQLiteError: Error {
@@ -80,6 +82,7 @@ public final class DataStore: DataStorable {
         location TEXT NOT NULL,
         longitude TEXT NOT NULL,
         latitude TEXT NOT NULL,
+        isFavorite INTEGER NOT NULL,
         createdAt INTEGER NOT NULL,
         PRIMARY KEY (location)
         );
@@ -101,7 +104,7 @@ public final class DataStore: DataStorable {
         try createTable()
         
         let statement = """
-        INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, createdAt) VALUES ('\(data.location)', '\(data.longitude)', '\(data.latitude)', '\(timestamp)');
+        INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, isFavorite, createdAt) VALUES ('\(data.location)', '\(data.longitude)', '\(data.latitude)', '\(data.isFavorite)', '\(timestamp)');
         """
         
         guard sqlite3_exec(dbPointer, statement, nil, nil, nil) == SQLITE_OK else {
@@ -116,7 +119,7 @@ public final class DataStore: DataStorable {
         
         let deleteStatement = try prepareStatement(statement)
         let result = sqlite3_step(deleteStatement)
-  
+        
         sqlite3_finalize(deleteStatement)
         
         if result == SQLITE_DONE {
@@ -139,9 +142,10 @@ public final class DataStore: DataStorable {
         while result == SQLITE_ROW {
             let location = String(cString: sqlite3_column_text(loadStatement, 0))
             let longitude = String(cString: sqlite3_column_text(loadStatement, 1))
-            let latitude =  String(cString: sqlite3_column_text(loadStatement, 2))
-            let timeStamp = sqlite3_column_int(loadStatement, 3)
-            dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude))
+            let latitude = String(cString: sqlite3_column_text(loadStatement, 2))
+            let isFavorite = sqlite3_column_int(loadStatement, 3)
+            let timeStamp = sqlite3_column_int(loadStatement, 4)
+            dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude, isFavorite: isFavorite == 0 ? false : true))
             result = sqlite3_step(loadStatement)
         }
         
@@ -153,8 +157,61 @@ public final class DataStore: DataStorable {
     public func getDustInfo() -> [DustStoreDTO] {
         return dustInfos
     }
-     
+    
     public func setDustInfo(_ info: DustStoreDTO) {
         self.dustInfos.append(info)
+    }
+    
+    public func setFavorite(location: String, isFavorite: Bool) throws {
+        if isFavorite {
+            let favoriteCount =  try getFavoriteCount()
+            if favoriteCount >= 2 {
+                throw SQLiteError.step("최대 2가까지 즐겨찾기 가능합니다.")
+            }
+        }
+        
+        let statement = """
+        UPDATE LocationInfo SET isFavorite = \(isFavorite ? 1 : 0) WHERE location == 
+        '\(location)'
+        """
+        
+        let updateStatement = try prepareStatement(statement)
+ 
+        guard sqlite3_step(updateStatement) == SQLITE_DONE else {
+            throw SQLiteError.step("favorite update error")
+        }
+        
+        sqlite3_finalize(updateStatement)
+    }
+    
+    private func getFavoriteCount() throws -> Int {
+        
+        let state = "SELECT COUNT(*) FROM LocationInfo WHERE isFavorite == 1"
+        let favoriteStatement = try prepareStatement(state)
+        defer {
+            sqlite3_finalize(favoriteStatement)
+        }
+        guard sqlite3_step(favoriteStatement) == SQLITE_ROW else {
+            throw SQLiteError.step("favorite count error")
+        }
+        
+        let count = sqlite3_column_int(favoriteStatement, 0)
+        return Int(count)
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
+        let statement = "SELECT isFavorite FROM LocationInfo WHERE location = '\(location)'"
+        
+        let favoriteStatement = try prepareStatement(statement)
+        defer {
+            sqlite3_finalize(favoriteStatement)
+        }
+        
+        guard sqlite3_step(favoriteStatement) == SQLITE_ROW else {
+            return false // 해당 지역이 없으면 false
+        }
+        
+        let isFavorite = sqlite3_column_int(favoriteStatement, 0)
+        return isFavorite == 1
     }
 }

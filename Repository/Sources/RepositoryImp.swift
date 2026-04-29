@@ -81,12 +81,21 @@ public final class Repository: RepositoryProtocol {
                                         DustStoreDTO(
                                             location: entity.location,
                                             longitude: entity.longitude,
-                                            latitude: entity.latitude
+                                            latitude: entity.latitude,
+                                            isFavorite: entity.isFavorite
                                         )
         )
     }
     
     public func deleteDustInfo(location: String) throws -> Bool {
         try self.dataStore.delete(location: location)
+    }
+    
+    public func updateFavorite(location: String, isFavorite: Bool) throws {
+        try self.dataStore.setFavorite(location: location, isFavorite: isFavorite)
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
+        try self.dataStore.getFavoriteStatus(location: location)
     }
 }
