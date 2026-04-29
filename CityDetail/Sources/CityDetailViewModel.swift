@@ -16,14 +16,16 @@ public struct CityDetailViewDataModel {
     let microDustDensity: String
     var dustGrade: Int = 0
     var microDustGrade: Int = 0
+    var isFavorite: Bool = false
     
-    init(location: String, entity: MesureDnstyEntity) {
+    init(location: String, entity: MesureDnstyEntity, isFavorite: Bool) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
         self.dustGrade = translateDustGrade(dustDensity)
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
+        self.isFavorite = isFavorite
     }
     
     init(location: String) {
@@ -149,27 +151,49 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
             let entity = LocationInfoEntity(latitude: self.latitude, longtitude: self.longitude)
             let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
             
+            // 즐겨찾기 상태 조회
+            let isFavorite = (try? self.usecase.getFavoriteStatus(location: self.name)) ?? false
             guard let tmX = tmLocation?.x, let tmY = tmLocation?.y else { return }
             guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
                 await MainActor.run {
-                    self.dataModel = CityDetailViewDataModel(location: self.name)
+                    var dataModel = CityDetailViewDataModel(location: self.name)
+                    self.dataModel = dataModel
                 }
                 return
             }
             
             await MainActor.run {
-                self.dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo)
+                var dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo, isFavorite: isFavorite)
+                self.dataModel = dataModel
             }
         }
     }
     
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
-        self.usecase.saveDustInfo(location: self.name, longitude: self.longitude, latitude: self.latitude)
+        self.usecase.saveDustInfo(location: self.name, longitude: self.longitude, latitude: self.latitude, isFavorite: false)
         self.router?.routeMainView()
     }
     
     func cancel() {
         self.router?.dimisss()
+    }
+    
+    func toggleFavorite() {
+        guard let currentDataModel = self.dataModel else {
+            return
+        }
+        let currentFavorite = currentDataModel.isFavorite
+        do {
+            try usecase.updateFavorite(location: currentDataModel.location, isFavorite: !currentFavorite)
+            
+            // 새로운 dataModel 생성하여 업데이트
+            var updatedDataModel = currentDataModel
+            updatedDataModel.isFavorite = !currentFavorite
+            self.dataModel = updatedDataModel
+        } catch {
+            // error 알럿 추가 필요
+            print("즐겨찾기 업데이트 실패: \(error)")
+        }
     }
 }
