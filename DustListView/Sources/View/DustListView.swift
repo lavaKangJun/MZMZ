@@ -63,6 +63,15 @@ public struct DustListView: View {
                                 viewModel.routeToFindLocation()
                             }
                         
+                        HStack(spacing: 3) {
+                            Text("※")
+                                .baselineOffset(2)
+                            Text("미세먼지 등급은 WHO 기준으로 표시됩니다.")
+                        }
+                        .font(.caption2)
+                        .foregroundColor(.gray)
+                        .padding(.top, 10)
+                        
                         Spacer()
                             .frame(height: 40)
                     }
