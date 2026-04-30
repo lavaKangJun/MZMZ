@@ -45,11 +45,11 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         guard let gradeValue = Int(value) else { return 0 }
         if -1 == gradeValue {
             return -1
-        } else if 0...30 ~= gradeValue {
+        } else if 0...45 ~= gradeValue {
             return 0
-        } else if 31...80 ~= gradeValue {
+        } else if 46...75 ~= gradeValue {
             return 1
-        } else if 81...150 ~= gradeValue {
+        } else if 76...100 ~= gradeValue {
             return 2
         } else {
             return 3
@@ -62,9 +62,9 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
             return -1
         } else if 0...15 ~= gradeValue {
             return 0
-        } else if 16...50 ~= gradeValue {
+        } else if 16...25 ~= gradeValue {
             return 1
-        } else if 50...100 ~= gradeValue {
+        } else if 26...50 ~= gradeValue {
             return 2
         } else {
             return 3
@@ -95,11 +95,11 @@ extension DustListViewDataModel {
         guard let gradeValue = Int(dustDensity) else { return "" }
         if gradeValue == -1 {
           return "점검중"
-        } else if 0...30 ~= gradeValue {
+        } else if 0...45 ~= gradeValue {
             return "좋음"
-        } else if 31...80 ~= gradeValue {
+        } else if 46...75 ~= gradeValue {
             return "보통"
-        } else if 81...150 ~= gradeValue {
+        } else if 76...100 ~= gradeValue {
             return "나쁨"
         } else {
             return "매우나쁨"
@@ -128,9 +128,9 @@ extension DustListViewDataModel {
             return "점검중"
         } else if 0...15 ~= gradeValue {
             return "좋음"
-        } else if 16...50 ~= gradeValue {
+        } else if 16...25 ~= gradeValue {
             return "보통"
-        } else if 51...100 ~= gradeValue {
+        } else if 26...50 ~= gradeValue {
             return "나쁨"
         } else {
             return "매우나쁨"
