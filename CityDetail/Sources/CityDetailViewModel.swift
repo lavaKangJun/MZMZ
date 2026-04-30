@@ -8,6 +8,7 @@
 import Foundation
 import Domain
 import SwiftUI
+import WidgetKit
 
 public struct CityDetailViewDataModel {
     let location: String
@@ -191,6 +192,7 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
             var updatedDataModel = currentDataModel
             updatedDataModel.isFavorite = !currentFavorite
             self.dataModel = updatedDataModel
+            WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
         } catch {
             // error 알럿 추가 필요
             print("즐겨찾기 업데이트 실패: \(error)")

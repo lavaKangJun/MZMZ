@@ -22,7 +22,7 @@ public struct CityDetailView: View {
                 if let dataModel = viewModel.dataModel {
                     HStack {
                         Image(systemName: dataModel.isFavorite ? "star.fill" : "star")
-                            .font(.system(size: 30, weight: .light))
+                            .font(.system(size: 25, weight: .light))
                             .foregroundColor(.white)
                             .onTapGesture {
                                 viewModel.toggleFavorite()
