@@ -17,6 +17,7 @@ let project = Project.frameworkWithTest(
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
         .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),
-        .project(target: "MZMZTesting", path: .relativeToCurrentFile("../MZMZTesting"))
+        .project(target: "MZMZTesting", path: .relativeToCurrentFile("../MZMZTesting")),
+        .project(target: "Common", path: .relativeToCurrentFile("../Common"))
     ]
 )

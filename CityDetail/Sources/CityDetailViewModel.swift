@@ -9,24 +9,25 @@ import Foundation
 import Domain
 import SwiftUI
 import WidgetKit
+import Common
 
 public struct CityDetailViewDataModel {
     let location: String
     let station: String?
     let dustDensity: String
     let microDustDensity: String
-    var dustGrade: Int = 0
-    var microDustGrade: Int = 0
     var isFavorite: Bool = false
+    var dustGrade: AirQualityGrade = .checking
+    var microDustGrade: AirQualityGrade = .checking
     
     init(location: String, entity: MesureDnstyEntity, isFavorite: Bool) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
-        self.dustGrade = translateDustGrade(dustDensity)
-        self.microDustGrade = translateMicroDustGrade(microDustDensity)
         self.isFavorite = isFavorite
+        self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
     }
     
     init(location: String) {
@@ -34,92 +35,8 @@ public struct CityDetailViewDataModel {
         self.station = nil
         self.dustDensity = "-1"
         self.microDustDensity = "-1"
-        self.dustGrade = translateDustGrade(dustDensity)
-        self.microDustGrade = translateMicroDustGrade(microDustDensity)
-    }
-    
-    private func translateDustGrade(_ value: String) -> Int {
-        guard let gradeValue = Int(value) else { return 0 }
-        if gradeValue == -1 {
-            return -1
-        } else if 0...45 ~= gradeValue {
-            return 0
-        } else if 46...50 ~= gradeValue {
-            return 1
-        } else if 51...75 ~= gradeValue {
-            return 2
-        } else if 76...100 ~= gradeValue {
-            return 3
-        } else {
-            return 4
-        }
-    }
-    
-    private func translateMicroDustGrade(_ value: String) -> Int {
-        guard let gradeValue = Int(value) else { return 0 }
-        if gradeValue == -1{
-            return -1
-        } else  if 0...15 ~= gradeValue {
-            return 0
-        } else if 16...25 ~= gradeValue {
-            return 1
-        } else if 26...37 ~= gradeValue {
-            return 2
-        } else if 38...50 ~= gradeValue {
-            return 3
-        } else {
-            return 4
-        }
-    }
-    
-    var dustGradeText: String {
-        guard let gradeValue = Int(dustDensity) else { return "" }
-        if gradeValue == -1 {
-          return "점검중"
-        } else if 0...45 ~= gradeValue {
-            return "좋음"
-        } else if 46...50 ~= gradeValue {
-            return "보통"
-        } else if 51...75 ~= gradeValue {
-            return "주의"
-        } else if 76...100 ~= gradeValue {
-            return "나쁨"
-        } else {
-            return "매우나쁨"
-        }
-    }
-    
-    var microDustGradeText: String {
-        guard let gradeValue = Int(microDustDensity) else { return "" }
-        if gradeValue == -1 {
-          return "점검중"
-        } else if 0...15 ~= gradeValue {
-            return "좋음"
-        } else if 16...25 ~= gradeValue {
-            return "보통"
-        } else if 26...37 ~= gradeValue {
-            return "주의"
-        } else if 38...50 ~= gradeValue {
-            return "나쁨"
-        } else {
-            return "매우나쁨"
-        }
-    }
-    
-    var backgroundColor: [Color] {
-        let grade = dustGrade > microDustGrade ? dustGrade : microDustGrade
-        switch grade {
-        case -1:
-            return [Color.gray.opacity(0.5)]
-        case 0:
-            return [Color.blue.opacity(0.5)]
-        case 1:
-            return [Color.blue.opacity(0.5), Color.black.opacity(0.1)]
-        case 2:
-            return [Color.blue.opacity(0.5), Color.black.opacity(0.5)]
-        default:
-            return [Color.blue.opacity(0.3), Color.black.opacity(0.8)]
-        }
+        self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
     }
 }
 

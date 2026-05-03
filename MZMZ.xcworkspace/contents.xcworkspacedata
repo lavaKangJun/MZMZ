@@ -8,6 +8,9 @@
       location = "group:CityDetail/CityDetail.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:Common/Common.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Domain/Domain.xcodeproj">
    </FileRef>
    <FileRef

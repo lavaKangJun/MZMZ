@@ -14,7 +14,8 @@ let project = Project.framework(
     dependencies: [
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
-        .project(target: "Scene", path: .relativeToCurrentFile("../Scene"))
+        .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),
+        .project(target: "Common", path: .relativeToCurrentFile("../Common"))
     ]
 )
 

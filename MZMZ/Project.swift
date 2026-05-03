@@ -19,5 +19,6 @@ let project = Project.app(
         .project(target: "MZMZTesting", path: .relativeToCurrentFile("../MZMZTesting")),
         .project(target: "AddCity", path: .relativeToCurrentFile("../AddCity")),
         .project(target: "CityDetail", path: .relativeToCurrentFile("../CityDetail")),
-        .project(target: "DustListView", path: .relativeToCurrentFile("../DustListView"))
+        .project(target: "DustListView", path: .relativeToCurrentFile("../DustListView")),
+        .project(target: "Common", path: .relativeToCurrentFile("../Common"))
     ])
