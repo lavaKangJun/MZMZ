@@ -27,6 +27,15 @@ public struct DustListView: View {
                     Spacer()
                     
                     Group {
+                        HStack {
+                            Text("즐겨찾기로 추가한 지역을 위젯으로 볼 수 있습니다.")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, -10)
+                        
                         List {
                             ForEach(self.dustListModel, id: \.self) { dataModel in
                                 listView(dataModel)
@@ -137,6 +146,21 @@ public struct DustListView: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
+            
+            // 즐겨찾기 별 이미지 (오른쪽 상단)
+            if dataModel.isFavorite {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.white)
+                    }
+                    Spacer()
+                }
+                .padding(.top, 10)
+                .padding(.trailing, 15)
+            }
         }
         .frame(height: 100)
         .frame(maxWidth: .infinity)

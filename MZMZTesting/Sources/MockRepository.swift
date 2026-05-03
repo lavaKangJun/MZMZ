@@ -42,5 +42,13 @@ public final class MockRepository: RepositoryProtocol, TestDouble {
     public func deleteDustInfo(location: String) throws -> Bool {
         resolve(Bool.self, name: "deleteDustInfo") ?? false
     }
+    
+    public func updateFavorite(location: String, isFavorite: Bool) throws {
+        verify(name: "updateFavorite", args: isFavorite)
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
+        return resolve(Bool.self, name: "getFavoriteStatus") ?? false
+    }
 }
 

@@ -18,8 +18,9 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     let latitude: String
     var dustGrade: Int = 0
     var microDustGrade: Int = 0
+    var isFavorite: Bool = false
     
-    init(entity: MesureDnstyEntity, location: String, longtitude: String, latitude: String) {
+    init(entity: MesureDnstyEntity, location: String, longtitude: String, latitude: String, isFavorite: Bool) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
@@ -28,9 +29,10 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.latitude = latitude
         self.dustGrade = translateDustGrade(dustDensity)
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
+        self.isFavorite = isFavorite
     }
     
-    init(location: String, station: String?, longtitude: String, latitude: String) {
+    init(location: String, station: String?, longtitude: String, latitude: String, isFavorite: Bool) {
         self.location = location
         self.station = station
         self.dustDensity = "-1"
@@ -39,6 +41,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.latitude = latitude
         self.dustGrade = translateDustGrade(dustDensity)
         self.microDustGrade = translateMicroDustGrade(microDustDensity)
+        self.isFavorite = isFavorite
     }
     
     private func translateDustGrade(_ value: String) -> Int {

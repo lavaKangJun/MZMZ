@@ -20,6 +20,18 @@ public struct CityDetailView: View {
                 .ignoresSafeArea()
             VStack(spacing: 10) {
                 if let dataModel = viewModel.dataModel {
+                    HStack {
+                        Image(systemName: dataModel.isFavorite ? "star.fill" : "star")
+                            .font(.system(size: 25, weight: .light))
+                            .foregroundColor(.white)
+                            .onTapGesture {
+                                viewModel.toggleFavorite()
+                            }
+                        Spacer()
+                    }
+                    .padding(.top, 20)
+                    .padding(.leading, 20)
+                   
                     Spacer()
                     
                     Text(dataModel.location)

@@ -14,12 +14,14 @@ public final class FakeDataStore: DataStorable {
         DustStoreDTO(
             location: "풍납2동",
             longitude: "127.115731280691",
-            latitude: "37.529239225114"
+            latitude: "37.529239225114",
+            isFavorite: false
         ),
         DustStoreDTO(
             location: "역삼2동",
             longitude: "127.033201088112",
-            latitude: "37.4954279212045"
+            latitude: "37.4954279212045",
+            isFavorite: true
         ),
     ]
     
@@ -42,6 +44,14 @@ public final class FakeDataStore: DataStorable {
     }
     
     public func delete(location: String) throws -> Bool {
+        return false
+    }
+    
+    public func setFavorite(location: String, isFavorite: Bool) throws {
+        
+    }
+    
+    public func getFavoriteStatus(location: String) throws -> Bool {
         return false
     }
 }

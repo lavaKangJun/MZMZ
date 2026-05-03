@@ -37,8 +37,10 @@ struct Provider: TimelineProvider, @unchecked Sendable {
             do {
                 var items: [LocationInfo] = []
                 let dustInfos = try self.usecase.getDustInfo()
+                // 즐겨찾기된 지역들만 필터링 (최대 2개)
+                let favoriteInfos = dustInfos.filter { $0.isFavorite }
                 let dataModels = try await withThrowingTaskGroup(of: LocationInfo.self) { group in
-                    for (index, dustInfo) in dustInfos.enumerated() {
+                    for (index, dustInfo) in favoriteInfos.enumerated() {
                         group.addTask {
                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
@@ -93,13 +95,27 @@ struct MZMZWidzetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(spacing: 2) {
             ForEach(entry.items) { info in
                 HStack {
+                    // 지역명
                     Text(info.location)
-                    Text("미세: \(info.dustText)")
-                    Text("초미세: \(info.microText)")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    // 미세먼지 정보 (한 줄)
+                    Text("미세: \(info.dustText) | 초미세: \(info.microText)")
+                        .font(.system(size: 9, weight: .medium))
+                        .lineLimit(1)
                 }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 6)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.secondary.opacity(0.1))
+                )
             }
         }
         .font(Font.system(size: 11, weight: .semibold))
