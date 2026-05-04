@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import Domain
 import Repository
+import Common
 //import DustListView
 
 struct Provider: TimelineProvider, @unchecked Sendable {
@@ -46,7 +47,12 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
                                   let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return LocationInfo(location: dustInfo.location, dustText: "", microText: "") }
                             
-                            return LocationInfo(location: dustInfo.location, dustText: mesureDnsty.dustGradeText, microText: mesureDnsty.microDustGradeText)
+                            return LocationInfo(
+                                location: dustInfo.location,
+                                dustText:
+                                    AirQualityGrade.grade(forPM10: mesureDnsty.pm10Value).rawValue,
+                                microText: AirQualityGrade.grade(forPM25: mesureDnsty.pm10Value).rawValue
+                            )
                         }
                     }
                     

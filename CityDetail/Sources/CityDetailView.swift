@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Common
 
 public struct CityDetailView: View {
     @StateObject private var viewModel: CityDetailViewModel
@@ -16,7 +17,7 @@ public struct CityDetailView: View {
     
     public var body: some View {
         ZStack {
-            backgroundView
+            AirQualityCardBackground(pm10Grade: viewModel.dataModel?.dustGrade ?? .checking, pm25Grade: viewModel.dataModel?.microDustGrade ?? .checking)
                 .ignoresSafeArea()
             VStack(spacing: 10) {
                 if let dataModel = viewModel.dataModel {
@@ -46,7 +47,7 @@ public struct CityDetailView: View {
                             .frame(width: 40, height: 40)
                        
                         Text("미세먼지")
-                        Text(dataModel.dustGradeText)
+                        Text(dataModel.dustGrade.rawValue)
                         Text(dataModel.dustDensity + " μg/m3")
                     }
                     .font(.system(size: 20, weight: .medium))
@@ -57,7 +58,7 @@ public struct CityDetailView: View {
                             .frame(width: 40, height: 40)
                         
                         Text("초미세먼지")
-                        Text(dataModel.microDustGradeText)
+                        Text(dataModel.microDustGrade.rawValue)
                         Text(dataModel.microDustDensity + " μg/m3")
                     }
                     .font(.system(size: 20, weight: .medium))
@@ -90,17 +91,6 @@ public struct CityDetailView: View {
         }
         .onAppear {
             viewModel.fetchCurrentCityDustInfo()
-        }
-    }
-    
-    private var backgroundView: some View {
-        if let colors = viewModel.dataModel?.backgroundColor {
-            return LinearGradient(gradient: Gradient(colors: colors),
-                                  startPoint: .top,
-                                  endPoint: .bottom)
-        } else {
-            return LinearGradient(gradient: Gradient(colors: []),
-                                  startPoint: .top, endPoint: .bottom)
         }
     }
 }

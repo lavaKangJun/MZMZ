@@ -24,7 +24,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
     
     @MainActor
     public func makeDustListScene() -> UIViewController {
-        let isTesting = false
+        let isTesting = true
         if isTesting {
             let fakeDataStore = FakeDataStore.shared
             let repository = StubRepository(dataStore: fakeDataStore)

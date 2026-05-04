@@ -17,6 +17,7 @@ let workspace = Workspace(
         "DustListView",
         "Scene",
         "AddCity",
-        "CityDetail"
+        "CityDetail",
+        "Common"
     ]
 )

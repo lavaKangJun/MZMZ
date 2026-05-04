@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Common
 
 public struct DustListView: View {
     private let viewModel: DustListViewModel
@@ -21,8 +22,6 @@ public struct DustListView: View {
     public var body: some View {
         NavigationStack {
             ZStack {
-                Color(uiColor: UIColor(red: 250/255, green: 244/255, blue: 192/255, alpha: 1))
-                    .ignoresSafeArea()
                 VStack {
                     Spacer()
                     
@@ -110,61 +109,82 @@ public struct DustListView: View {
     
     public func listView(_ dataModel: DustListViewDataModel) -> some View {
         ZStack(alignment: .leading) {
-            Color.clear
-                .background(
-                    LinearGradient(gradient: Gradient(colors: dataModel.backgroundColor),
-                                   startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
-                )
+            AirQualityCardBackground(pm10Grade: dataModel.dustGrade, pm25Grade: dataModel.microDustGrade)
                 .mask(RoundedRectangle(cornerRadius: 10))
             
-            VStack(alignment: .leading) {
-                Spacer()
-                
-                Text(dataModel.location)
-                    .font(Font.system(size: 20, weight: .bold))
-                    .foregroundColor(Color.white)
-                
-                Spacer()
-                
-                HStack {
-                    HStack {
-                        Text("미세먼지:")
-                        Text(dataModel.dustGradeText + (dataModel.dustIsInspect ? "" : " " + "\(dataModel.dustDensity) μg/m3"))
-                        
-                    }
-                    .foregroundColor(Color.gray)
-                    .font(Font.system(size: 13, weight: .semibold))
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: 6) {
+                    Text(dataModel.location)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(.white)
                     
-                    HStack {
-                        Text("초미세먼지:")
-                        Text(dataModel.microDustGradeText + (dataModel.microIsInspect ? "" : " " + "\(dataModel.microDustDensity) μg/m3"))
-                    }.foregroundColor(Color.gray)
-                        .font(Font.system(size: 13, weight: .semibold))
-                    
-                }
-                Spacer()
-            }
-            .padding(.horizontal, 20)
-            
-            // 즐겨찾기 별 이미지 (오른쪽 상단)
-            if dataModel.isFavorite {
-                VStack {
-                    HStack {
-                        Spacer()
+                    if dataModel.isFavorite {
                         Image(systemName: "star.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.white)
+                            .font(.system(size: 11))
+                            .foregroundStyle(.white)
                     }
+                    
                     Spacer()
                 }
-                .padding(.top, 10)
-                .padding(.trailing, 15)
+                HStack(alignment: .bottom, spacing: 0) {
+                    GradeColumn(
+                        label: "미세",
+                        grade: dataModel.dustGrade,
+                        value: dataModel.dustDensity,
+                        alignment: .leading
+                    )
+                    
+                    Spacer()
+                    
+                    GradeColumn(
+                        label: "초미세",
+                        grade: dataModel.microDustGrade,
+                        value: dataModel.microDustDensity,
+                        alignment: .trailing
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+        .frame(height: 110)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+    
+    private struct GradeColumn: View {
+        let label: String
+        let grade: AirQualityGrade
+        let value: String?
+        let alignment: HorizontalAlignment
+        
+        /// "매우나쁨"(4자)만 사이즈 줄이기
+        private var gradeFontSize: CGFloat {
+            grade == .veryBad ? 18 : 22
+        }
+        
+        /// 점검중이면 "—", 그 외엔 수치 표시
+        private var valueText: String {
+            guard let value, grade != .checking else { return "—" }
+            return "\(value) ㎍/㎥"
+        }
+        
+        var body: some View {
+            VStack(alignment: alignment, spacing: 2) {
+                Text(label)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.6))
+                    .tracking(0.3)
+                
+                Text(grade.rawValue)
+                    .font(.system(size: gradeFontSize, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding(.top, -2)
+                
+                Text(valueText)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .padding(.top, 2)
             }
         }
-        .frame(height: 100)
-        .frame(maxWidth: .infinity)
-        .cornerRadius(20)
-        .clipped()
     }
 }
