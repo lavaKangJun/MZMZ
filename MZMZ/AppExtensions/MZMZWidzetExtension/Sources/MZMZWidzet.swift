@@ -51,7 +51,7 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                                 location: dustInfo.location,
                                 dustText:
                                     AirQualityGrade.grade(forPM10: mesureDnsty.pm10Value).rawValue,
-                                microText: AirQualityGrade.grade(forPM25: mesureDnsty.pm10Value).rawValue
+                                microText: AirQualityGrade.grade(forPM25: mesureDnsty.pm25Value).rawValue
                             )
                         }
                     }
@@ -113,18 +113,17 @@ struct MZMZWidzetEntryView : View {
                     
                     // 미세먼지 정보 (한 줄)
                     Text("미세: \(info.dustText) | 초미세: \(info.microText)")
-                        .font(.system(size: 9, weight: .medium))
+                        .font(.system(size: 10, weight: .semibold))
                         .lineLimit(1)
                 }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 6)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(Color.secondary.opacity(0.1))
                 )
             }
         }
-        .font(Font.system(size: 11, weight: .semibold))
     }
 }
 
