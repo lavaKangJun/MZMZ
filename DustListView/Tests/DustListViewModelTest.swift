@@ -115,7 +115,6 @@ class DustListViewModelTests {
         
         // Act
         self.viewModel.dustListStream
-            .print("dustListStream")
             .sink { result in
                 // 삭제 후 스트림에도 반영됨
                 dataListCount = result.count

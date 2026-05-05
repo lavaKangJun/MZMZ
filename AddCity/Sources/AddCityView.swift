@@ -19,6 +19,9 @@ public struct AddCityView: View {
     
     public var body: some View {
         ZStack {
+            Color(.systemGroupedBackground)
+                .ignoresSafeArea()
+            
             Color.clear
                 .contentShape(Rectangle())
                 .ignoresSafeArea()
@@ -39,7 +42,7 @@ public struct AddCityView: View {
                             .textFieldStyle(PlainTextFieldStyle())
                     }
                     .padding(10)
-                    .background(Color(.systemGray6))
+                    .background(Color(.systemGray5))
                     .cornerRadius(8)
                     
                     Button("Cancel") {
@@ -49,21 +52,22 @@ public struct AddCityView: View {
                 }
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
                 
-                List(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
-                    Text(cellViewModel.name)
-                        .listRowSeparator(.hidden)
-                        .onTapGesture {
-                            let dependecvy = CityDetailDependency(
-                                name: cellViewModel.name,
-                                station: nil,
-                                longitude: cellViewModel.longitude,
-                                latitude: cellViewModel.latitude,
-                                isSearchResult: true
-                            )
-                            viewModel.routeToCityDetail(dependecvy)
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
+                            SearchResultRow(fullName: cellViewModel.name, query: textedCity) {
+                                let dependecvy = CityDetailDependency(
+                                    name: cellViewModel.name,
+                                    station: nil,
+                                    longitude: cellViewModel.longitude,
+                                    latitude: cellViewModel.latitude,
+                                    isSearchResult: true
+                                )
+                                viewModel.routeToCityDetail(dependecvy)
+                            }
                         }
+                    }
                 }
-                .listStyle(.plain)
             }
             .onChange(of: textedCity) { oldValue, newValue in
                 if newValue.isEmpty == false, oldValue != newValue {
@@ -71,5 +75,43 @@ public struct AddCityView: View {
                 }
             }
         }
+    }
+}
+
+
+struct SearchResultRow: View {
+    let fullName: String
+    let query: String
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button(action: onTap) {
+            HStack {
+                highlightedText
+                    .font(.system(size: 15))
+                    .foregroundStyle(.primary)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    /// 검색어 매칭 부분 강조
+    private var highlightedText: Text {
+        guard !query.isEmpty,
+              let range = fullName.range(of: query) else {
+            return Text(fullName)
+        }
+        
+        let before = String(fullName[..<range.lowerBound])
+        let match = String(fullName[range])
+        let after = String(fullName[range.upperBound...])
+        
+        return Text(before) +
+               Text(match).foregroundStyle(.blue).bold() +
+               Text(after)
     }
 }
