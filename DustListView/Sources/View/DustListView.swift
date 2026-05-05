@@ -22,6 +22,9 @@ public struct DustListView: View {
     public var body: some View {
         NavigationStack {
             ZStack {
+                Color(Color(.systemGray6))
+                    .ignoresSafeArea()
+                
                 VStack {
                     Spacer()
                     

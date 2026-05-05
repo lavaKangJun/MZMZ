@@ -31,7 +31,7 @@ public final class Repository: RepositoryProtocol {
         parameters["output_coord"] = "TM"
         
         let result: KakaoResponse<TMLocationInfo> = try await self.remote.request(header: header, endpoint: .tmLocation, method: .get, parameters: parameters)
-        print("formatTMCoordinate", result.documents)
+       // print("formatTMCoordinate", result.documents)
         return result.documents.map { $0.makeEntity() }
     }
     

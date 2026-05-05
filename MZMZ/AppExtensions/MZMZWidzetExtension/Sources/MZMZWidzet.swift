@@ -57,7 +57,6 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                     }
                     
                     for try await model in group {
-                        print("result", model)
                         items.append(model)
                     }
                     return items
