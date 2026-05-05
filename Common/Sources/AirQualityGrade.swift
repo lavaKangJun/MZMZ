@@ -80,35 +80,56 @@ extension AirQualityGrade {
         case .checking: return -1
         }
     }
+    
+    public var description: String {
+        switch self {
+        case .good:
+            return goodMessages.randomElement() ??  "산책하기 좋은 날이에요."
+        case .moderate:
+            return "WHO 권고 기준 이내, 안전한 수준이에요"
+        case .caution:
+            return "외출 시 가벼운 마스크 착용을 권장해요"
+        case .bad:
+            return "실외 활동을 줄이고 KF80 이상 마스크를 착용하세요"
+        case .veryBad:
+            return "외출을 자제하고 KF94 마스크를 꼭 착용하세요"
+        case .checking:
+            return "측정소 점검 중이에요. 잠시 후 다시 확인해주세요"
+        }
+    }
+    
+    private var goodMessages: [String] {
+        [
+            "산책하기 좋은 날이에요",
+            "창문을 활짝 열어보세요",
+            "실외 활동하기 딱 좋아요",
+            "마음껏 외출해도 좋아요",
+            "공기가 깨끗해요. 즐겨보세요",
+            "환기하기 좋은 날이에요"
+        ]
+    }
 }
 
+public enum AirQualityGradeViewStyle {
+    case list
+    case detail
+}
 
 public struct AirQualityCardBackground: View {
     private let pm10Grade: AirQualityGrade
     private let pm25Grade: AirQualityGrade
+    private let style: AirQualityGradeViewStyle
     @Environment(\.colorScheme) private var colorScheme
     
-    public init(pm10Grade: AirQualityGrade, pm25Grade: AirQualityGrade) {
+    public init(pm10Grade: AirQualityGrade, pm25Grade: AirQualityGrade, style: AirQualityGradeViewStyle) {
         self.pm10Grade = pm10Grade
         self.pm25Grade = pm25Grade
+        self.style = style
     }
     
     public var body: some View {
         ZStack {
-            if pm10Grade == pm25Grade {
-                leftColor
-            } else {
-                LinearGradient(
-                    stops: [
-                        .init(color: leftColor, location: 0.0),
-                        .init(color: leftColor, location: 0.4),
-                        .init(color: rightColor, location: 0.6),
-                        .init(color: rightColor, location: 1.0)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            }
+            backgroundView
             
             // 입자 (주의 이상)
             if pm10Grade.severity >= 2 {
@@ -120,9 +141,86 @@ public struct AirQualityCardBackground: View {
             
             // 햇살 (양쪽 다 좋음)
             if pm10Grade == .good && pm25Grade == .good {
-                SunOverlay()
+                sunOverlay
             }
         }
+    }
+    
+    private var sunOverlay: some View {
+        switch style {
+        case .list:
+            // 카드: 우상단 구석에 작게
+            GeometryReader { geo in
+                Circle()
+                    .fill(RadialGradient(
+                        colors: [
+                            Color(hex: "ffd966").opacity(0.6),
+                            Color(hex: "ffd966").opacity(0)
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 30
+                    ))
+                    .frame(width: 70, height: 70)
+                    .position(x: geo.size.width - 40, y: 35)
+            }
+        case .detail:
+            // 풀스크린: 화면 중앙 살짝 위에 크게 (지역명 위)
+            GeometryReader { geo in
+                Circle()
+                    .fill(RadialGradient(
+                        colors: [
+                            Color(hex: "ffd966").opacity(0.6),
+                            Color(hex: "ffd966").opacity(0)
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: 75
+                    ))
+                    .frame(width: 360, height: 360)
+                    .position(x: geo.size.width / 2, y: geo.size.height * 0.22)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var backgroundView: some View {
+        if pm10Grade == pm25Grade {
+            leftColor
+        } else {
+            switch style {
+            case .list:
+                listBackgroundView
+            case .detail:
+                detailViewBackground
+            }
+        }
+    }
+    
+    private var listBackgroundView: some View {
+        LinearGradient(
+            stops: [
+                .init(color: leftColor, location: 0.0),
+                .init(color: leftColor, location: 0.4),
+                .init(color: rightColor, location: 0.6),
+                .init(color: rightColor, location: 1.0)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+    
+    private var detailViewBackground: some View {
+        LinearGradient(
+            stops: [
+                .init(color: leftColor, location: 0.0),
+                .init(color: leftColor, location: 0.47),
+                .init(color: rightColor, location: 0.53),
+                .init(color: rightColor, location: 1.0)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
     }
     
     // MARK: - 좌상단 → 우하단 대각선으로 좌측 영역만 그리기
@@ -158,28 +256,6 @@ public struct AirQualityCardBackground: View {
         pm25Grade.gradientColors(isDark: colorScheme == .dark)
     }
 }
-
-private struct SunOverlay: View {
-    var body: some View {
-        GeometryReader { geo in
-            Circle()
-                .fill(
-                    RadialGradient(
-                        colors: [
-                            Color(hex: "ffd966").opacity(0.6),
-                            Color(hex: "ffd966").opacity(0)
-                        ],
-                        center: .center,
-                        startRadius: 0,
-                        endRadius: 25
-                    )
-                )
-                .frame(width: 50, height: 50)
-                .position(x: geo.size.width - 30, y: 30)
-        }
-    }
-}
-
 
 
 // MARK: - 먼지 입자

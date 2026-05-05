@@ -109,7 +109,11 @@ public struct DustListView: View {
     
     public func listView(_ dataModel: DustListViewDataModel) -> some View {
         ZStack(alignment: .leading) {
-            AirQualityCardBackground(pm10Grade: dataModel.dustGrade, pm25Grade: dataModel.microDustGrade)
+            AirQualityCardBackground(
+                pm10Grade: dataModel.dustGrade,
+                pm25Grade: dataModel.microDustGrade,
+                style: .list
+            )
                 .mask(RoundedRectangle(cornerRadius: 10))
             
             VStack(alignment: .leading, spacing: 3) {
