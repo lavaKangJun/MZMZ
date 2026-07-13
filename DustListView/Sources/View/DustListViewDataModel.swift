@@ -49,11 +49,12 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
 
 extension DustListViewDataModel {
     public static func ==(lhs: DustListViewDataModel, rhs: DustListViewDataModel) -> Bool {
-        return lhs.location == rhs.location
+        return lhs.location == rhs.location && lhs.isFavorite == rhs.isFavorite
     }
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self.location)
+        hasher.combine(self.isFavorite)
     }
 }
 

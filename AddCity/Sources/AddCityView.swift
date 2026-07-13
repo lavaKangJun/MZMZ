@@ -61,7 +61,8 @@ public struct AddCityView: View {
                                     station: nil,
                                     longitude: cellViewModel.longitude,
                                     latitude: cellViewModel.latitude,
-                                    isSearchResult: true
+                                    isSearchResult: true,
+                                    dismiss: nil
                                 )
                                 viewModel.routeToCityDetail(dependecvy)
                             }

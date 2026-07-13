@@ -14,18 +14,22 @@ public struct CityDetailDependency {
     public let longitude: String
     public let latitude: String
     public let isSearchResult: Bool
+    public let dismiss: (() -> Void)?
+    
     public init(
         name: String,
         station: String?,
         longitude: String,
         latitude: String,
-        isSearchResult: Bool
+        isSearchResult: Bool,
+        dismiss: (() -> Void)?
     ) {
         self.name = name
         self.station = station
         self.longitude = longitude
         self.latitude = latitude
         self.isSearchResult = isSearchResult
+        self.dismiss = dismiss
     }
 }
 

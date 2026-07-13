@@ -23,6 +23,7 @@ final public class CityDetailSceneBuilderImp: @preconcurrency CityDetailSceneBui
             longitude: dependency.longitude,
             latitude: dependency.latitude,
             isSearchResult: dependency.isSearchResult,
+            dismiss: dependency.dismiss,
             usecase: DustInfoUseCase(repository: repository)
         )
         let router = CityDetailRouter()

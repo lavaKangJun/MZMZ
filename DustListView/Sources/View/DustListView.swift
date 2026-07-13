@@ -90,6 +90,7 @@ public struct DustListView: View {
                     .navigationBarTitleDisplayMode(.large)
                 }
                 .onReceive(viewModel.dustListStream) { dustList in
+                    print("dustList", dustList.map({ ($0.location, $0.isFavorite) }))
                     self.dustListModel = dustList
                 }
                 .onReceive(viewModel.errorStream) { message in
@@ -105,6 +106,7 @@ public struct DustListView: View {
                 }
                 .onViewWillAppear {
                     viewModel.fetchDust()
+                    print("onViewWillAppear")
                 }
             }
         }

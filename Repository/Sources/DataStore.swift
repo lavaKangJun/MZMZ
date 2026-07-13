@@ -24,6 +24,7 @@ public enum SQLiteError: Error {
     case prepare
     case step(String)
     case transation(String)
+    case overLike(String)
 }
 
 public final class DataStore: DataStorable {
@@ -166,7 +167,7 @@ public final class DataStore: DataStorable {
         if isFavorite {
             let favoriteCount =  try getFavoriteCount()
             if favoriteCount >= 2 {
-                throw SQLiteError.step("최대 2가까지 즐겨찾기 가능합니다.")
+                throw SQLiteError.overLike("최대 2가까지 즐겨찾기 가능합니다.")
             }
         }
         

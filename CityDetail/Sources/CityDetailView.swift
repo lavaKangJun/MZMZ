@@ -57,6 +57,9 @@ public struct CityDetailView: View {
         .onAppear {
             viewModel.fetchCurrentCityDustInfo()
         }
+        .onDisappear {
+            viewModel.disappear()
+        }
     }
     
     private func topNavigationBar(isSearched: Bool, isFavorite: Bool) -> some View {

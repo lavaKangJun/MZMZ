@@ -223,20 +223,6 @@ public struct AirQualityCardBackground: View {
         )
     }
     
-    // MARK: - 좌상단 → 우하단 대각선으로 좌측 영역만 그리기
-    private struct LeftDiagonalShape: Shape {
-        func path(in rect: CGRect) -> Path {
-            var path = Path()
-            // 좌상단(0,0) → 우상단 60% 지점 → 좌하단 40% 지점 → 좌하단(0,h)
-            path.move(to: CGPoint(x: 0, y: 0))
-            path.addLine(to: CGPoint(x: rect.width * 0.6, y: 0))
-            path.addLine(to: CGPoint(x: rect.width * 0.4, y: rect.height))
-            path.addLine(to: CGPoint(x: 0, y: rect.height))
-            path.closeSubpath()
-            return path
-        }
-    }
-    
     private func particleCount(for grade: AirQualityGrade) -> Int {
         switch grade {
         case .caution: return 2
@@ -246,12 +232,10 @@ public struct AirQualityCardBackground: View {
         }
     }
     
-    /// 좌측 색 (미세먼지 등급의 어두운 톤)
     private var leftColor: Color {
         pm10Grade.gradientColors(isDark: colorScheme == .dark)
     }
     
-    /// 우측 색 (초미세 등급의 밝은 톤)
     private var rightColor: Color {
         pm25Grade.gradientColors(isDark: colorScheme == .dark)
     }
