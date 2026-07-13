@@ -10,6 +10,7 @@ import Domain
 import SwiftUI
 import WidgetKit
 import Common
+import Repository
 
 public struct CityDetailViewDataModel {
     let location: String
@@ -48,15 +49,16 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     private let isSearchResult: Bool
     private let usecase: DustInfoUseCaseProtocol
     public var router: CityDetailRouting?
-    
+    private var dismiss: (() -> Void)?
     @Published var dataModel: CityDetailViewDataModel?
-        
+    
     init(
         name: String,
         station: String?,
         longitude: String,
         latitude: String,
         isSearchResult: Bool,
+        dismiss: (() -> Void)?,
         usecase: DustInfoUseCaseProtocol
     ) {
         self.name = name
@@ -64,9 +66,10 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         self.longitude = longitude
         self.latitude = latitude
         self.isSearchResult = isSearchResult
+        self.dismiss = dismiss
         self.usecase = usecase
     }
-
+    
     var isSearched: Bool {
         return self.isSearchResult
     }
@@ -104,6 +107,10 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         self.router?.dimisss()
     }
     
+    func disappear() {
+        self.dismiss?()
+    }
+    
     func toggleFavorite() {
         guard let currentDataModel = self.dataModel else {
             return
@@ -111,14 +118,16 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         let currentFavorite = currentDataModel.isFavorite
         do {
             try usecase.updateFavorite(location: currentDataModel.location, isFavorite: !currentFavorite)
-            
-            // 새로운 dataModel 생성하여 업데이트
             var updatedDataModel = currentDataModel
             updatedDataModel.isFavorite = !currentFavorite
             self.dataModel = updatedDataModel
             WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
-        } catch {
+        } catch let error {
             // error 알럿 추가 필요
+            if case SQLiteError.overLike = error {
+                self.router?.errorAlert()
+            }
+            
             print("즐겨찾기 업데이트 실패: \(error)")
         }
     }

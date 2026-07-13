@@ -36,36 +36,44 @@ struct Provider: TimelineProvider, @unchecked Sendable {
     nonisolated func getTimeline(in context: Context, completion: @escaping @Sendable (Timeline<Entry>) -> ()) {
         Task {
             do {
-                var items: [LocationInfo] = []
                 let dustInfos = try self.usecase.getDustInfo()
                 // 즐겨찾기된 지역들만 필터링 (최대 2개)
                 let favoriteInfos = dustInfos.filter { $0.isFavorite }
-                let dataModels = try await withThrowingTaskGroup(of: LocationInfo.self) { group in
+                let items = try await withThrowingTaskGroup(of: (Int, LocationInfo).self) { group in
                     for (index, dustInfo) in favoriteInfos.enumerated() {
                         group.addTask {
-                            let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
+                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return LocationInfo(location: dustInfo.location, dustText: "", microText: "") }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, LocationInfo(location: dustInfo.location, dustText: "", microText: "")) }
                             
-                            return LocationInfo(
+                            return (index, LocationInfo(
                                 location: dustInfo.location,
                                 dustText:
                                     AirQualityGrade.grade(forPM10: mesureDnsty.pm10Value).rawValue,
                                 microText: AirQualityGrade.grade(forPM25: mesureDnsty.pm25Value).rawValue
+                                )
                             )
                         }
                     }
                     
+                    var collected: [(Int, LocationInfo)] = []
                     for try await model in group {
-                        print("result", model)
-                        items.append(model)
+                        collected.append(model)
                     }
-                    return items
+                    return collected
                 }
-                let timeline = Timeline(entries: [SimpleEntry(items: items)], policy: .after(Date().addingTimeInterval(600)))
+                
+                let sorted = items.sorted(by: { $0.0 < $1.0 }).map( { $0.1 })
+                let timeline = Timeline(entries: [SimpleEntry(items: sorted)], policy: .after(Date().addingTimeInterval(1000)))
+                print("sorted", sorted)
                 completion(timeline)
          
             } catch {
+                let timeline = Timeline(
+                    entries: [SimpleEntry(items: [])],
+                    policy: .after(Date().addingTimeInterval(1000))
+                )
+                completion(timeline)
                 print("error", error)
             }
         }

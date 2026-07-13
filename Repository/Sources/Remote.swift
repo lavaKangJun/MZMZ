@@ -67,6 +67,9 @@ public final class Remote: RemoteProtocol {
         let result = response.result
         switch result {
         case let .success(data):
+//            if let jsonString = String(data: data, encoding: .utf8) {
+//                print("📦\(endpoint) Response JSON:\n\(jsonString)")
+//            }
             let decodeResult = try JSONDecoder().decode(T.self, from: data)
             return decodeResult
         case let .failure(error):

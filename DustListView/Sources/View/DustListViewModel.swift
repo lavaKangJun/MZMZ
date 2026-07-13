@@ -59,8 +59,6 @@ public final class DustListViewModel: @unchecked Sendable   {
                 await MainActor.run { [weak self] in
                     self?.dustListSubject.send(dataModels)
                 }
-                
-                WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
             } catch {
                 await MainActor.run { [weak self] in
                     self?.errorSubject.send(error.localizedDescription)
@@ -95,6 +93,15 @@ public final class DustListViewModel: @unchecked Sendable   {
         longitude: String,
         latitude: String
     ) {
-        self.router?.routeToDetail(name: name, station: station, longitude: longitude, latitude: latitude)
+        let dismiss: () -> Void = { [weak self] in
+            self?.fetchDust()
+        }
+        self.router?.routeToDetail(
+            name: name,
+            station: station,
+            longitude: longitude,
+            latitude: latitude,
+            dismiss: dismiss
+        )
     }
 }

@@ -22,6 +22,9 @@ public struct DustListView: View {
     public var body: some View {
         NavigationStack {
             ZStack {
+                Color(Color(.systemGray6))
+                    .ignoresSafeArea()
+                
                 VStack {
                     Spacer()
                     
@@ -87,6 +90,7 @@ public struct DustListView: View {
                     .navigationBarTitleDisplayMode(.large)
                 }
                 .onReceive(viewModel.dustListStream) { dustList in
+                    print("dustList", dustList.map({ ($0.location, $0.isFavorite) }))
                     self.dustListModel = dustList
                 }
                 .onReceive(viewModel.errorStream) { message in
@@ -102,6 +106,7 @@ public struct DustListView: View {
                 }
                 .onViewWillAppear {
                     viewModel.fetchDust()
+                    print("onViewWillAppear")
                 }
             }
         }
