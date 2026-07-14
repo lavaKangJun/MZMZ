@@ -12,7 +12,15 @@ import Scene
 public protocol DustListRouting {
     var scene: UIViewController? { get set}
     func routeToFindLocation()
-    func routeToDetail(name: String, station: String?, longitude: String, latitude: String, dismiss: (() -> Void)?)
+    func routeToDetail(
+        name: String,
+        station: String?,
+        longitude: String,
+        latitude: String,
+        tmX: Double,
+        tmY: Double,
+        dismiss: (() -> Void)?
+    )
 }
 
 public final class DustListRouter: DustListRouting {
@@ -36,6 +44,8 @@ public final class DustListRouter: DustListRouting {
         station: String?,
         longitude: String,
         latitude: String,
+        tmX: Double,
+        tmY: Double,
         dismiss: (() -> Void)?
     ) {
         let dependency = CityDetailDependency(
@@ -43,6 +53,8 @@ public final class DustListRouter: DustListRouting {
             station: station,
             longitude: longitude,
             latitude: latitude,
+            tmX: tmX,
+            tmY: tmY,
             isSearchResult: false,
             dismiss: dismiss
         )

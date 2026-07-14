@@ -12,6 +12,12 @@ import WidgetKit
 import Common
 import Repository
 
+enum LoadState {
+    case loading
+    case loaded
+    case failed
+}
+
 public struct CityDetailViewDataModel {
     let location: String
     let station: String?
@@ -41,22 +47,28 @@ public struct CityDetailViewDataModel {
     }
 }
 
+@MainActor
 public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     private let name: String
     private let station: String?
     private let longitude: String
     private let latitude: String
+    private let tmX: Double
+    private let tmY: Double
     private let isSearchResult: Bool
     private let usecase: DustInfoUseCaseProtocol
     public var router: CityDetailRouting?
     private var dismiss: (() -> Void)?
-    @Published var dataModel: CityDetailViewDataModel?
+    @Published var dataModel: CityDetailViewDataModel
+    @Published private(set) var loadState: LoadState = .loading
     
     init(
         name: String,
         station: String?,
         longitude: String,
         latitude: String,
+        tmX: Double,
+        tmY: Double,
         isSearchResult: Bool,
         dismiss: (() -> Void)?,
         usecase: DustInfoUseCaseProtocol
@@ -65,9 +77,13 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         self.station = station
         self.longitude = longitude
         self.latitude = latitude
+        self.tmX = tmX
+        self.tmY = tmY
         self.isSearchResult = isSearchResult
         self.dismiss = dismiss
         self.usecase = usecase
+        self.dataModel = CityDetailViewDataModel(location: name)
+        fetchCurrentCityDustInfo()
     }
     
     var isSearched: Bool {
@@ -76,24 +92,28 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     
     func fetchCurrentCityDustInfo() {
         Task {
-            let entity = LocationInfoEntity(latitude: self.latitude, longtitude: self.longitude)
-            let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
-            
-            // 즐겨찾기 상태 조회
-            let isFavorite = (try? self.usecase.getFavoriteStatus(location: self.name)) ?? false
-            guard let tmX = tmLocation?.x, let tmY = tmLocation?.y else { return }
-            guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
-                await MainActor.run {
-                    var dataModel = CityDetailViewDataModel(location: self.name)
-                    self.dataModel = dataModel
+            do {
+                // 즐겨찾기 상태 조회
+                let tf = Date()
+                let isFavorite = (try? self.usecase.getFavoriteStatus(location: self.name)) ?? false
+                guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
+        
+                        let dataModel = CityDetailViewDataModel(location: self.name)
+                        self.dataModel = dataModel
+                        self.loadState = .failed
+                    
+                    return
                 }
-                return
+                let tA = Date()
+                    let dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo, isFavorite: isFavorite)
+                    self.dataModel = dataModel
+                    self.loadState = .loaded
+            } catch {
+                    self.dataModel = CityDetailViewDataModel(location: self.name)
+                    self.loadState = .failed
+                
             }
             
-            await MainActor.run {
-                var dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo, isFavorite: isFavorite)
-                self.dataModel = dataModel
-            }
         }
     }
     
@@ -112,9 +132,7 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     }
     
     func toggleFavorite() {
-        guard let currentDataModel = self.dataModel else {
-            return
-        }
+        let currentDataModel = self.dataModel
         let currentFavorite = currentDataModel.isFavorite
         do {
             try usecase.updateFavorite(location: currentDataModel.location, isFavorite: !currentFavorite)

@@ -13,6 +13,8 @@ public struct CityDetailDependency {
     public let station: String?
     public let longitude: String
     public let latitude: String
+    public let tmX: Double?
+    public let tmY: Double?
     public let isSearchResult: Bool
     public let dismiss: (() -> Void)?
     
@@ -21,6 +23,8 @@ public struct CityDetailDependency {
         station: String?,
         longitude: String,
         latitude: String,
+        tmX: Double?,
+        tmY: Double?,
         isSearchResult: Bool,
         dismiss: (() -> Void)?
     ) {
@@ -28,6 +32,8 @@ public struct CityDetailDependency {
         self.station = station
         self.longitude = longitude
         self.latitude = latitude
+        self.tmX = tmX
+        self.tmY = tmY
         self.isSearchResult = isSearchResult
         self.dismiss = dismiss
     }

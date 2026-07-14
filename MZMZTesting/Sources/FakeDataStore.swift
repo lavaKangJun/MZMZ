@@ -8,7 +8,7 @@
 import Foundation
 import Repository
 
-public final class FakeDataStore: DataStorable {
+public final class FakeDataStore: DataStorable, @unchecked Sendable {
     nonisolated(unsafe) public static let shared = FakeDataStore()
     private var dustInfos: [DustStoreDTO] = [
         DustStoreDTO(
