@@ -8,6 +8,7 @@
 import UIKit
 @preconcurrency import Combine
 import Domain
+import Common
 import WidgetKit
 
 public final class DustListViewModel: @unchecked Sendable   {
@@ -49,6 +50,7 @@ public final class DustListViewModel: @unchecked Sendable   {
                                 )
                                 return (index, dataModel)
                             }
+                            print("@@mesureDnsty", mesureDnsty.dataTime)
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
@@ -102,10 +104,11 @@ public final class DustListViewModel: @unchecked Sendable   {
     public func routeToDetail(
         name: String,
         station: String?,
-        longitude: String,
-        latitude: String,
-        tmX: Double,
-        tmY: Double,
+        dustDensity: String,
+        microDustDensity: String,
+        dustGrade: AirQualityGrade,
+        microDustGrade: AirQualityGrade,
+        isFavorite: Bool
     ) {
         let dismiss: () -> Void = { [weak self] in
             self?.fetchDust()
@@ -113,10 +116,11 @@ public final class DustListViewModel: @unchecked Sendable   {
         self.router?.routeToDetail(
             name: name,
             station: station,
-            longitude: longitude,
-            latitude: latitude,
-            tmX: tmX,
-            tmY: tmY,
+            dustDensity: dustDensity,
+            microDustDensity: microDustDensity,
+            dustGrade: dustGrade,
+            microDustGrade: microDustGrade,
+            isFavorite: isFavorite,
             dismiss: dismiss
         )
     }

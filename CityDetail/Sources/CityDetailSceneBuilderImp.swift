@@ -18,13 +18,7 @@ final public class CityDetailSceneBuilderImp: @preconcurrency CityDetailSceneBui
         let remote = Remote()
         let repository = Repository(dataStore: DataStore.shared, remote: remote)
         let viewModel = CityDetailViewModel(
-            name: dependency.name,
-            station: dependency.station,
-            longitude: dependency.longitude,
-            latitude: dependency.latitude,
-            tmX: dependency.tmX ?? 0,
-            tmY: dependency.tmY ?? 0,
-            isSearchResult: dependency.isSearchResult,
+            detailViewType: dependency.detailViewType,
             dismiss: dependency.dismiss,
             usecase: DustInfoUseCase(repository: repository)
         )

@@ -58,10 +58,11 @@ public struct DustListView: View {
                                             .routeToDetail(
                                                 name: dataModel.location,
                                                 station: dataModel.station,
-                                                longitude: dataModel.longtitude,
-                                                latitude: dataModel.latitude,
-                                                tmX: dataModel.tmX,
-                                                tmY: dataModel.tmY
+                                                dustDensity: dataModel.dustDensity,
+                                                microDustDensity: dataModel.microDustDensity,
+                                                dustGrade: dataModel.dustGrade,
+                                                microDustGrade: dataModel.microDustGrade,
+                                                isFavorite: dataModel.isFavorite
                                             )
                                     }
                             }

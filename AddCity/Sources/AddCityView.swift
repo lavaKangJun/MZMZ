@@ -56,15 +56,11 @@ public struct AddCityView: View {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
                             SearchResultRow(fullName: cellViewModel.name, query: textedCity) {
-                                let dependecvy = CityDetailDependency(
+                                let dependecvy =
+                                CityDetailDependency(
                                     name: cellViewModel.name,
-                                    station: nil,
                                     longitude: cellViewModel.longitude,
-                                    latitude: cellViewModel.latitude,
-                                    tmX: nil,
-                                    tmY: nil,
-                                    isSearchResult: true,
-                                    dismiss: nil
+                                    latitude: cellViewModel.latitude
                                 )
                                 viewModel.routeToCityDetail(dependecvy)
                             }

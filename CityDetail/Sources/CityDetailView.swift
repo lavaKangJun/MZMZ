@@ -56,9 +56,6 @@ public struct CityDetailView: View {
                 Spacer()
             }
         }
-        .onAppear {
-            //            viewModel.fetchCurrentCityDustInfo()
-        }
         .onDisappear {
             viewModel.disappear()
         }
@@ -214,7 +211,7 @@ public struct CityDetailView: View {
     
     private var currentTimeText: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일 HH:mm 측정"
+        formatter.dateFormat = "M월 d일 HH:mm"
         formatter.locale = Locale(identifier: "ko_KR")
         return formatter.string(from: Date())
     }

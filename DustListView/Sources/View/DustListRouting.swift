@@ -7,7 +7,7 @@
 
 import UIKit
 import Scene
-
+import Common
 @MainActor
 public protocol DustListRouting {
     var scene: UIViewController? { get set}
@@ -15,10 +15,11 @@ public protocol DustListRouting {
     func routeToDetail(
         name: String,
         station: String?,
-        longitude: String,
-        latitude: String,
-        tmX: Double,
-        tmY: Double,
+        dustDensity: String,
+        microDustDensity: String,
+        dustGrade: AirQualityGrade,
+        microDustGrade: AirQualityGrade,
+        isFavorite: Bool,
         dismiss: (() -> Void)?
     )
 }
@@ -42,20 +43,21 @@ public final class DustListRouter: DustListRouting {
     public func routeToDetail(
         name: String,
         station: String?,
-        longitude: String,
-        latitude: String,
-        tmX: Double,
-        tmY: Double,
+        dustDensity: String,
+        microDustDensity: String,
+        dustGrade: AirQualityGrade,
+        microDustGrade: AirQualityGrade,
+        isFavorite: Bool,
         dismiss: (() -> Void)?
     ) {
         let dependency = CityDetailDependency(
             name: name,
             station: station,
-            longitude: longitude,
-            latitude: latitude,
-            tmX: tmX,
-            tmY: tmY,
-            isSearchResult: false,
+            dustDensity: dustDensity,
+            microDustDensity: microDustDensity,
+            dustGrade: dustGrade,
+            microDustGrade: microDustGrade,
+            isFavorite: isFavorite,
             dismiss: dismiss
         )
         let view = cityDetailSceneBuilder.makeCityDetailScene(dependency)
