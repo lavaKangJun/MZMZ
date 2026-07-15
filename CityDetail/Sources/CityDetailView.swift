@@ -17,45 +17,47 @@ public struct CityDetailView: View {
     
     public var body: some View {
         ZStack {
-            if let dataModel = viewModel.dataModel {
-                AirQualityCardBackground(
-                    pm10Grade: dataModel.dustGrade,
-                    pm25Grade: dataModel.microDustGrade,
-                    style: .detail
-                )
-                .ignoresSafeArea()
+            AirQualityCardBackground(
+                pm10Grade: viewModel.dataModel.dustGrade,
+                pm25Grade: viewModel.dataModel.microDustGrade,
+                style: .detail
+            )
+            .ignoresSafeArea()
+            .animation(.easeInOut(duration: 0.35), value: viewModel.loadState)
+            
+            VStack(spacing: 0) {
+                // 상단 영역
+                headerSection(viewModel.dataModel)
                 
-                VStack(spacing: 0) {
-                    // 상단 영역
-                    headerSection(dataModel)
-                    
+                Group {
                     // 큰 등급 표시
-                    mainGradeSection(dataModel)
+                    mainGradeSection(viewModel.dataModel)
                         .padding(.top, 24)
                     
                     // 안내 메시지
-                    gradeDescription(dataModel)
+                    gradeDescription(viewModel.dataModel)
                         .padding(.top, 28)
                         .padding(.horizontal, 20)
                     
                     // 측정소 정보
-                    observatoryView(dataModel)
+                    observatoryView(viewModel.dataModel)
                         .padding(.top, 12)
                         .padding(.horizontal, 20)
-                    
-                    Spacer(minLength: 40)
                 }
-                .padding(.top, 140)
+                .redacted(reason: viewModel.loadState == .loading ? .placeholder : [])
                 
-                // 상단 네비게이션 (오버레이)
-                VStack {
-                    topNavigationBar(isSearched: viewModel.isSearched, isFavorite: dataModel.isFavorite)
-                    Spacer()
-                }
+                Spacer(minLength: 40)
+            }
+            .padding(.top, 140)
+            
+            // 상단 네비게이션 (오버레이)
+            VStack {
+                topNavigationBar(isSearched: viewModel.isSearched, isFavorite: viewModel.dataModel.isFavorite)
+                Spacer()
             }
         }
         .onAppear {
-            viewModel.fetchCurrentCityDustInfo()
+            //            viewModel.fetchCurrentCityDustInfo()
         }
         .onDisappear {
             viewModel.disappear()
@@ -219,87 +221,11 @@ public struct CityDetailView: View {
     
     private func dustText(_ dataMode: CityDetailViewDataModel) -> String {
         let pm10 = dataMode.dustDensity
-        return "\(pm10) ㎍/㎥"
+        return pm10 == "-1" ? "-" : "\(pm10) ㎍/㎥"
     }
     
     private func microDustText(_ dataMode: CityDetailViewDataModel) -> String {
         let pm25 = dataMode.microDustDensity
-        return "\(pm25) ㎍/㎥"
+        return pm25 == "-1" ? "-" : "\(pm25) ㎍/㎥"
     }
 }
-
-//            VStack(spacing: 10) {
-//                if let dataModel = viewModel.dataModel {
-//                    HStack {
-//                        Image(systemName: dataModel.isFavorite ? "star.fill" : "star")
-//                            .font(.system(size: 25, weight: .light))
-//                            .foregroundColor(.white)
-//                            .onTapGesture {
-//                                viewModel.toggleFavorite()
-//                            }
-//                        Spacer()
-//                    }
-//                    .padding(.top, 20)
-//                    .padding(.leading, 20)
-//                   
-//                    Spacer()
-//                    
-//                    Text(dataModel.location)
-//                        .font(.system(size: 30, weight: .bold))
-//
-//                    Spacer()
-//                        .frame(height: 50)
-//                    
-//                    HStack {
-//                        Image("dust", bundle: Bundle.module)
-//                            .resizable()
-//                            .frame(width: 40, height: 40)
-//                       
-//                        Text("미세먼지")
-//                        Text(dataModel.dustGrade.rawValue)
-//                        Text(dataModel.dustDensity + " μg/m3")
-//                    }
-//                    .font(.system(size: 20, weight: .medium))
-//                    
-//                    HStack {
-//                        Image("microdust", bundle: Bundle.module)
-//                            .resizable()
-//                            .frame(width: 40, height: 40)
-//                        
-//                        Text("초미세먼지")
-//                        Text(dataModel.microDustGrade.rawValue)
-//                        Text(dataModel.microDustDensity + " μg/m3")
-//                    }
-//                    .font(.system(size: 20, weight: .medium))
-//                    
-//                    Spacer()
-//                    
-//                    Text("관측소: \(dataModel.station ?? "")")
-//                    
-//                    Spacer()
-//                }
-//            }
-//            .foregroundColor(.white)
-//            
-//            if viewModel.isSearched {
-//                VStack {
-//                    HStack {
-//                        Spacer()
-//                        
-//                        Button("추가") {
-//                            self.viewModel.saveCity()
-//                        }
-//                        
-//                        Spacer()
-//                            .frame(width: 16)
-//                    }
-//                    Spacer()
-//                }
-//                .padding(.top, 20)
-//            }
-//        }
-//        .onAppear {
-//            viewModel.fetchCurrentCityDustInfo()
-//        }
-//    }
-//}

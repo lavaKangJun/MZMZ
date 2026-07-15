@@ -61,6 +61,8 @@ public struct AddCityView: View {
                                     station: nil,
                                     longitude: cellViewModel.longitude,
                                     latitude: cellViewModel.latitude,
+                                    tmX: nil,
+                                    tmY: nil,
                                     isSearchResult: true,
                                     dismiss: nil
                                 )

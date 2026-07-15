@@ -59,7 +59,9 @@ public struct DustListView: View {
                                                 name: dataModel.location,
                                                 station: dataModel.station,
                                                 longitude: dataModel.longtitude,
-                                                latitude: dataModel.latitude
+                                                latitude: dataModel.latitude,
+                                                tmX: dataModel.tmX,
+                                                tmY: dataModel.tmY
                                             )
                                     }
                             }
@@ -105,7 +107,7 @@ public struct DustListView: View {
                     )
                 }
                 .onViewWillAppear {
-                    viewModel.fetchDust()
+//                    viewModel.fetchDust()
                     print("onViewWillAppear")
                 }
             }

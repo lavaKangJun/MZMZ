@@ -17,29 +17,49 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     let microDustDensity: String
     let longtitude: String
     let latitude: String
+    let tmX: Double
+    let tmY: Double
     var isFavorite: Bool = false
     var dustGrade: AirQualityGrade
     var microDustGrade: AirQualityGrade
     
-    init(entity: MesureDnstyEntity, location: String, longtitude: String, latitude: String, isFavorite: Bool) {
+    init(
+        entity: MesureDnstyEntity,
+        location: String,
+        longtitude: String,
+        latitude: String,
+        tmX: Double,
+        tmY: Double,
+        isFavorite: Bool
+    ) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
         self.longtitude = longtitude
         self.latitude = latitude
+        self.tmX = tmX
+        self.tmY = tmY
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
     }
     
-    init(location: String, station: String?, longtitude: String, latitude: String, isFavorite: Bool) {
+    init(
+        location: String,
+        station: String?,
+        longtitude: String,
+        latitude: String,
+        isFavorite: Bool
+    ) {
         self.location = location
         self.station = station
         self.dustDensity = "-1"
         self.microDustDensity = "-1"
         self.longtitude = longtitude
         self.latitude = latitude
+        self.tmX = 0
+        self.tmY = 0
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)

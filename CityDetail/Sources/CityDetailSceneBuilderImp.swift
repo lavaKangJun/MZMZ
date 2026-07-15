@@ -22,6 +22,8 @@ final public class CityDetailSceneBuilderImp: @preconcurrency CityDetailSceneBui
             station: dependency.station,
             longitude: dependency.longitude,
             latitude: dependency.latitude,
+            tmX: dependency.tmX ?? 0,
+            tmY: dependency.tmY ?? 0,
             isSearchResult: dependency.isSearchResult,
             dismiss: dependency.dismiss,
             usecase: DustInfoUseCase(repository: repository)

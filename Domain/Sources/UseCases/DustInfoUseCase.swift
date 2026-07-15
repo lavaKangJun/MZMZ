@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol DustInfoUseCaseProtocol {
+public protocol DustInfoUseCaseProtocol: Sendable {
     func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
     func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool)

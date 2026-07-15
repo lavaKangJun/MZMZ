@@ -27,6 +27,7 @@ public final class DustListViewModel: @unchecked Sendable   {
     
     public init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
+        fetchDust()
     }
     
     public func fetchDust() {
@@ -38,12 +39,23 @@ public final class DustListViewModel: @unchecked Sendable   {
                         group.addTask { [dustInfo] in
                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
                             guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, DustListViewDataModel(location: dustInfo.location, station: nil, longtitude: dustInfo.longitude, latitude: dustInfo.latitude, isFavorite: dustInfo.isFavorite)) }
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else {
+                                let dataModel = DustListViewDataModel(
+                                    location: dustInfo.location,
+                                    station: nil,
+                                    longtitude: dustInfo.longitude,
+                                    latitude: dustInfo.latitude,
+                                    isFavorite: dustInfo.isFavorite
+                                )
+                                return (index, dataModel)
+                            }
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
                                 longtitude: dustInfo.longitude,
                                 latitude: dustInfo.latitude,
+                                tmX: location.x,
+                                tmY: location.y,
                                 isFavorite: dustInfo.isFavorite)
                             )
                         }
@@ -91,7 +103,9 @@ public final class DustListViewModel: @unchecked Sendable   {
         name: String,
         station: String?,
         longitude: String,
-        latitude: String
+        latitude: String,
+        tmX: Double,
+        tmY: Double,
     ) {
         let dismiss: () -> Void = { [weak self] in
             self?.fetchDust()
@@ -101,6 +115,8 @@ public final class DustListViewModel: @unchecked Sendable   {
             station: station,
             longitude: longitude,
             latitude: latitude,
+            tmX: tmX,
+            tmY: tmY,
             dismiss: dismiss
         )
     }

@@ -8,7 +8,7 @@
 import Foundation
 import SQLite3
 
-public protocol DataStorable {
+public protocol DataStorable: Sendable {
     func getDustInfo() -> [DustStoreDTO]
     func setDustInfo(_ info: DustStoreDTO)
     func insertTable(data: DustStoreDTO) throws
@@ -27,7 +27,7 @@ public enum SQLiteError: Error {
     case overLike(String)
 }
 
-public final class DataStore: DataStorable {
+public final class DataStore: DataStorable, @unchecked Sendable {
     @MainActor public static let shared = DataStore()
     private var dustInfos: [DustStoreDTO] = []
     private var dbPointer: OpaquePointer?
