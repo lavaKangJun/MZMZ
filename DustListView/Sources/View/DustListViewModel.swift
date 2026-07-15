@@ -28,7 +28,6 @@ public final class DustListViewModel: @unchecked Sendable   {
     
     public init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
-        fetchDust()
     }
     
     public func fetchDust() {

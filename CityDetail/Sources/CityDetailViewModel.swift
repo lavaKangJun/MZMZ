@@ -86,6 +86,7 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         switch self.detailViewType {
         case .search(let searchData):
             self.dataModel = CityDetailViewDataModel(location: searchData.location)
+            fetchCurrentCityDustInfo()
         case .deatail(let detailData):
             self.dataModel = CityDetailViewDataModel(
                 location: detailData.location,
@@ -109,22 +110,23 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
         }
     }
     
-    func fetchCurrentCityDustInfo() {
+    private func fetchCurrentCityDustInfo() {
         switch self.detailViewType {
         case let .search(searchData):
             Task {
                 do {
                     let entity = LocationInfoEntity(latitude: searchData.latitude, longtitude: searchData.longitude)
-                    
+                    let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
+
                     guard
-                        let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity),
-                        let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmLocation.x, tmY: tmLocation.y) else {
+                        let tmX = tmLocation?.x,
+                        let tmY = tmLocation?.y,
+                        let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
                         let dataModel = CityDetailViewDataModel(location: searchData.location)
                         self.dataModel = dataModel
                         self.loadState = .failed
                         return
                     }
-                    
                     let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo)
                     self.dataModel = dataModel
                     self.loadState = .loaded
