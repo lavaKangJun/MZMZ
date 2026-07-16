@@ -42,7 +42,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.tmY = tmY
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
-        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
     }
     
     init(
@@ -62,7 +62,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.tmY = 0
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
-        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
 
     }
 }

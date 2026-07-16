@@ -38,8 +38,18 @@ public final class DustListViewModel: @unchecked Sendable   {
                     for (index, dustInfo) in dustInfos.enumerated() {
                         group.addTask { [dustInfo] in
                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
-                            guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else {
+                            var tmX: Double?
+                            var tmY: Double?
+                            if let _tmX = dustInfo.tmX, let _tmY = dustInfo.tmY {
+                                tmX = _tmX
+                                tmY = _tmY
+                            } else {
+                                let location = try await self.usecase.convertoToTMCoordinate(location: entity)
+                                tmX = location?.x
+                                tmY = location?.y
+                            }
+                            guard let tmX, let tmY,
+                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
                                 let dataModel = DustListViewDataModel(
                                     location: dustInfo.location,
                                     station: nil,
@@ -49,14 +59,13 @@ public final class DustListViewModel: @unchecked Sendable   {
                                 )
                                 return (index, dataModel)
                             }
-                            print("@@mesureDnsty", mesureDnsty.dataTime)
                             return (index, DustListViewDataModel(
                                 entity: mesureDnsty,
                                 location: dustInfo.location,
                                 longtitude: dustInfo.longitude,
                                 latitude: dustInfo.latitude,
-                                tmX: location.x,
-                                tmY: location.y,
+                                tmX: tmX,
+                                tmY: tmY,
                                 isFavorite: dustInfo.isFavorite)
                             )
                         }

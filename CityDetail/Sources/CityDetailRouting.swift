@@ -16,7 +16,7 @@ public protocol CityDetailRouting {
 
 @MainActor
 public final class CityDetailRouter: @preconcurrency CityDetailRouting {
-    public var scene: UIViewController?
+    public weak var scene: UIViewController?
     
     public func dimisss() {
         //        self.scene?.dismiss(animated: false)
