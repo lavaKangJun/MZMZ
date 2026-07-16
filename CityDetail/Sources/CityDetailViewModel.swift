@@ -10,6 +10,7 @@ import Domain
 import SwiftUI
 import WidgetKit
 import Common
+import Scene
 import Repository
 
 enum LoadState {
@@ -27,14 +28,31 @@ public struct CityDetailViewDataModel {
     var dustGrade: AirQualityGrade = .checking
     var microDustGrade: AirQualityGrade = .checking
     
-    init(location: String, entity: MesureDnstyEntity, isFavorite: Bool) {
+    init(location: String, entity: MesureDnstyEntity) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
-        self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
-        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
+    }
+    
+    init(
+        location: String,
+        station: String?,
+        dustDensity: String,
+        microDustDensity: String,
+        isFavorite: Bool,
+        dustGrade: AirQualityGrade,
+        microDustGrade: AirQualityGrade
+    ) {
+        self.location = location
+        self.station = station
+        self.dustGrade = dustGrade
+        self.microDustGrade = microDustGrade
+        self.dustDensity = dustDensity
+        self.microDustDensity = microDustDensity
+        self.isFavorite = isFavorite
     }
     
     init(location: String) {
@@ -43,84 +61,91 @@ public struct CityDetailViewDataModel {
         self.dustDensity = "-1"
         self.microDustDensity = "-1"
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
-        self.microDustGrade = AirQualityGrade.grade(forPM10: microDustDensity)
+        self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
     }
 }
 
 @MainActor
 public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
-    private let name: String
-    private let station: String?
-    private let longitude: String
-    private let latitude: String
-    private let tmX: Double
-    private let tmY: Double
-    private let isSearchResult: Bool
     private let usecase: DustInfoUseCaseProtocol
     public var router: CityDetailRouting?
+    
+    private let detailViewType: DetailViewType
     private var dismiss: (() -> Void)?
     @Published var dataModel: CityDetailViewDataModel
     @Published private(set) var loadState: LoadState = .loading
     
     init(
-        name: String,
-        station: String?,
-        longitude: String,
-        latitude: String,
-        tmX: Double,
-        tmY: Double,
-        isSearchResult: Bool,
+        detailViewType: DetailViewType,
         dismiss: (() -> Void)?,
         usecase: DustInfoUseCaseProtocol
     ) {
-        self.name = name
-        self.station = station
-        self.longitude = longitude
-        self.latitude = latitude
-        self.tmX = tmX
-        self.tmY = tmY
-        self.isSearchResult = isSearchResult
+        self.detailViewType = detailViewType
         self.dismiss = dismiss
         self.usecase = usecase
-        self.dataModel = CityDetailViewDataModel(location: name)
-        fetchCurrentCityDustInfo()
+        switch self.detailViewType {
+        case .search(let searchData):
+            self.dataModel = CityDetailViewDataModel(location: searchData.location)
+            fetchCurrentCityDustInfo()
+        case .deatail(let detailData):
+            self.dataModel = CityDetailViewDataModel(
+                location: detailData.location,
+                station: detailData.station,
+                dustDensity: detailData.dustDensity,
+                microDustDensity: detailData.microDustDensity,
+                isFavorite: detailData.isFavorite,
+                dustGrade: detailData.dustGrade,
+                microDustGrade: detailData.microDustGrade
+            )
+            self.loadState = .loaded
+        }
     }
     
     var isSearched: Bool {
-        return self.isSearchResult
+        switch self.detailViewType {
+        case .search:
+            return true
+        case .deatail:
+            return false
+        }
     }
     
-    func fetchCurrentCityDustInfo() {
-        Task {
-            do {
-                // 즐겨찾기 상태 조회
-                let tf = Date()
-                let isFavorite = (try? self.usecase.getFavoriteStatus(location: self.name)) ?? false
-                guard let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
-        
-                        let dataModel = CityDetailViewDataModel(location: self.name)
+    private func fetchCurrentCityDustInfo() {
+        switch self.detailViewType {
+        case let .search(searchData):
+            Task {
+                do {
+                    let entity = LocationInfoEntity(latitude: searchData.latitude, longtitude: searchData.longitude)
+                    let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
+
+                    guard
+                        let tmX = tmLocation?.x,
+                        let tmY = tmLocation?.y,
+                        let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
+                        let dataModel = CityDetailViewDataModel(location: searchData.location)
                         self.dataModel = dataModel
                         self.loadState = .failed
-                    
-                    return
-                }
-                let tA = Date()
-                    let dataModel = CityDetailViewDataModel(location: self.name, entity: dustInfo, isFavorite: isFavorite)
+                        return
+                    }
+                    let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo)
                     self.dataModel = dataModel
                     self.loadState = .loaded
-            } catch {
-                    self.dataModel = CityDetailViewDataModel(location: self.name)
+                } catch {
+                    self.dataModel = CityDetailViewDataModel(location: searchData.location)
                     self.loadState = .failed
-                
+                }
             }
-            
+        default:
+            return
         }
     }
     
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
-        self.usecase.saveDustInfo(location: self.name, longitude: self.longitude, latitude: self.latitude, isFavorite: false)
-        self.router?.routeMainView()
+        if case let .search(searchData) = self.detailViewType {
+            self.usecase.saveDustInfo(location: searchData.location, longitude: searchData.longitude, latitude: searchData.latitude, isFavorite: false)
+            self.router?.routeMainView()
+        }
     }
     
     func cancel() {

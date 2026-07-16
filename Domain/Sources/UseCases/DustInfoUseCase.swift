@@ -9,6 +9,7 @@ import Foundation
 
 public protocol DustInfoUseCaseProtocol: Sendable {
     func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
+    func fetchMesureDnsty(station: String) async throws -> MesureDnstyEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
     func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool)
     func updateFavorite(location: String, isFavorite: Bool) throws
@@ -28,15 +29,17 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
         return makeTMLocation.last
     }
     
+    public func fetchMesureDnsty(station: String) async throws -> MesureDnstyEntity? {
+        let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: station)
+        return mesureDnstyList.items.first(where: { ($0.pm10Value != "-") && ($0.pm25Value != "-") })
+    }
+    
     public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
         let msrstns = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName })
         for index in 0..<msrstns.count {
             if let firstStation = msrstns[safe: index] {
-                let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: firstStation)
-                if let mesureDnsty = mesureDnstyList.items.first(where: { ($0.pm10Value != "-") && ($0.pm25Value != "-") }) {
-                    return mesureDnsty
-                } else {
-                    continue
+                if let dnstry = try await fetchMesureDnsty(station: firstStation) {
+                    return dnstry
                 }
             }
         }
