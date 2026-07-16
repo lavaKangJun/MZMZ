@@ -24,17 +24,21 @@ public struct CityDetailViewDataModel {
     let station: String?
     let dustDensity: String
     let microDustDensity: String
+    let tmX: Double?
+    let tmY: Double?
     var isFavorite: Bool = false
     var dustGrade: AirQualityGrade = .checking
     var microDustGrade: AirQualityGrade = .checking
     
-    init(location: String, entity: MesureDnstyEntity) {
+    init(location: String, entity: MesureDnstyEntity, tmX: Double?, tmY: Double?) {
         self.location = location
         self.station = entity.location
         self.dustDensity = entity.pm10Value
         self.microDustDensity = entity.pm25Value
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
+        self.tmX = tmX
+        self.tmY = tmY
     }
     
     init(
@@ -53,6 +57,8 @@ public struct CityDetailViewDataModel {
         self.dustDensity = dustDensity
         self.microDustDensity = microDustDensity
         self.isFavorite = isFavorite
+        self.tmX = nil
+        self.tmY = nil
     }
     
     init(location: String) {
@@ -62,6 +68,8 @@ public struct CityDetailViewDataModel {
         self.microDustDensity = "-1"
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
+        self.tmX = nil
+        self.tmY = nil
     }
 }
 
@@ -127,7 +135,7 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
                         self.loadState = .failed
                         return
                     }
-                    let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo)
+                    let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo, tmX: tmX, tmY: tmY)
                     self.dataModel = dataModel
                     self.loadState = .loaded
                 } catch {
@@ -143,7 +151,7 @@ public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
         if case let .search(searchData) = self.detailViewType {
-            self.usecase.saveDustInfo(location: searchData.location, longitude: searchData.longitude, latitude: searchData.latitude, isFavorite: false)
+            self.usecase.saveDustInfo(location: searchData.location, longitude: searchData.longitude, latitude: searchData.latitude, tmX: self.dataModel.tmX ?? -1, tmY: self.dataModel.tmY ?? -1, isFavorite: false)
             self.router?.routeMainView()
         }
     }

@@ -63,18 +63,22 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                     return collected
                 }
                 
+                let refreshDate = Calendar.current.nextDate(
+                    after: Date(),
+                    matching: DateComponents(minute: 15),
+                    matchingPolicy: .nextTime
+                ) ?? Date().addingTimeInterval(3600)
+                
                 let sorted = items.sorted(by: { $0.0 < $1.0 }).map( { $0.1 })
-                let timeline = Timeline(entries: [SimpleEntry(items: sorted)], policy: .after(Date().addingTimeInterval(1000)))
-                print("sorted", sorted)
+                let timeline = Timeline(entries: [SimpleEntry(items: sorted)], policy: .after(refreshDate))
                 completion(timeline)
          
             } catch {
                 let timeline = Timeline(
                     entries: [SimpleEntry(items: [])],
-                    policy: .after(Date().addingTimeInterval(1000))
+                    policy: .after(Date().addingTimeInterval(3600))
                 )
                 completion(timeline)
-                print("error", error)
             }
         }
     }

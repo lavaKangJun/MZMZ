@@ -11,7 +11,7 @@ public protocol DustInfoUseCaseProtocol: Sendable {
     func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
     func fetchMesureDnsty(station: String) async throws -> MesureDnstyEntity?
     func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
-    func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool)
+    func saveDustInfo(location: String, longitude: String, latitude: String, tmX: Double, tmY: Double, isFavorite: Bool)
     func updateFavorite(location: String, isFavorite: Bool) throws
     func getFavoriteStatus(location: String) throws -> Bool
 }
@@ -50,10 +50,21 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
         location: String,
         longitude: String,
         latitude: String,
+        tmX: Double,
+        tmY: Double,
         isFavorite: Bool
     ) {
         do {
-            try self.repository.setDustInfo(DustStoreEntity(location: location, longitude: longitude, latitude: latitude, isFavorite: isFavorite))
+            try self.repository.setDustInfo(
+                DustStoreEntity(
+                    location: location,
+                    longitude: longitude,
+                    latitude: latitude,
+                    tmX: tmX,
+                    tmY: tmY,
+                    isFavorite: isFavorite
+                )
+            )
         } catch {
             print("save Error", error)
         }

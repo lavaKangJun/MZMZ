@@ -9,10 +9,10 @@ import SwiftUI
 import Common
 
 public struct CityDetailView: View {
-    @StateObject private var viewModel: CityDetailViewModel
+    @ObservedObject private var viewModel: CityDetailViewModel
     
     init(viewModel: CityDetailViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+        self.viewModel = viewModel
     }
     
     public var body: some View {

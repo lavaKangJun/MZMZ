@@ -15,12 +15,16 @@ public final class FakeDataStore: DataStorable, @unchecked Sendable {
             location: "풍납2동",
             longitude: "127.115731280691",
             latitude: "37.529239225114",
+            tmX: 432.34,
+            tmY: 154.44,
             isFavorite: false
         ),
         DustStoreDTO(
             location: "역삼2동",
             longitude: "127.033201088112",
             latitude: "37.4954279212045",
+            tmX: 432.34,
+            tmY: 154.44,
             isFavorite: true
         ),
     ]

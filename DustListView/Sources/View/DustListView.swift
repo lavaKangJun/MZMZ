@@ -11,7 +11,6 @@ import Common
 public struct DustListView: View {
     private let viewModel: DustListViewModel
     @State private var dustListModel: [DustListViewDataModel] = []
-    @State private var searchCity = ""
     @State private var errorMessage = ""
     @State private var showErrorAlert = false
     
