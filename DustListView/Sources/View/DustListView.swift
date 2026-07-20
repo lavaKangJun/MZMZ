@@ -13,102 +13,126 @@ public struct DustListView: View {
     @State private var dustListModel: [DustListViewDataModel] = []
     @State private var errorMessage = ""
     @State private var showErrorAlert = false
+    @State private var isLoading = false
     
     public init(viewModel: DustListViewModel) {
         self.viewModel = viewModel
     }
     
     public var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(Color(.systemGray6))
-                    .ignoresSafeArea()
-                
-                VStack {
-                    Spacer()
+        ZStack {
+            NavigationStack {
+                ZStack {
+                    Color(Color(.systemGray6))
+                        .ignoresSafeArea()
                     
-                    Group {
-                        HStack {
-                            Text("즐겨찾기로 추가한 지역을 위젯으로 볼 수 있습니다.")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, -10)
+                    VStack {
+                        Spacer()
                         
-                        List {
-                            ForEach(self.dustListModel, id: \.self) { dataModel in
-                                listView(dataModel)
-                                    .padding(.bottom, 20)
-                                    .listRowSeparator(.hidden)
-                                    .listRowInsets(EdgeInsets())
-                                    .listRowBackground(Color.clear)
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
-                                        Button(role: .destructive) {
-                                            viewModel.deleteLocation(dataModel.location)
-                                        } label: {
-                                            Label("삭제", systemImage: "trash")
+                        Group {
+                            HStack {
+                                Text("즐겨찾기로 추가한 지역을 위젯으로 볼 수 있습니다.")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            .padding(.top, -10)
+                            
+                            List {
+                                ForEach(self.dustListModel, id: \.self) { dataModel in
+                                    listView(dataModel)
+                                        .padding(.bottom, 20)
+                                        .listRowSeparator(.hidden)
+                                        .listRowInsets(EdgeInsets())
+                                        .listRowBackground(Color.clear)
+                                        .swipeActions(edge: .trailing, allowsFullSwipe: true, content: {
+                                            Button(role: .destructive) {
+                                                viewModel.deleteLocation(dataModel.location)
+                                            } label: {
+                                                Label("삭제", systemImage: "trash")
+                                            }
+                                            .tint(.clear)
+                                        })
+                                        .onTapGesture {
+                                            self.viewModel
+                                                .routeToDetail(
+                                                    name: dataModel.location,
+                                                    station: dataModel.station,
+                                                    dustDensity: dataModel.dustDensity,
+                                                    microDustDensity: dataModel.microDustDensity,
+                                                    dustGrade: dataModel.dustGrade,
+                                                    microDustGrade: dataModel.microDustGrade,
+                                                    isFavorite: dataModel.isFavorite
+                                                )
                                         }
-                                        .tint(.clear)
-                                    })
-                                    .onTapGesture {
-                                        self.viewModel
-                                            .routeToDetail(
-                                                name: dataModel.location,
-                                                station: dataModel.station,
-                                                dustDensity: dataModel.dustDensity,
-                                                microDustDensity: dataModel.microDustDensity,
-                                                dustGrade: dataModel.dustGrade,
-                                                microDustGrade: dataModel.microDustGrade,
-                                                isFavorite: dataModel.isFavorite
-                                            )
-                                    }
+                                }
                             }
-                        }
-                        .scrollContentBackground(.hidden)
-                        Spacer()
-                        
-                        Image(systemName: "plus.circle")
-                            .imageScale(.large)
-                            .font(.largeTitle)
-                            .onTapGesture {
-                                viewModel.routeToFindLocation()
+                            .scrollContentBackground(.hidden)
+                            .refreshable {
+                                await viewModel.refresh()
                             }
-                        
-                        HStack(spacing: 3) {
-                            Text("※")
-                                .baselineOffset(2)
-                            Text("미세먼지 등급은 WHO 기준으로 표시됩니다.")
+                            Spacer()
+                            
+                            Image(systemName: "plus.circle")
+                                .imageScale(.large)
+                                .font(.largeTitle)
+                                .onTapGesture {
+                                    viewModel.routeToFindLocation()
+                                }
+                            
+                            HStack(spacing: 3) {
+                                Text("※")
+                                    .baselineOffset(2)
+                                Text("미세먼지 등급은 WHO 기준으로 표시됩니다.")
+                            }
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .padding(.top, 10)
+                            
+                            Spacer()
+                                .frame(height: 40)
                         }
-                        .font(.caption2)
-                        .foregroundColor(.gray)
-                        .padding(.top, 10)
-                        
-                        Spacer()
-                            .frame(height: 40)
+                        .navigationTitle("미세먼지")
+                        .navigationBarTitleDisplayMode(.large)
                     }
-                    .navigationTitle("미세먼지")
-                    .navigationBarTitleDisplayMode(.large)
-                }
-                .onReceive(viewModel.dustListStream) { dustList in
-                    self.dustListModel = dustList
-                }
-                .onReceive(viewModel.errorStream) { message in
-                    self.errorMessage = message
-                    self.showErrorAlert = true
-                }
-                .alert(isPresented: $showErrorAlert) {
-                    Alert(
-                        title: Text("fetch error"),
-                        message: Text(errorMessage),
-                        dismissButton: .default(Text("확인"))
-                    )
-                }
-                .onViewWillAppear {
-                    viewModel.fetchDust()
+                    .onReceive(viewModel.dustListStream) { dustList in
+                        self.dustListModel = dustList
+                    }
+                    .onReceive(viewModel.errorStream) { message in
+                        self.errorMessage = message
+                        self.showErrorAlert = true
+                    }
+                    .alert(isPresented: $showErrorAlert) {
+                        Alert(
+                            title: Text("fetch error"),
+                            message: Text(errorMessage),
+                            dismissButton: .default(Text("확인"))
+                        )
+                    }
                 }
             }
+            
+            if isLoading {
+                ZStack {
+                    Color(Color(.systemGray6))
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 16) {
+                        PulseLoader()
+                        Text("Loading...")
+                            .font(.system(size: 14))
+                            .foregroundColor(.gray)
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+        .onViewWillAppear {
+            viewModel.fetchDust()
+        }
+        .onReceive(viewModel.isLoadingStream) { isLoading in
+            self.isLoading = isLoading
         }
     }
     
