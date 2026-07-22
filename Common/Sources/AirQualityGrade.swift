@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public enum AirQualityGrade: String {
+public enum AirQualityGrade: String, Sendable {
     case checking = "점검중"
     case good = "좋음"
     case moderate = "보통"
