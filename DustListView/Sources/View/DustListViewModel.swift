@@ -32,12 +32,10 @@ public final class DustListViewModel: @unchecked Sendable   {
     
     public init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
+        self.isLoadingSubject.send(true)
     }
     
     public func fetchDust() {
-        if self.dustListSubject.value.isEmpty {
-            self.isLoadingSubject.send(true)
-        }
         Task {
             do {
                 let dataModels = try await self.loadData()
