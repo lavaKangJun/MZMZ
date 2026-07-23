@@ -7,11 +7,21 @@
 
 import Foundation
 import Domain
+import Common
+
+enum AppSecrets {
+    static var airKoreaKey: String {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "AIR_KOREA_KEY") as? String,
+              !key.isEmpty else {
+            fatalError("AIR_KOREA_KEY 누락 — Secrets.xcconfig 확인")
+        }
+        return key
+    }
+}
 
 public final class Repository: RepositoryProtocol {
     private let dataStore: DataStorable
     private let remote: RemoteProtocol
-    private let airKoreaKey = "WpzhxSjZh2demmdSFRh4E%2BHd%2FHY27TmerkvFVRYMm38NVafozKEVZ%2FxDtfJobyTXI57jVadT%2FBkXAuvy7eqDSQ%3D%3D"
     
     public init(dataStore: DataStorable, remote: RemoteProtocol) {
         self.dataStore = dataStore
@@ -39,7 +49,7 @@ public final class Repository: RepositoryProtocol {
         var parameters: [String: String] = [:]
         parameters["tmX"] = "\(tmX)"
         parameters["tmY"] = "\(tmY)"
-        parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
+        parameters["serviceKey"] = AppSecrets.airKoreaKey.removingPercentEncoding
         parameters["returnType"] = "json"
         parameters["ver"] = "1.1"
         
@@ -49,7 +59,7 @@ public final class Repository: RepositoryProtocol {
     
     public func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity {
         var parameters: [String: String] = [:]
-        parameters["serviceKey"] = airKoreaKey.removingPercentEncoding
+        parameters["serviceKey"] = AppSecrets.airKoreaKey.removingPercentEncoding
         parameters["returnType"] = "json"
         parameters["ver"] = "1.1"
         parameters["stationName"] = stationName

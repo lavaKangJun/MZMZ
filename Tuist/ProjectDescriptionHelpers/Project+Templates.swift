@@ -22,6 +22,8 @@ extension Project {
             appName: name,
             extensionName: "WidzetExtension",
             infoPlist: [
+                "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
+                "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
                 "NSExtension": .dictionary([
                     "NSExtensionPointIdentifier": .string("com.apple.widgetkit-extension")
                 ]),
@@ -76,7 +78,10 @@ extension Project {
             ],
             entitlements: Entitlements.file(path: "AppExtensions/\(targetName)/\(targetName).entitlements"),
             dependencies: dependencies,
-            settings: .settings(configurations: [])
+            settings: .settings(configurations: [
+                .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
+                .release(name: "Release", xcconfig: "Secrets.xcconfig")
+            ])
         )]
     }
     
@@ -177,6 +182,8 @@ extension Project {
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
         let infoPlist: [String: Plist.Value] = [
+            "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
+            "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
             "UILaunchStoryboardName": "LaunchScreen",
             "UIApplicationSceneManifest": [
                 "UIApplicationSupportsMultipleScenes": false,
@@ -184,9 +191,7 @@ extension Project {
             ],
             "NSAppTransportSecurity" : [
                 "NSAllowsArbitraryLoads": true
-            ],
-            "NSLocationWhenInUseUsageDescription": "위치 정보 접근 허용이 필요합니다.",
-            "NSLocationAlwaysAndWhenInUseUsageDescription": "위치 정보 접근 허용이 필요합니다."
+            ]
         ]
 
         return [.target(name: name,
@@ -198,7 +203,12 @@ extension Project {
                         sources: ["Sources/**"],
                         resources: ["Resources/**"],
                         entitlements: Entitlements.file(path: "./MZMZ.entitlements"),
-                        dependencies: dependencies)
+                        dependencies: dependencies,
+                        settings: .settings(configurations: [
+                            .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
+                            .release(name: "Release", xcconfig: "Secrets.xcconfig")
+                        ])
+                       )
         ]
     }
 }
