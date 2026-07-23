@@ -99,20 +99,10 @@ public final class StubRepository: RepositoryProtocol {
     }
     
     public func getDustInfo() -> [DustStoreEntity] {
-        return self.dataStore.getDustInfo().map{ $0.makeEntity() }
+        return []
     }
     
     public func setDustInfo(_ entity: DustStoreEntity) {
-        self.dataStore.setDustInfo(
-            DustStoreDTO(
-                location: entity.location,
-                longitude: entity.longitude,
-                latitude: entity.latitude,
-                tmX: entity.tmX,
-                tmY: entity.tmY,
-                isFavorite: entity.isFavorite
-            )
-        )
     }
     
     public func deleteDustInfo(location: String) throws -> Bool {

@@ -9,8 +9,6 @@ import Foundation
 import SQLite3
 
 public protocol DataStorable: Sendable {
-    func getDustInfo() -> [DustStoreDTO]
-    func setDustInfo(_ info: DustStoreDTO)
     func insertTable(data: DustStoreDTO) throws
     func load() throws -> [DustStoreDTO]
     func delete(location: String) throws -> Bool
@@ -47,14 +45,15 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         do {
             guard let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.junyoung.mzmz") else { return nil }
             
-            if sqlite3_open("\(filePath)/\(databaseName)", &dbPointer) != SQLITE_OK {
+            let dbURL = filePath.appendingPathComponent(databaseName)
+            if sqlite3_open(dbURL.path(), &dbPointer) != SQLITE_OK {
                 print("Fail create DB")
                 return nil
             } else {
                 return dbPointer
             }
         } catch {
-            print("Fail create file path")
+            print("Fail create file path", error)
             return nil
         }
     }
@@ -177,15 +176,7 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         
         return dto
     }
-    
-    public func getDustInfo() -> [DustStoreDTO] {
-        return dustInfos
-    }
-    
-    public func setDustInfo(_ info: DustStoreDTO) {
-        self.dustInfos.append(info)
-    }
-    
+
     public func setFavorite(location: String, isFavorite: Bool) throws {
         if isFavorite {
             let favoriteCount =  try getFavoriteCount()
@@ -194,18 +185,17 @@ public final class DataStore: DataStorable, @unchecked Sendable {
             }
         }
         
-        let statement = """
-        UPDATE LocationInfo SET isFavorite = \(isFavorite ? 1 : 0) WHERE location == 
-        '\(location)'
-        """
-        
+        let statement = "UPDATE LocationInfo SET isFavorite = ? WHERE location = ?;"
         let updateStatement = try prepareStatement(statement)
  
+        defer { sqlite3_finalize(updateStatement) }
+        
+        sqlite3_bind_int(updateStatement, 1, isFavorite ? 1 : 0)
+        sqlite3_bind_text(updateStatement, 2, (location as NSString).utf8String, -1, nil)
+        
         guard sqlite3_step(updateStatement) == SQLITE_DONE else {
             throw SQLiteError.step("favorite update error")
         }
-        
-        sqlite3_finalize(updateStatement)
     }
     
     private func getFavoriteCount() throws -> Int {
