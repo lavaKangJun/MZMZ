@@ -18,61 +18,64 @@ public struct AddCityView: View {
     }
     
     public var body: some View {
-        ZStack {
-            Color(.systemGroupedBackground)
-                .ignoresSafeArea()
-            
-            Color.clear
-                .contentShape(Rectangle())
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isSearchFocus = false
-                }
-            
-            VStack {
-                Spacer()
-                    .frame(height: 20)
-                HStack {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        
-                        TextField("도시 검색", text: $textedCity)
-                            .focused($isSearchFocus)
-                            .textFieldStyle(PlainTextFieldStyle())
-                    }
-                    .padding(10)
-                    .background(Color(.systemGray5))
-                    .cornerRadius(8)
-                    
-                    Button("Cancel") {
-                        textedCity = ""
-                        viewModel.clearSearch()
-                    }
-                }
-                .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
+        NavigationStack {
+            ZStack {
+                Color(.systemGray6)
+                    .ignoresSafeArea()
                 
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
-                            SearchResultRow(fullName: cellViewModel.name, query: textedCity) {
-                                let dependecvy =
-                                CityDetailDependency(
-                                    name: cellViewModel.name,
-                                    longitude: cellViewModel.longitude,
-                                    latitude: cellViewModel.latitude
-                                )
-                                viewModel.routeToCityDetail(dependecvy)
+                Color.clear
+                    .contentShape(Rectangle())
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isSearchFocus = false
+                    }
+                
+                VStack {
+                    HStack {
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                            
+                            TextField("도시 검색", text: $textedCity)
+                                .focused($isSearchFocus)
+                                .textFieldStyle(PlainTextFieldStyle())
+                        }
+                        .padding(10)
+                        .background(Color(.systemGray5))
+                        .cornerRadius(8)
+                        
+                        Button("취소") {
+                            textedCity = ""
+                            viewModel.clearSearch()
+                        }
+                        .tint(Color(.gray))
+                    }
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
+                            ForEach(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
+                                SearchResultRow(fullName: cellViewModel.name, query: textedCity) {
+                                    let dependecvy =
+                                    CityDetailDependency(
+                                        name: cellViewModel.name,
+                                        longitude: cellViewModel.longitude,
+                                        latitude: cellViewModel.latitude
+                                    )
+                                    viewModel.routeToCityDetail(dependecvy)
+                                }
                             }
                         }
                     }
                 }
-            }
-            .onChange(of: textedCity) { oldValue, newValue in
-                if newValue.isEmpty == false, oldValue != newValue {
-                    viewModel.searchText(newValue)
+                .onChange(of: textedCity) { oldValue, newValue in
+                    if newValue.isEmpty == false, oldValue != newValue {
+                        viewModel.searchText(newValue)
+                    }
                 }
             }
+            .navigationTitle("지역 추가")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }

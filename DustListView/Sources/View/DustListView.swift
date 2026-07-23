@@ -123,6 +123,7 @@ public struct DustListView: View {
                         Text("Loading...")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
                     }
                 }
                 .transition(.opacity)

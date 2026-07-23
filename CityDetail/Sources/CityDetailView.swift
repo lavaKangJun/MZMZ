@@ -46,6 +46,18 @@ public struct CityDetailView: View {
                 }
                 .redacted(reason: viewModel.loadState == .loading ? .placeholder : [])
                 
+                if viewModel.loadState == .loading {
+                    VStack() {
+                        Spacer()
+                            .frame(height: 30)
+                        Text("데이터를 가져오고 있습니다...")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.75))
+                            .multilineTextAlignment(.center)
+                    }
+                    .transition(.opacity)
+                }
+                
                 Spacer(minLength: 40)
             }
             .padding(.top, 140)
