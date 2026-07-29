@@ -11,28 +11,18 @@ import Domain
 import Common
 import WidgetKit
 
+@Observable
 public final class DustListViewModel: @unchecked Sendable   {
     private let usecase: DustListUseCaseProtocol
-    private let dustListSubject = CurrentValueSubject<[DustListViewDataModel], Never>([])
-    private let errorSubject = PassthroughSubject<String, Never>()
-    private let isLoadingSubject = CurrentValueSubject<Bool, Never>(false)
-    public var router: DustListRouting?
-    
-    public var dustListStream: AnyPublisher<[DustListViewDataModel], Never> {
-        return self.dustListSubject.eraseToAnyPublisher()
-    }
-    
-    public var errorStream: AnyPublisher<String, Never> {
-        return self.errorSubject.eraseToAnyPublisher()
-    }
-    
-    public var isLoadingStream: AnyPublisher<Bool, Never> {
-        return self.isLoadingSubject.eraseToAnyPublisher()
-    }
+    var dustListModels: [DustListViewDataModel] = []
+    var errorMessage: String = ""
+    var showError = false
+    var isLoading = false
+    @ObservationIgnored public var router: DustListRouting?
     
     public init(usecase: DustListUseCaseProtocol) {
         self.usecase = usecase
-        self.isLoadingSubject.send(true)
+        self.isLoading = true
     }
     
     public func fetchDust() {
@@ -40,13 +30,14 @@ public final class DustListViewModel: @unchecked Sendable   {
             do {
                 let dataModels = try await self.loadData()
                 await MainActor.run { [weak self] in
-                    self?.dustListSubject.send(dataModels)
-                    self?.isLoadingSubject.send(false)
+                    self?.dustListModels = dataModels
+                    self?.isLoading = false
                 }
             } catch {
                 await MainActor.run { [weak self] in
-                    self?.errorSubject.send(error.localizedDescription)
-                    self?.isLoadingSubject.send(false)
+                    self?.errorMessage = error.localizedDescription
+                    self?.showError = true
+                    self?.isLoading = false
                 }
             }
         }
@@ -56,11 +47,12 @@ public final class DustListViewModel: @unchecked Sendable   {
         do {
             let models = try await self.loadData()
             await MainActor.run { [weak self] in
-                self?.dustListSubject.send(models)
+                self?.dustListModels = models
             }
         } catch {
             await MainActor.run { [weak self] in
-                self?.errorSubject.send(error.localizedDescription)
+                self?.showError = true
+                self?.errorMessage = error.localizedDescription
             }
         }
     }
@@ -116,13 +108,14 @@ public final class DustListViewModel: @unchecked Sendable   {
     public func deleteLocation(_ locaion: String) {
         let result = self.usecase.deleteDustInfo(location: locaion)
         guard result == true else {
-            self.errorSubject.send("delete fail")
+            self.errorMessage = "delete fail"
+            self.showError = true
             return
         }
         
-        var current = self.dustListSubject.value
+        var current = self.dustListModels
         current.removeAll(where: { $0.location == locaion })
-        self.dustListSubject.send(current)
+        self.dustListModels = current
         
         WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
     }

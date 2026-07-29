@@ -38,7 +38,9 @@ public final class AddCityViewModel: @unchecked Sendable {
         Task {
             do {
                 let locations = try await useCase.findLocation(location: text)
-                self.cityCellViewModels = locations.map({ CityPresentable($0) })
+                await MainActor.run {
+                    self.cityCellViewModels = locations.map({ CityPresentable($0) })
+                }
             } catch { }
         }
     }
