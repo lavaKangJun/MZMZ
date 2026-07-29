@@ -9,7 +9,7 @@ import SwiftUI
 import Common
 
 public struct CityDetailView: View {
-    @ObservedObject private var viewModel: CityDetailViewModel
+    public var viewModel: CityDetailViewModel
     
     init(viewModel: CityDetailViewModel) {
         self.viewModel = viewModel

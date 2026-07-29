@@ -11,7 +11,7 @@ import Scene
 public struct AddCityView: View {
     @State private var textedCity: String = ""
     @FocusState private var isSearchFocus: Bool
-    public var viewModel: AddCityViewModel
+    public let viewModel: AddCityViewModel
     
     public var body: some View {
         NavigationStack {

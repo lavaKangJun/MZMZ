@@ -9,17 +9,11 @@ import SwiftUI
 import Common
 
 public struct DustListView: View {
-    private let viewModel: DustListViewModel
-    @State private var dustListModel: [DustListViewDataModel] = []
-    @State private var errorMessage = ""
-    @State private var showErrorAlert = false
-    @State private var isLoading = false
-    
-    public init(viewModel: DustListViewModel) {
-        self.viewModel = viewModel
-    }
+    public let viewModel: DustListViewModel
     
     public var body: some View {
+        @Bindable var viewModel = viewModel
+        
         ZStack {
             NavigationStack {
                 ZStack {
@@ -40,7 +34,7 @@ public struct DustListView: View {
                             .padding(.top, -10)
                             
                             List {
-                                ForEach(self.dustListModel, id: \.self) { dataModel in
+                                ForEach(self.viewModel.dustListModels, id: \.self) { dataModel in
                                     listView(dataModel)
                                         .padding(.bottom, 20)
                                         .listRowSeparator(.hidden)
@@ -96,24 +90,17 @@ public struct DustListView: View {
                         .navigationTitle("미세먼지")
                         .navigationBarTitleDisplayMode(.large)
                     }
-                    .onReceive(viewModel.dustListStream) { dustList in
-                        self.dustListModel = dustList
-                    }
-                    .onReceive(viewModel.errorStream) { message in
-                        self.errorMessage = message
-                        self.showErrorAlert = true
-                    }
-                    .alert(isPresented: $showErrorAlert) {
+                    .alert(isPresented: $viewModel.showError) {
                         Alert(
                             title: Text("fetch error"),
-                            message: Text(errorMessage),
+                            message: Text(viewModel.errorMessage),
                             dismissButton: .default(Text("확인"))
                         )
                     }
                 }
             }
             
-            if isLoading {
+            if viewModel.isLoading {
                 ZStack {
                     Color(Color(.systemGray6))
                         .ignoresSafeArea()
@@ -131,9 +118,6 @@ public struct DustListView: View {
         }
         .onViewWillAppear {
             viewModel.fetchDust()
-        }
-        .onReceive(viewModel.isLoadingStream) { isLoading in
-            self.isLoading = isLoading
         }
     }
     
@@ -222,3 +206,4 @@ public struct DustListView: View {
         }
     }
 }
+

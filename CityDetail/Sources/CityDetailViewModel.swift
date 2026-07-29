@@ -74,14 +74,15 @@ public struct CityDetailViewDataModel {
 }
 
 @MainActor
-public final class CityDetailViewModel: ObservableObject, @unchecked Sendable {
+@Observable
+public final class CityDetailViewModel: @unchecked Sendable {
     private let usecase: DustInfoUseCaseProtocol
-    public var router: CityDetailRouting?
+    @ObservationIgnored public var router: CityDetailRouting?
     
     private let detailViewType: DetailViewType
     private var dismiss: (() -> Void)?
-    @Published var dataModel: CityDetailViewDataModel
-    @Published private(set) var loadState: LoadState = .loading
+    var dataModel: CityDetailViewDataModel
+    private(set) var loadState: LoadState = .loading
     
     init(
         detailViewType: DetailViewType,
