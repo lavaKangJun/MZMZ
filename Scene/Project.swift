@@ -8,5 +8,7 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.framework(name: "Scene", packages: [], dependencies: [])
+let project = Project.framework(name: "Scene", packages: [], dependencies: [
+    .project(target: "Common", path: .relativeToCurrentFile("../Common"))
+])
 

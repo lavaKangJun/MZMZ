@@ -10,6 +10,7 @@ import Combine
 import Domain
 import Scene
 
+
 public struct CityPresentable {
     public let name: String
     public let longitude: String
@@ -22,31 +23,27 @@ public struct CityPresentable {
     }
 }
 
-public final class AddCityViewModel: ObservableObject, @unchecked Sendable {
+@Observable
+public final class AddCityViewModel: @unchecked Sendable {
     private let useCase: FindLocationUseCaseProtocol
-    private let locationResult = CurrentValueSubject<[SearchLocationEntity], Never>([])
-    @Published public var cityCellViewModel: [CityPresentable] = []
-    public var router: AddCityRouter?
+    public var cityCellViewModels: [CityPresentable] = []
+    @ObservationIgnored public var router: AddCityRouter?
     
     init(useCase: FindLocationUseCaseProtocol) {
         self.useCase = useCase
-        
-        self.locationResult
-            .map{ $0.map{ CityPresentable($0) }}
-            .receive(on: DispatchQueue.main)
-            .assign(to: &$cityCellViewModel)
     }
 
     func searchText(_ text: String) {
         guard text.isEmpty == false else { return }
         Task {
-            let location = try await useCase.findLocation(location: text)
-            self.locationResult.send(location)
+            do {
+                let locations = try await useCase.findLocation(location: text)
+                self.cityCellViewModels = locations.map({ CityPresentable($0) })
+            } catch { }
         }
     }
     
     @MainActor func clearSearch() {
-        //self.locationResult.send([])
         self.router?.dismiss()
     }
     
