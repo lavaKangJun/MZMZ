@@ -11,11 +11,7 @@ import Scene
 public struct AddCityView: View {
     @State private var textedCity: String = ""
     @FocusState private var isSearchFocus: Bool
-    @StateObject private var viewModel: AddCityViewModel
-    
-    init(viewModel: AddCityViewModel) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
-    }
+    public var viewModel: AddCityViewModel
     
     public var body: some View {
         NavigationStack {
@@ -54,7 +50,7 @@ public struct AddCityView: View {
                     
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(viewModel.cityCellViewModel, id: \.name) { cellViewModel in
+                            ForEach(viewModel.cityCellViewModels, id: \.name) { cellViewModel in
                                 SearchResultRow(fullName: cellViewModel.name, query: textedCity) {
                                     let dependecvy =
                                     CityDetailDependency(
