@@ -37,16 +37,13 @@ struct Provider: TimelineProvider, @unchecked Sendable {
         Task {
             do {
                 let dustInfos = try self.usecase.getDustInfo()
-                print("dustInfos", dustInfos)
                 // 즐겨찾기된 지역들만 필터링 (최대 2개)
                 let favoriteInfos = dustInfos.filter { $0.isFavorite }
                 let items = try await withThrowingTaskGroup(of: (Int, LocationInfo).self) { group in
                     for (index, dustInfo) in favoriteInfos.enumerated() {
                         group.addTask {
-                             let entity = LocationInfoEntity(latitude: dustInfo.latitude, longtitude: dustInfo.longitude)
-                            guard let location = try await self.usecase.convertoToTMCoordinate(location: entity),
-                                  let mesureDnsty = try await self.usecase.fetchMesureDnsty(tmX: location.x, tmY: location.y) else { return (index, LocationInfo(location: dustInfo.location, pm10Grade: .checking, pm25Grade: .checking)) }
-                            
+                            let dustDetailInfo = try await self.usecase.nearestStationDustInfo(lat: dustInfo.latitude, lng: dustInfo.longitude)
+                     
                             return (
                                 index,
                                 LocationInfo(
@@ -54,11 +51,11 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                                     pm10Grade:
                                         AirQualityGrade
                                         .grade(
-                                            forPM10: mesureDnsty.pm10Value
+                                            forPM10: "\(dustDetailInfo.pm10Value)"
                                         ),
                                     pm25Grade: AirQualityGrade
                                         .grade(
-                                            forPM25: mesureDnsty.pm25Value
+                                            forPM25: "\(dustDetailInfo.pm25Value)"
                                         )
                                 )
                             )
@@ -230,8 +227,7 @@ struct MZMZWidzet: Widget {
 
     public init() {
         let repository = Repository(dataStore: DataStore.shared, remote: Remote())
-        let locationService = LocationService()
-        self.usecase = DustListUseCase(repository: repository, locationService: locationService)
+        self.usecase = DustListUseCase(repository: repository)
     }
     
     var body: some WidgetConfiguration {

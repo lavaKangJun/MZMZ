@@ -28,8 +28,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
         if isTesting {
             let fakeDataStore = FakeDataStore.shared
             let repository = StubRepository(dataStore: fakeDataStore)
-            let locationService = StubLocationService()
-            let useCase = StubDustListUseCase(repository: repository, locationService: locationService)
+            let useCase = StubDustListUseCase(repository: repository)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder, 
                                         cityDetailSceneBuilder: self.cityDetailSceheBuilder)
             let viewModel = DustListViewModel(usecase: useCase)
@@ -40,8 +39,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
             return viewControlelr
         } else {
             let repository = Repository(dataStore: DataStore.shared, remote: Remote())
-            let locationService = LocationService()
-            let useCase = DustListUseCase(repository: repository, locationService: locationService)
+            let useCase = DustListUseCase(repository: repository)
             let router = DustListRouter(addCitySceneBuilder: self.addCitySceneBuilder,
                                         cityDetailSceneBuilder: self.cityDetailSceheBuilder)
             let viewModel = DustListViewModel(usecase: useCase)
