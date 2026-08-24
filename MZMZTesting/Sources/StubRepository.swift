@@ -116,4 +116,8 @@ public final class StubRepository: RepositoryProtocol {
     public func getFavoriteStatus(location: String) throws -> Bool {
         return false
     }
+    
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        return DustInfoEntity()
+    }
 }

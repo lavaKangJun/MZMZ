@@ -50,5 +50,9 @@ public final class MockRepository: RepositoryProtocol, TestDouble {
     public func getFavoriteStatus(location: String) throws -> Bool {
         return resolve(Bool.self, name: "getFavoriteStatus") ?? false
     }
+    
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        return resolve(DustInfoEntity.self, name: "nearestStationDustInfo") ?? DustInfoEntity()
+    }
 }
 

@@ -14,6 +14,7 @@ public enum Endpoint: String {
     case nearbyMsrstnList = "http://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getNearbyMsrstnList"
     case msrstnAcctoRltmMesureDnsty = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty"
     case findLocation = "https://dapi.kakao.com/v2/local/search/address.json"
+    case nearestStation = "https://asia-northeast3-mzmz-392b7.cloudfunctions.net/nearestStation"
 }
 
 public enum RemoteAPIMethod {
