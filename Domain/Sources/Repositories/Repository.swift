@@ -18,4 +18,5 @@ public protocol RepositoryProtocol: Sendable {
     func deleteDustInfo(location: String) throws -> Bool
     func updateFavorite(location: String, isFavorite: Bool) throws
     func getFavoriteStatus(location: String) throws -> Bool
+    func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity
 }

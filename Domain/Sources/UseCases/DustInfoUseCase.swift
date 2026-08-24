@@ -14,6 +14,7 @@ public protocol DustInfoUseCaseProtocol: Sendable {
     func saveDustInfo(location: String, longitude: String, latitude: String, tmX: Double, tmY: Double, isFavorite: Bool)
     func updateFavorite(location: String, isFavorite: Bool) throws
     func getFavoriteStatus(location: String) throws -> Bool
+    func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity
 }
 
 public final class DustInfoUseCase: DustInfoUseCaseProtocol {
@@ -44,6 +45,10 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
             }
         }
         return nil
+    }
+    
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        return try await repository.nearestStationDustInfo(lat: lat, lng: lng)
     }
     
     public func saveDustInfo(

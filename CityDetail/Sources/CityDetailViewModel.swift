@@ -30,15 +30,15 @@ public struct CityDetailViewDataModel {
     var dustGrade: AirQualityGrade = .checking
     var microDustGrade: AirQualityGrade = .checking
     
-    init(location: String, entity: MesureDnstyEntity, tmX: Double?, tmY: Double?) {
+    init(location: String, entity: DustInfoEntity) {
         self.location = location
-        self.station = entity.location
-        self.dustDensity = entity.pm10Value
-        self.microDustDensity = entity.pm25Value
+        self.station = entity.stationName
+        self.dustDensity = "\(entity.pm10Value)"
+        self.microDustDensity = "\(entity.pm25Value)"
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
-        self.tmX = tmX
-        self.tmY = tmY
+        self.tmX = nil
+        self.tmY = nil
     }
     
     init(
@@ -124,21 +124,11 @@ public final class CityDetailViewModel: @unchecked Sendable {
         case let .search(searchData):
             Task {
                 do {
-                    let entity = LocationInfoEntity(latitude: searchData.latitude, longtitude: searchData.longitude)
-                    let tmLocation = try await self.usecase.convertToTMCoordinate(location: entity)
-
-                    guard
-                        let tmX = tmLocation?.x,
-                        let tmY = tmLocation?.y,
-                        let dustInfo = try await self.usecase.fetchMesureDnsty(tmX: tmX, tmY: tmY) else {
-                        let dataModel = CityDetailViewDataModel(location: searchData.location)
-                        self.dataModel = dataModel
-                        self.loadState = .failed
-                        return
-                    }
-                    let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo, tmX: tmX, tmY: tmY)
+                    let dustInfo = try await self.usecase.nearestStationDustInfo(lat: searchData.latitude, lng: searchData.longitude)
+                    let dataModel = CityDetailViewDataModel(location: searchData.location, entity: dustInfo)
                     self.dataModel = dataModel
                     self.loadState = .loaded
+                                                                                 
                 } catch {
                     self.dataModel = CityDetailViewDataModel(location: searchData.location)
                     self.loadState = .failed

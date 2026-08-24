@@ -110,4 +110,12 @@ public final class Repository: RepositoryProtocol {
     public func getFavoriteStatus(location: String) throws -> Bool {
         try self.dataStore.getFavoriteStatus(location: location)
     }
+    
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        var parameters: [String: String] = [:]
+        parameters["lat"] = lat
+        parameters["lng"] = lng
+        
+        return try await self.remote.request(header: nil, endpoint: .nearestStation, method: .get, parameters: parameters)
+    }
 }
