@@ -39,11 +39,21 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                 let dustInfos = try self.usecase.getDustInfo()
                 // 즐겨찾기된 지역들만 필터링 (최대 2개)
                 let favoriteInfos = dustInfos.filter { $0.isFavorite }
-                let items = try await withThrowingTaskGroup(of: (Int, LocationInfo).self) { group in
+                let expected = currentHourDataTime()
+                // Bool = 이번 정시 값을 아직 못 받음(재시도 대상).
+                let items = try await withThrowingTaskGroup(of: (Int, LocationInfo, Bool).self) { group in
                     for (index, dustInfo) in favoriteInfos.enumerated() {
                         group.addTask {
-                            let dustDetailInfo = try await self.usecase.nearestStationDustInfo(lat: dustInfo.latitude, lng: dustInfo.longitude)
+                            guard let dustDetailInfo = try? await self.usecase.nearestStationDustInfo(lat: dustInfo.latitude, lng: dustInfo.longitude) else {
+                                return (index, LocationInfo(location: dustInfo.location, pm10Grade: .checking, pm25Grade: .checking), true)
+                            }
                      
+                            // 값이 null 인 경우뿐 아니라, 값은 정상인데 아직
+                            // 이전 시각 것인 경우도 재시도 대상이다.
+                            let needRetry = dustDetailInfo.dataTime != expected
+                                || dustDetailInfo.pm10Value == nil
+                                || dustDetailInfo.pm25Value == nil
+
                             return (
                                 index,
                                 LocationInfo(
@@ -51,29 +61,27 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                                     pm10Grade:
                                         AirQualityGrade
                                         .grade(
-                                            forPM10: "\(dustDetailInfo.pm10Value)"
+                                            forPM10: "\(dustDetailInfo.pm10Value ?? -1)"
                                         ),
                                     pm25Grade: AirQualityGrade
                                         .grade(
-                                            forPM25: "\(dustDetailInfo.pm25Value)"
+                                            forPM25: "\(dustDetailInfo.pm25Value ?? -1)"
                                         )
-                                )
+                                ),
+                                needRetry
                             )
                         }
                     }
                     
-                    var collected: [(Int, LocationInfo)] = []
+                    var collected: [(Int, LocationInfo, Bool)] = []
                     for try await model in group {
                         collected.append(model)
                     }
                     return collected
                 }
                 
-                let refreshDate = Calendar.current.nextDate(
-                    after: Date(),
-                    matching: DateComponents(minute: 15),
-                    matchingPolicy: .nextTime
-                ) ?? Date().addingTimeInterval(3600)
+                let needsRetry = items.contains(where: { $0.2 })
+                let refreshDate = nextRefreshDate(needsRetry: needsRetry)
                 
                 let sorted = items.sorted(by: { $0.0 < $1.0 }).map( { $0.1 })
                 let timeline = Timeline(entries: [SimpleEntry(items: sorted)], policy: .after(refreshDate))
@@ -93,6 +101,45 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                 completion(timeline)
             }
         }
+    }
+    
+    /// 서버가 내려주는 dataTime 은 "yyyy-MM-dd HH:mm" (KST) 형식이다.
+    /// 지금 있어야 할 정시 문자열을 만들어 응답이 최신인지 비교하는 데 쓴다.
+    private func currentHourDataTime(_ now: Date = Date()) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd HH:00"
+        return formatter.string(from: now)
+    }
+
+    /// 다음 타임라인 갱신 시각.
+    ///
+    /// 에어코리아는 :14 무렵에 시도 대부분을 한꺼번에 올린다. 서버 정기
+    /// 수집이 :12 라 :15 에 받으면 서울 외에는 아직 이전 시각 값이다.
+    /// 서버가 :20 에 보정하므로 그 직후인 같은 시각 :25 에 한 번만 더
+    /// 받아본다. :25 에도 안 채워져 있으면 다음 시각 :15 로 넘겨
+    /// 무한 재시도를 막는다.
+    private func nextRefreshDate(needsRetry: Bool, now: Date = Date()) -> Date {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul") ?? .current
+
+        if needsRetry,
+           let retry = calendar.nextDate(
+            after: now,
+            matching: DateComponents(minute: 25),
+            matchingPolicy: .nextTime
+           ),
+           calendar.component(.hour, from: retry)
+            == calendar.component(.hour, from: now) {
+            return retry
+        }
+
+        return calendar.nextDate(
+            after: now,
+            matching: DateComponents(minute: 15),
+            matchingPolicy: .nextTime
+        ) ?? now.addingTimeInterval(3600)
     }
 }
 

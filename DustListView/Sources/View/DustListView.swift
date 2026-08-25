@@ -23,6 +23,17 @@ public struct DustListView: View {
                     VStack {
                         Spacer()
                         
+                        // 라지 타이틀은 스크롤 오프셋에 묶여 있어서 리스트를
+                        // 당기면 같이 내려온다. 제자리에 두려고 내비게이션 바
+                        // 타이틀 대신 일반 뷰로 그린다.
+                        HStack {
+                            Text("미세먼지")
+                                .font(.largeTitle.bold())
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 40)
+                        
                         Group {
                             HStack {
                                 Text("즐겨찾기로 추가한 지역을 위젯으로 볼 수 있습니다.")
@@ -87,8 +98,7 @@ public struct DustListView: View {
                             Spacer()
                                 .frame(height: 40)
                         }
-                        .navigationTitle("미세먼지")
-                        .navigationBarTitleDisplayMode(.large)
+                        .toolbar(.hidden, for: .navigationBar)
                     }
                     .alert(isPresented: $viewModel.showError) {
                         Alert(

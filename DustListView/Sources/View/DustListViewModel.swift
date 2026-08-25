@@ -63,7 +63,9 @@ public final class DustListViewModel: @unchecked Sendable   {
             for (index, dustInfo) in dustInfos.enumerated() {
                 group.addTask { [dustInfo] in
                     
-                    let dustDetailInfo = try await self.usecase.nearestStationDustInfo(lat: dustInfo.latitude, lng: dustInfo.longitude)
+                    guard let dustDetailInfo = try? await self.usecase.nearestStationDustInfo(lat: dustInfo.latitude, lng: dustInfo.longitude) else {
+                        return (index, DustListViewDataModel(entity: DustInfoEntity(), location: dustInfo.location, longtitude: dustInfo.longitude, latitude: dustInfo.latitude, isFavorite: dustInfo.isFavorite))
+                    }
                     return (index, DustListViewDataModel(
                         entity: dustDetailInfo,
                         location: dustInfo.location,

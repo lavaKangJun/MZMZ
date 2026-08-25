@@ -30,8 +30,8 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     ) {
         self.location = location
         self.station = entity.stationName
-        self.dustDensity = "\(entity.pm10Value)"
-        self.microDustDensity = "\(entity.pm25Value)"
+        self.dustDensity = "\(entity.pm10Value ?? -1)"
+        self.microDustDensity = "\(entity.pm25Value ?? -1)"
         self.longtitude = longtitude
         self.latitude = latitude
         self.isFavorite = isFavorite
