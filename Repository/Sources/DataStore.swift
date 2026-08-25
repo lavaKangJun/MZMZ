@@ -82,8 +82,6 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         location TEXT NOT NULL,
         longitude TEXT NOT NULL,
         latitude TEXT NOT NULL,
-        tmX DOUBLE,
-        tmY DOUBLE,
         isFavorite INTEGER NOT NULL,
         createdAt INTEGER NOT NULL,
         PRIMARY KEY (location)
@@ -104,7 +102,7 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         try createTable()
         
         let sql = """
-            INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, tmX, tmY, isFavorite, createdAt)
+            INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, isFavorite, createdAt)
             VALUES (?, ?, ?, ?, ?, ?, ?);
             """
         let statement = try prepareStatement(sql)
@@ -113,20 +111,8 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         sqlite3_bind_text(statement, 1, (data.location as NSString).utf8String, -1, nil)
         sqlite3_bind_text(statement, 2, (data.longitude as NSString).utf8String, -1, nil)
         sqlite3_bind_text(statement, 3, (data.latitude as NSString).utf8String, -1, nil)
-        
-        if let tmX = data.tmX {
-            sqlite3_bind_double(statement, 4, tmX)
-        } else {
-            sqlite3_bind_null(statement, 4)
-        }
-        if let tmY = data.tmY {
-            sqlite3_bind_double(statement, 5, tmY)
-        } else {
-            sqlite3_bind_null(statement, 5)
-        }
-        
-        sqlite3_bind_int(statement, 6, data.isFavorite ? 1 : 0)
-        sqlite3_bind_int64(statement, 7, Int64(Date().timeIntervalSince1970))
+        sqlite3_bind_int(statement, 4, data.isFavorite ? 1 : 0)
+        sqlite3_bind_int64(statement, 5, Int64(Date().timeIntervalSince1970))
         
         guard sqlite3_step(statement) == SQLITE_DONE else {
             throw SQLiteError.step("insert")
@@ -164,11 +150,9 @@ public final class DataStore: DataStorable, @unchecked Sendable {
             let location = String(cString: sqlite3_column_text(loadStatement, 0))
             let longitude = String(cString: sqlite3_column_text(loadStatement, 1))
             let latitude = String(cString: sqlite3_column_text(loadStatement, 2))
-            let tmX = sqlite3_column_double(loadStatement, 3)
-            let tmY = sqlite3_column_double(loadStatement, 4)
-            let isFavorite = sqlite3_column_int(loadStatement, 5)
-            let timeStamp = sqlite3_column_int(loadStatement, 6)
-            dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude, tmX: tmX, tmY: tmY, isFavorite: isFavorite == 0 ? false : true))
+            let isFavorite = sqlite3_column_int(loadStatement, 4)
+            let timeStamp = sqlite3_column_int(loadStatement, 5)
+            dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude, isFavorite: isFavorite == 0 ? false : true))
             result = sqlite3_step(loadStatement)
         }
         

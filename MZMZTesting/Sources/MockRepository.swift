@@ -11,22 +11,6 @@ import Domain
 import Repository
 
 public final class MockRepository: RepositoryProtocol, TestDouble {
-    public func fetchDust() -> [DustEntity] {
-        resolve([DustEntity].self, name: "fetchDust") ?? []
-    }
-    
-    public func formatTMCoordinate(locationInfo: Domain.LocationInfoEntity, key: String) async throws -> [TMLocationInfoEntity] {
-        resolve([TMLocationInfoEntity].self, name: "formatTMCoordinate") ?? []
-    }
-    
-    public func fetchMsrstnList(tmX: Double, tmY: Double) async throws -> MsrstnListEntity {
-        resolve(MsrstnListEntity.self, name: "fetchMsrstnList") ?? MsrstnListEntity(totalCount: 0, items: [])
-    }
-    
-    public func fetchMesureDnsty(stationName: String) async throws -> MesureDnstyListEntity {
-        resolve(MesureDnstyListEntity.self, name: "fetchMesureDnsty") ?? MesureDnstyListEntity(totalCount: 0, items: [])
-    }
-    
     public func findLocation(location: String, key: String) async throws -> [Domain.SearchLocationEntity] {
         resolve([SearchLocationEntity].self, name: "findLocation") ?? []
     }

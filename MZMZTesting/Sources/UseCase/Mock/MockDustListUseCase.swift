@@ -12,23 +12,15 @@ import Domain
 public final class MockDustListUseCase: DustListUseCaseProtocol, TestDouble {
     public init() { }
     
-    public func fetchLocation() async throws -> TMLocationInfoEntity? {
-        resolve(TMLocationInfoEntity.self, name: "fetchLocation")
-    }
-    
-    public func convertoToTMCoordinate(location: Domain.LocationInfoEntity) async throws -> TMLocationInfoEntity? {
-        resolve(TMLocationInfoEntity.self, name: "convertoToTMCoordinate")
-    }
-    
-    public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
-        resolve(MesureDnstyEntity.self, name: "fetchMesureDnsty")
-    }
-    
     public func getDustInfo() throws -> [DustStoreEntity] {
         try resolveWithThrows([DustStoreEntity].self, name: "getDustInfo") ?? []
     }
     
     public func deleteDustInfo(location: String) -> Bool {
         resolve(Bool.self, name: "deleteDustInfo") ?? false
+    }
+    
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        try resolveWithThrows(DustInfoEntity.self, name: "nearestStationDustInfo") ?? DustInfoEntity()
     }
 }

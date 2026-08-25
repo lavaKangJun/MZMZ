@@ -8,48 +8,21 @@
 import Foundation
 
 public protocol DustListUseCaseProtocol {
-    func fetchLocation() async throws -> TMLocationInfoEntity?
-    func convertoToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
-    func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
     func getDustInfo() throws -> [DustStoreEntity]
     func deleteDustInfo(location: String) -> Bool
+    func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity
 }
 
 public final class DustListUseCase: DustListUseCaseProtocol {
     private let repository: RepositoryProtocol
-    private let locationService: LocationServiceProtocol
     private let authKey = AppSecrets.kakaoRestKey
     
-    public init(repository: RepositoryProtocol, locationService: LocationServiceProtocol) {
+    public init(repository: RepositoryProtocol) {
         self.repository = repository
-        self.locationService = locationService
     }
     
-    public func fetchLocation() async throws -> TMLocationInfoEntity? {
-        guard let location = self.locationService.getLocation() else { return nil }
-        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
-        return makeTMLocation.last
-    }
-    
-    public func convertoToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity? {
-        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
-        return makeTMLocation.last
-    }
-    
-    public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
-        let msrstns = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName })
-        for index in 0..<msrstns.count {
-            if let firstStation = msrstns[safe: index] {
-                let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: firstStation)
-                if let mesureDnsty = mesureDnstyList.items.first,
-                   mesureDnsty.pm10Value != "-" && mesureDnsty.pm25Value != "-" {
-                    return mesureDnsty
-                } else {
-                    continue
-                }
-            }
-        }
-        return nil
+    public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
+        return try await repository.nearestStationDustInfo(lat: lat, lng: lng)
     }
     
     public func getDustInfo() throws -> [DustStoreEntity] {

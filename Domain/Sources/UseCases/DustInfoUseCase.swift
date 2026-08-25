@@ -8,9 +8,6 @@
 import Foundation
 
 public protocol DustInfoUseCaseProtocol: Sendable {
-    func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity?
-    func fetchMesureDnsty(station: String) async throws -> MesureDnstyEntity?
-    func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity?
     func saveDustInfo(location: String, longitude: String, latitude: String, tmX: Double, tmY: Double, isFavorite: Bool)
     func updateFavorite(location: String, isFavorite: Bool) throws
     func getFavoriteStatus(location: String) throws -> Bool
@@ -23,28 +20,6 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
     
     public init(repository: RepositoryProtocol) {
         self.repository = repository
-    }
-    
-    public func convertToTMCoordinate(location: LocationInfoEntity) async throws -> TMLocationInfoEntity? {
-        let makeTMLocation = try await repository.formatTMCoordinate(locationInfo: location, key: authKey)
-        return makeTMLocation.last
-    }
-    
-    public func fetchMesureDnsty(station: String) async throws -> MesureDnstyEntity? {
-        let mesureDnstyList = try await repository.fetchMesureDnsty(stationName: station)
-        return mesureDnstyList.items.first(where: { ($0.pm10Value != "-") && ($0.pm25Value != "-") })
-    }
-    
-    public func fetchMesureDnsty(tmX: Double, tmY: Double) async throws -> MesureDnstyEntity? {
-        let msrstns = try await repository.fetchMsrstnList(tmX: tmX, tmY: tmY).items.map({ $0.stationName })
-        for index in 0..<msrstns.count {
-            if let firstStation = msrstns[safe: index] {
-                if let dnstry = try await fetchMesureDnsty(station: firstStation) {
-                    return dnstry
-                }
-            }
-        }
-        return nil
     }
     
     public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
@@ -65,8 +40,6 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
                     location: location,
                     longitude: longitude,
                     latitude: latitude,
-                    tmX: tmX,
-                    tmY: tmY,
                     isFavorite: isFavorite
                 )
             )
