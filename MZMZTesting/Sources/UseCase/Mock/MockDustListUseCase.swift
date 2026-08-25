@@ -21,6 +21,6 @@ public final class MockDustListUseCase: DustListUseCaseProtocol, TestDouble {
     }
     
     public func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity {
-        return DustInfoEntity()
+        try resolveWithThrows(DustInfoEntity.self, name: "nearestStationDustInfo") ?? DustInfoEntity()
     }
 }

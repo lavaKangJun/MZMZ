@@ -10,6 +10,7 @@ import Testing
 import Combine
 import Repository
 import Domain
+import Common
 import MZMZTesting
 
 @testable import DustListView
@@ -42,32 +43,24 @@ class DustListViewModelTests {
     func fetchDustTest() async throws {
         // Arrange
         makeInit()
-        var dustList: [DustListViewDataModel] = []
-        
         self.mockUsecase.registerWithThrows([DustStoreEntity].self, name: "getDustInfo") {
-            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789")]
+            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789", isFavorite: false)]
+        }
+        self.mockUsecase.registerWithThrows(DustInfoEntity.self, name: "nearestStationDustInfo") {
+            return DustInfoEntity(stationName: "강원도", pm10Value: 13, pm25Value: 24, dataTime: "2026-12-23", distanceKm: 0.4, sido: "강원도", addr: "대한민구 강원도")
         }
         
         // Act
-        self.viewModel.dustListStream
-            .dropFirst()
-            .sink { result in
-                dustList = result
-            }.store(in: &cancellables)
-        
-        viewModel.fetchDust()
-        
-        try await Task.sleep(for: .seconds(0.3))
+        await viewModel.refresh()
         
         // Assert
-        #expect(dustList.first?.location == "강원도", "list: \(dustList.count)")
+        #expect(self.viewModel.dustListModels.first?.location == "강원도")
     }
     
     @Test("미세먼지 정보를 가져오는 실패 테스트")
     func fetchDustFailTest() async throws {
         // Arrange
         makeInit()
-        var errorMsg = ""
         self.mockUsecase.registerWithThrows([DustStoreEntity].self, name: "getDustInfo") {
             let error = NSError(
                 domain: "com.mzmz.dustlist",
@@ -76,33 +69,23 @@ class DustListViewModelTests {
                     NSLocalizedDescriptionKey: "데이터를 찾을 수 없습니다"
                 ]
             )
-            
             throw error
         }
         
         // Act
-        self.viewModel.errorStream
-            .sink { error in
-                errorMsg = error
-            }.store(in: &cancellables)
-        
-        viewModel.fetchDust()
-        
-        try await Task.sleep(for: .seconds(0.3))
+        await viewModel.refresh()
         
         // Assert
-        #expect(errorMsg == "데이터를 찾을 수 없습니다")
+        #expect( self.viewModel.errorMessage == "데이터를 찾을 수 없습니다")
     }
     
     @Test("미세먼지 리스트 데이터 제거 테스트")
     func testDeleteDustListData() async throws {
         // Arrange
         makeInit()
-        var dataListCount = 0
-        
         // 삭제 검증을 위한 데이터를 가져옴
         self.mockUsecase.registerWithThrows([DustStoreEntity].self, name: "getDustInfo") {
-            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789"), DustStoreEntity(location: "서울", longitude: "789.456", latitude: "456.789")]
+            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789", isFavorite: false), DustStoreEntity(location: "서울", longitude: "789.456", latitude: "456.789", isFavorite: false)]
         }
         
         self.mockUsecase.register(Bool.self, name: "deleteDustInfo") {
@@ -110,33 +93,22 @@ class DustListViewModelTests {
             return true
         }
         
-        self.viewModel.fetchDust()
-        try await Task.sleep(for: .seconds(0.3))
+        await self.viewModel.refresh()
         
         // Act
-        self.viewModel.dustListStream
-            .sink { result in
-                // 삭제 후 스트림에도 반영됨
-                dataListCount = result.count
-                
-            }.store(in: &cancellables)
-        
         self.viewModel.deleteLocation("강원도")
-        try await Task.sleep(for: .seconds(0.3))
         
         // Assert
-        #expect(dataListCount == 1, "삭제 실패, \(dataListCount)")
+        #expect(self.viewModel.dustListModels.count == 1)
     }
     
     @Test("미세먼지 리스트 데이터 제거 실패 테스트")
     func testDeleteFailDustListData() async throws {
         // Arrange
         makeInit()
-        var dataListCount = 0
-        
         // 삭제 검증을 위한 데이터를 가져옴
         self.mockUsecase.registerWithThrows([DustStoreEntity].self, name: "getDustInfo") {
-            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789"), DustStoreEntity(location: "서울", longitude: "789.456", latitude: "456.789")]
+            return [DustStoreEntity(location: "강원도", longitude: "123.456", latitude: "456.789", isFavorite: false), DustStoreEntity(location: "서울", longitude: "789.456", latitude: "456.789", isFavorite: false)]
         }
         
         self.mockUsecase.register(Bool.self, name: "deleteDustInfo") {
@@ -144,20 +116,13 @@ class DustListViewModelTests {
             return false
         }
         
-        self.viewModel.fetchDust()
+        await self.viewModel.refresh()
         
         // Act
-        self.viewModel.dustListStream
-            .sink { result in
-                // 삭제 실패 후 스트림에 영향 없음
-                dataListCount = result.count
-            }.store(in: &cancellables)
-        
         self.viewModel.deleteLocation("강원도")
-        try await Task.sleep(for: .seconds(0.3))
         
         // Assert
-        #expect(dataListCount == 2, "삭제 실패, \(dataListCount)")
+        #expect(self.viewModel.dustListModels.count == 2)
     }
     
     @MainActor @Test("지역 찾는 뷰 라우팅 테스트")
@@ -187,7 +152,7 @@ class DustListViewModelTests {
         }
         
         // Act
-        self.viewModel.routeToDetail(name: "강원도", station: "강원도",  longitude: "123.456", latitude: "789.123")
+        self.viewModel.routeToDetail(name: "강원도", station: "강원도", dustDensity: "12", microDustDensity: "6", dustGrade: .good, microDustGrade: .good, isFavorite: false)
         
         // Assert
         #expect(called == true, "routeToDetailView")
@@ -201,7 +166,16 @@ class SpyRouting: DustListRouting, TestDouble {
         self.verify(name: "routeToFindLocation", args: nil)
     }
     
-    func routeToDetail(name: String, station: String?, longitude: String, latitude: String) {
+    func routeToDetail(
+        name: String,
+        station: String?,
+        dustDensity: String,
+        microDustDensity: String,
+        dustGrade: AirQualityGrade,
+        microDustGrade: AirQualityGrade,
+        isFavorite: Bool,
+        dismiss: (() -> Void)?
+    ) {
         self.verify(name: "routeToDetail", args: name)
     }
 }

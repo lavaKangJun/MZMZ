@@ -40,8 +40,6 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
                     location: location,
                     longitude: longitude,
                     latitude: latitude,
-                    tmX: tmX,
-                    tmY: tmY,
                     isFavorite: isFavorite
                 )
             )

@@ -41,8 +41,6 @@ public final class Repository: RepositoryProtocol {
                                             location: entity.location,
                                             longitude: entity.longitude,
                                             latitude: entity.latitude,
-                                            tmX: entity.tmX,
-                                            tmY: entity.tmY,
                                             isFavorite: entity.isFavorite
                                         )
         )
