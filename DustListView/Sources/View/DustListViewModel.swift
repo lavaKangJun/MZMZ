@@ -33,6 +33,7 @@ public final class DustListViewModel: @unchecked Sendable   {
                     self?.dustListModels = dataModels
                     self?.isLoading = false
                 }
+                WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
             } catch {
                 await MainActor.run { [weak self] in
                     self?.errorMessage = error.localizedDescription

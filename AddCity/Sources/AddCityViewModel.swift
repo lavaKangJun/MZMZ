@@ -45,7 +45,11 @@ public final class AddCityViewModel: @unchecked Sendable {
         }
     }
     
-    @MainActor func clearSearch() {
+    @MainActor func claer() {
+        self.cityCellViewModels = []
+    }
+    
+    @MainActor func dismiss() {
         self.router?.dismiss()
     }
     
