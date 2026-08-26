@@ -33,8 +33,10 @@ public struct CityDetailViewDataModel {
     init(location: String, entity: DustInfoEntity) {
         self.location = location
         self.station = entity.stationName
-        self.dustDensity = "\(entity.pm10Value)"
-        self.microDustDensity = "\(entity.pm25Value)"
+        // Int? 를 그대로 보간하면 "Optional(13)" 이 되어 grade(forPM10:) 의
+        // Int(_:) 파싱이 실패하고 값이 있는데도 점검중으로 표시된다.
+        self.dustDensity = "\(entity.pm10Value ?? -1)"
+        self.microDustDensity = "\(entity.pm25Value ?? -1)"
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
         self.tmX = nil
