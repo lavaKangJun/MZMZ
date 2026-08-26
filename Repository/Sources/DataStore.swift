@@ -83,7 +83,7 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         longitude TEXT NOT NULL,
         latitude TEXT NOT NULL,
         isFavorite INTEGER NOT NULL,
-        createdAt INTEGER NOT NULL,
+        updatedAt INTEGER NOT NULL,
         PRIMARY KEY (location)
         );
         """
@@ -102,8 +102,8 @@ public final class DataStore: DataStorable, @unchecked Sendable {
         try createTable()
         
         let sql = """
-            INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, isFavorite, createdAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?);
+            INSERT OR REPLACE INTO \(tableName) (location, longitude, latitude, isFavorite, updatedAt)
+            VALUES (?, ?, ?, ?, ?);
             """
         let statement = try prepareStatement(sql)
         defer { sqlite3_finalize(statement) }
@@ -139,8 +139,10 @@ public final class DataStore: DataStorable, @unchecked Sendable {
     public func load() throws -> [DustStoreDTO] {
         try createTable()
         
+        // 즐겨찾기(1)가 먼저, 그 안에서는 최근에 즐겨찾기한 순.
+        // 즐겨찾기가 아닌 항목은 최근에 추가한 순.
         let statement = """
-        SELECT * FROM \(tableName) ORDER BY createdAt DESC
+        SELECT * FROM \(tableName) ORDER BY isFavorite DESC, updatedAt DESC
         """
         
         let loadStatement = try prepareStatement(statement)
@@ -150,8 +152,9 @@ public final class DataStore: DataStorable, @unchecked Sendable {
             let location = String(cString: sqlite3_column_text(loadStatement, 0))
             let longitude = String(cString: sqlite3_column_text(loadStatement, 1))
             let latitude = String(cString: sqlite3_column_text(loadStatement, 2))
-            let isFavorite = sqlite3_column_int(loadStatement, 4)
-            let timeStamp = sqlite3_column_int(loadStatement, 5)
+            // 컬럼 순서: 0 location, 1 longitude, 2 latitude,
+            // 3 isFavorite, 4 updatedAt
+            let isFavorite = sqlite3_column_int(loadStatement, 3)
             dto.append(DustStoreDTO(location: location, longitude: longitude, latitude: latitude, isFavorite: isFavorite == 0 ? false : true))
             result = sqlite3_step(loadStatement)
         }
@@ -169,13 +172,17 @@ public final class DataStore: DataStorable, @unchecked Sendable {
             }
         }
         
-        let statement = "UPDATE LocationInfo SET isFavorite = ? WHERE location = ?;"
+        // updatedAt 을 같이 갱신해야 방금 즐겨찾기한 항목이 맨 위로 온다.
+        let statement = """
+        UPDATE \(tableName) SET isFavorite = ?, updatedAt = ? WHERE location = ?;
+        """
         let updateStatement = try prepareStatement(statement)
  
         defer { sqlite3_finalize(updateStatement) }
         
         sqlite3_bind_int(updateStatement, 1, isFavorite ? 1 : 0)
-        sqlite3_bind_text(updateStatement, 2, (location as NSString).utf8String, -1, nil)
+        sqlite3_bind_int64(updateStatement, 2, Int64(Date().timeIntervalSince1970))
+        sqlite3_bind_text(updateStatement, 3, (location as NSString).utf8String, -1, nil)
         
         guard sqlite3_step(updateStatement) == SQLITE_DONE else {
             throw SQLiteError.step("favorite update error")
