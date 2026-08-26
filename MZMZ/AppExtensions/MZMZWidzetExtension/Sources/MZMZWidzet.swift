@@ -229,15 +229,21 @@ struct MZMZWidzetEntryView : View {
                                     Text("초미세 \(info.microText)")
                                 }
                                 .font(.system(size: 10))
+                                // "매우나쁨"/"점검중" 은 "좋음" 보다 한 줄이
+                                // 30pt 넘게 길어서 작은 위젯에서 넘친다.
+                                // 여백을 줄여도 최소 폭 기기에선 모자라므로
+                                // 줄바꿈 대신 축소되게 둔다.
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.8)
                                 .foregroundStyle(.white.opacity(0.9))
                             }
-                            .padding(.horizontal, 10)
+                            .padding(.horizontal, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                 }
             }
-        }.padding(8)
+        }.padding(6)
     }
         
     var lockScreenView: some View {
@@ -255,6 +261,7 @@ struct MZMZWidzetEntryView : View {
                     Text("미세: \(info.dustText) | 초미세: \(info.microText)")
                         .font(.system(size: 10, weight: .semibold))
                         .lineLimit(1)
+                        .minimumScaleFactor(0.8)
                 }
                 .padding(.horizontal, 4)
                 .padding(.vertical, 4)
