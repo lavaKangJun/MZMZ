@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Repository
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        AppCheckBootstrap.configure()
+
         let builder = ApplicationRootBuilder()
         self.applicationViewModel = builder.makeRootViewModel()
         self.applicationRouter = self.applicationViewModel.router
