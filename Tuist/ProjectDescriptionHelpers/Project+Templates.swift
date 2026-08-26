@@ -7,6 +7,11 @@ import ProjectDescription
 
 extension Project {
     static let organizationName = "Junyoung"
+    /// Apple Developer 팀 ID.
+    ///
+    /// Xcode 에서 고른 값은 pbxproj 에만 남아 `tuist generate` 하면 날아간다.
+    /// App Attest entitlement 서명에 이 팀이 필요하므로 여기 박아 둔다.
+    static let developmentTeam = "KPUSDZ4348"
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
@@ -47,7 +52,8 @@ extension Project {
                        ),
                        settings: .settings( base: [
                         "SWIFT_VERSION": "6.0",
-                        "SWIFT_STRICT_CONCURRENCY": "minimal"
+                        "SWIFT_STRICT_CONCURRENCY": "minimal",
+                        "DEVELOPMENT_TEAM": .string(developmentTeam)
                        ]),
                        targets: targets + extensionTarget,
                        resourceSynthesizers: [])
