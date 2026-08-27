@@ -12,6 +12,16 @@ extension Project {
     /// Xcode 에서 고른 값은 pbxproj 에만 남아 `tuist generate` 하면 날아간다.
     /// App Attest entitlement 서명에 이 팀이 필요하므로 여기 박아 둔다.
     static let developmentTeam = "KPUSDZ4348"
+
+    /// 사용자에게 보이는 버전(CFBundleShortVersionString).
+    /// 앱스토어 버전 표기에 쓰인다.
+    static let marketingVersion = "1.0.0"
+    /// 빌드 번호(CFBundleVersion).
+    ///
+    /// TestFlight/앱스토어는 업로드마다 이 값이 이전보다 커야 한다.
+    /// 같은 버전으로 다시 올릴 때는 여기만 1.0.1, 1.0.2 로 올리면 된다.
+    /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
+    static let buildVersion = "1.0.0"
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
@@ -29,6 +39,8 @@ extension Project {
             infoPlist: [
                 "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
                 "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
+                "CFBundleShortVersionString": .string(marketingVersion),
+                "CFBundleVersion": .string(buildVersion),
                 "NSExtension": .dictionary([
                     "NSExtensionPointIdentifier": .string("com.apple.widgetkit-extension")
                 ]),
@@ -190,6 +202,11 @@ extension Project {
         let infoPlist: [String: Plist.Value] = [
             "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
             "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
+            "CFBundleShortVersionString": .string(marketingVersion),
+            "CFBundleVersion": .string(buildVersion),
+            // HTTPS 외에 별도 암호화를 쓰지 않아 수출 규정 면제 대상이다.
+            // 선언해두면 업로드할 때마다 묻지 않는다.
+            "ITSAppUsesNonExemptEncryption": false,
             "UILaunchStoryboardName": "LaunchScreen",
             "UIApplicationSceneManifest": [
                 "UIApplicationSupportsMultipleScenes": false,
