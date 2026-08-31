@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import Alamofire
 import FirebaseAppCheck
 
@@ -97,15 +98,21 @@ public final class Remote: RemoteProtocol {
         }
     }
 
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "MZMZ",
+        category: "AppCheck"
+    )
+
     /// App Check 토큰을 가져온다.
     ///
-    /// 실패해도 요청 자체는 보낸다. 서버가 아직 검증을 강제하지 않는
-    /// 동안에는 통과하고, 강제한 뒤에는 서버가 401 로 판단한다.
+    /// 실패하면 헤더 없이 보내고 서버가 401 로 끊는다.
     private static func appCheckToken() async -> String? {
         do {
-            return try await AppCheck.appCheck().token(forcingRefresh: false).token
+            return try await AppCheck.appCheck()
+                .token(forcingRefresh: false).token
         } catch {
-            print("App Check 토큰 발급 실패", error)
+            // print 는 통합 로그에 안 남아 TestFlight 빌드에서 볼 수 없다.
+            logger.error("App Check 토큰 발급 실패: \(error.localizedDescription, privacy: .public)")
             return nil
         }
     }
