@@ -18,10 +18,9 @@ extension Project {
     static let marketingVersion = "1.0.0"
     /// 빌드 번호(CFBundleVersion).
     ///
-    /// TestFlight/앱스토어는 업로드마다 이 값이 이전보다 커야 한다.
-    /// 같은 버전으로 다시 올릴 때는 여기만 1.0.1, 1.0.2 로 올리면 된다.
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
     static let buildVersion = "1.0.0"
+    static let buildVersion = "3"
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
