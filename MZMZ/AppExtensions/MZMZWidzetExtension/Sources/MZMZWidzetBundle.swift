@@ -13,7 +13,7 @@ import Repository
 struct MZMZWidzetBundle: WidgetBundle {
     init() {
         // 익스텐션은 AppDelegate 가 돌지 않아 여기서 직접 초기화한다.
-        AppCheckBootstrap.configure()
+        AppCheckBootstrap.configure(.deviceCheck)
     }
 
     var body: some Widget {

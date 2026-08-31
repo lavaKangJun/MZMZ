@@ -6,14 +6,5 @@
 	<array>
 		<string>group.com.junyoung.mzmz</string>
 	</array>
-	<!-- Firebase App Check(App Attest)용. 이 키가 없으면 실기기에서
-	     DCAppAttestService 가 거부해 토큰 발급이 실패한다.
-	     Debug 빌드는 AppCheckDebugProvider 를 쓰므로 이 값과 무관하고,
-	     Release(TestFlight/App Store)가 production 환경을 쓴다.
-	     주의: 유료 Apple Developer Program 계정에서만 서명된다.
-	     Personal Team 으로는 "do not support the App Attest capability"
-	     로 프로비저닝이 실패한다. -->
-	<key>com.apple.developer.devicecheck.appattest-environment</key>
-	<string>production</string>
 </dict>
 </plist>
