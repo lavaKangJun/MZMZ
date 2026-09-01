@@ -4,6 +4,11 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+# GITHUB_TOKEN 은 기본이 읽기 전용이라 이게 없으면 리뷰를 못 남긴다.
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   code-review:
     runs-on: ubuntu-latest
@@ -21,7 +26,9 @@ jobs:
    
     - name: Install dependencies
       run: |
-        pip install anthropic pygithub requests
+        # 메이저 버전을 고정한다. 안 하면 SDK 2.x 가 나오는 순간
+        # 또 조용히 깨진다(1.x 가 temperature 를 없앤 것처럼).
+        pip install 'anthropic>=1,<2' pygithub requests
    
     - name: Get changed files
       id: changed-files

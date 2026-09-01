@@ -389,10 +389,12 @@ class AICodeReviewer:
         """
         
         try:
+            # temperature 는 anthropic SDK 1.x 에서 messages.create() 시그니처에서
+            # 빠졌다(전달하면 TypeError). 최신 모델들이 샘플링 파라미터를 받지
+            # 않게 되면서 함께 정리된 것이라, 되살리지 말고 지운다.
             response = self.anthropic.messages.create(
                 model="claude-sonnet-4-5-20250929",
                 max_tokens=3000,
-                temperature=0,
                 messages=[
                     {"role": "user", "content": prompt}
                 ]
