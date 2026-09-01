@@ -25,7 +25,7 @@ public protocol DustListRouting {
 }
 
 public final class DustListRouter: DustListRouting {
-    public var scene: UIViewController?
+    public weak var scene: UIViewController?
     public let addCitySceneBuilder: AddCitySceneBuilder
     public let cityDetailSceneBuilder: CityDetailSceneBuilder
     

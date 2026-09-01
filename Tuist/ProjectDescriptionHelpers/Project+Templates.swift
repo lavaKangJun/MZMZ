@@ -19,7 +19,6 @@ extension Project {
     /// 빌드 번호(CFBundleVersion).
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
-    static let buildVersion = "1.0.0"
     static let buildVersion = "3"
     /// Helper function to create the Project for this ExampleApp
     public static func app(

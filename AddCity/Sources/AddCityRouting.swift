@@ -15,11 +15,15 @@ public protocol AddCityRouting {
 }
 
 public final class AddCityRouter: @preconcurrency AddCityRouting {
-    public var scene: UIViewController?
+    public weak var scene: UIViewController?
     public let detailCitySceneBuilder: CityDetailSceneBuilder
     
     init(detailCitySceneBuilder: CityDetailSceneBuilder) {
         self.detailCitySceneBuilder = detailCitySceneBuilder
+    }
+    
+    deinit {
+        print("deinit \(Self.self)")
     }
     
     @MainActor

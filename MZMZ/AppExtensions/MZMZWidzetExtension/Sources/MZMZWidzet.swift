@@ -116,9 +116,9 @@ struct Provider: TimelineProvider, @unchecked Sendable {
     /// 다음 타임라인 갱신 시각.
     ///
     /// 에어코리아는 :14 무렵에 시도 대부분을 한꺼번에 올린다. 서버 정기
-    /// 수집이 :12 라 :15 에 받으면 서울 외에는 아직 이전 시각 값이다.
-    /// 서버가 :20 에 보정하므로 그 직후인 같은 시각 :25 에 한 번만 더
-    /// 받아본다. :25 에도 안 채워져 있으면 다음 시각 :15 로 넘겨
+    /// 수집이 12분 이라 15분에 받으면 서울 외에는 아직 이전 시각 값이다.
+    /// 서버가 20분 에 보정하므로 그 직후인 같은 시각 25분에 한 번만 더
+    /// 받아본다. 25분 에도 안 채워져 있으면 다음 시각 15분 로 넘겨
     /// 무한 재시도를 막는다.
     private func nextRefreshDate(needsRetry: Bool, now: Date = Date()) -> Date {
         var calendar = Calendar(identifier: .gregorian)
