@@ -113,21 +113,37 @@ struct Provider: TimelineProvider, @unchecked Sendable {
         return formatter.string(from: now)
     }
 
+    /// 갱신을 시도할 분(分). 오름차순이어야 한다.
+    ///
+    /// 서버 쪽 일정과 맞물려 있다. 에어코리아가 14분 무렵에 시도 대부분을
+    /// 올리고, 서버는 12분에 정기 수집한 뒤 16/20/30분에 보정한다.
+    /// 실측상 16분 보정이 280~300개를 채우고 20분이 10~20개, 30분이 2~4개다.
+    ///
+    /// - 14분: 발행 직후. 이미 올라온 지역은 여기서 끝난다.
+    /// - 18분: 16분 보정 직후. 대부분 여기서 채워진다.
+    ///   (16분 보정은 16분 15초~48초에 끝나므로 18분이면 여유가 있다)
+    /// - 23분: 20분 보정 직후.
+    /// - 35분: 30분 보정 직후. 마지막 기회.
+    private static let refreshMinutes = [14, 18, 23, 35]
+
     /// 다음 타임라인 갱신 시각.
     ///
-    /// 에어코리아는 :14 무렵에 시도 대부분을 한꺼번에 올린다. 서버 정기
-    /// 수집이 12분 이라 15분에 받으면 서울 외에는 아직 이전 시각 값이다.
-    /// 서버가 20분 에 보정하므로 그 직후인 같은 시각 25분에 한 번만 더
-    /// 받아본다. 25분 에도 안 채워져 있으면 다음 시각 15분 로 넘겨
-    /// 무한 재시도를 막는다.
+    /// 받은 값이 이번 정시 것이면 다음 시각의 첫 슬롯으로 넘어간다.
+    /// 낡았을 때만 같은 시각의 다음 슬롯으로 물러나며 다시 받아본다.
+    /// 매번 네 번을 다 도는 게 아니라, 채워질 때까지만 쓰는 구조다.
+    /// 필요 없는 호출을 만들지 않는 게 중요하다.
+    ///
     private func nextRefreshDate(needsRetry: Bool, now: Date = Date()) -> Date {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul") ?? .current
 
+        let currentMinute = calendar.component(.minute, from: now)
+
         if needsRetry,
+           let nextMinute = Self.refreshMinutes.first(where: { $0 > currentMinute }),
            let retry = calendar.nextDate(
             after: now,
-            matching: DateComponents(minute: 25),
+            matching: DateComponents(minute: nextMinute),
             matchingPolicy: .nextTime
            ),
            calendar.component(.hour, from: retry)
@@ -137,7 +153,7 @@ struct Provider: TimelineProvider, @unchecked Sendable {
 
         return calendar.nextDate(
             after: now,
-            matching: DateComponents(minute: 15),
+            matching: DateComponents(minute: Self.refreshMinutes[0]),
             matchingPolicy: .nextTime
         ) ?? now.addingTimeInterval(3600)
     }
