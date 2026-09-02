@@ -108,19 +108,18 @@ public struct DustListView: View {
             }
             
             if viewModel.isLoading {
-                ZStack {
-                    Color(Color(.systemGray6))
-                        .ignoresSafeArea()
-                    
-                    VStack(spacing: 16) {
-                        PulseLoader()
-                        Text("Loading...")
-                            .font(.system(size: 14))
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
+                Color(.systemGray6)
+                    .ignoresSafeArea()
+                    .overlay {
+                        VStack(spacing: 16) {
+                            PulseLoader()
+                            Text("Loading...")
+                                .font(.system(size: 14))
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                        }
                     }
-                }
-                .transition(.opacity)
+                    .transition(.opacity)
             }
         }
         .onViewWillAppear {

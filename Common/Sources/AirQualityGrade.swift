@@ -14,6 +14,7 @@ public enum AirQualityGrade: String, Sendable {
     case caution = "주의"
     case bad = "나쁨"
     case veryBad = "매우나쁨"
+    case extreme = "최악"
 }
 
 extension AirQualityGrade {
@@ -28,8 +29,10 @@ extension AirQualityGrade {
             return .caution
         case 76...100:
             return .bad
-        case 101...:
+        case 101...149:
             return .veryBad
+        case 150...:
+            return .extreme
         default:
             return .checking // 점검중: -1
         }
@@ -46,8 +49,10 @@ extension AirQualityGrade {
             return .caution
         case 38...50:
             return .bad
-        case 51...:
+        case 51...74:
             return .veryBad
+        case 75...:
+            return .extreme
         default:
             return .checking // 점검중: -1
         }
@@ -65,6 +70,8 @@ extension AirQualityGrade {
             return isDark ? Color(hex: "a87038") : Color(hex: "dc9565")
         case .veryBad:
             return Color(hex: "5a3422")
+        case .extreme:
+            return Color(hex: "1a0f0d")
         case .checking:
             return isDark ? Color(hex: "525258") : Color(hex: "b0b0b4")
         }
@@ -77,6 +84,7 @@ extension AirQualityGrade {
         case .caution: return 2
         case .bad: return 3
         case .veryBad: return 4
+        case .extreme: return 5
         case .checking: return -1
         }
     }
@@ -91,7 +99,7 @@ extension AirQualityGrade {
             return "외출 시 가벼운 마스크 착용을 권장해요"
         case .bad:
             return "실외 활동을 줄이고 KF80 이상 마스크를 착용하세요"
-        case .veryBad:
+        case .veryBad, .extreme:
             return "외출을 자제하고 KF94 마스크를 꼭 착용하세요"
         case .checking:
             return "측정소 점검 중이에요. 잠시 후 다시 확인해주세요"
@@ -227,7 +235,7 @@ public struct AirQualityCardBackground: View {
         switch grade {
         case .caution: return 2
         case .bad: return 3
-        case .veryBad: return 5
+        case .veryBad, .extreme: return 5
         default: return 0
         }
     }
