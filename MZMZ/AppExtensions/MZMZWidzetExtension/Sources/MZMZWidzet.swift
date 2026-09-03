@@ -28,7 +28,7 @@ struct Provider: TimelineProvider, @unchecked Sendable {
 
     // 빠르게 보일 임시 데이터 제공
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let location = LocationInfo(location: "천호동", pm10Grade: .checking, pm25Grade: .checking)
+        let location = LocationInfo(location: "종로", pm10Grade: .checking, pm25Grade: .checking)
         let entry = SimpleEntry(items: [location])
         completion(entry)
     }
@@ -339,5 +339,5 @@ struct MZMZWidzet: Widget {
 #Preview(as: .systemSmall) {
     MZMZWidzet()
 } timeline: {
-    SimpleEntry(items: [LocationInfo(location: "천호동", pm10Grade: .checking, pm25Grade: .checking)])
+    SimpleEntry(items: [LocationInfo(location: "종로", pm10Grade: .checking, pm25Grade: .checking)])
 }

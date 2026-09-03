@@ -106,7 +106,7 @@ public struct CityDetailView: View {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
             
-            Text(currentTimeText)
+            Text(measuredAtText(dataModel))
                 .font(.system(size: 17))
                 .foregroundStyle(.white.opacity(0.75))
         }
@@ -221,12 +221,40 @@ public struct CityDetailView: View {
         }
     }
     
-    private var currentTimeText: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "M월 d일 HH:mm"
-        formatter.locale = Locale(identifier: "ko_KR")
-        return formatter.string(from: Date())
+    /// 측정 시각 표시.
+    ///
+    /// 예전에는 `Date()` 로 화면을 여는 시각을 보여줬는데, 그건 "언제 잰
+    /// 값인지"와 무관하다. 에어코리아는 매시 정시 값을 :14 무렵에 올리므로
+    /// 실제 측정 시각은 현재 시각보다 최대 한 시간 넘게 이전일 수 있다.
+    ///
+    /// 서버가 주는 dataTime("yyyy-MM-dd HH:mm", KST)을 그대로 쓴다.
+    /// 값이 없으면(측정소 점검 등) 농도 표시와 같은 "—" 로 맞춘다.
+    private func measuredAtText(_ dataModel: CityDetailViewDataModel) -> String {
+        guard let dataTime = dataModel.dataTime,
+              let date = Self.serverFormatter.date(from: dataTime) else {
+            return "—"
+        }
+        return Self.displayFormatter.string(from: date) + " 기준"
     }
+
+    /// 서버 원문 파싱용. 고정 형식이라 en_US_POSIX 를 쓴다.
+    /// (사용자 달력 설정이 불교력 등이면 ko_KR 로는 파싱이 깨진다)
+    private static let serverFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        return formatter
+    }()
+
+    /// 화면 표시용.
+    private static let displayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "M월 d일 HH:mm"
+        return formatter
+    }()
     
     private func dustText(_ dataMode: CityDetailViewDataModel) -> String {
         let pm10 = dataMode.dustDensity

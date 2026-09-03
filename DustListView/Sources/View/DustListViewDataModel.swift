@@ -20,6 +20,9 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
     var isFavorite: Bool = false
     var dustGrade: AirQualityGrade
     var microDustGrade: AirQualityGrade
+    /// 측정 시각. 서버가 주는 "yyyy-MM-dd HH:mm"(KST) 원문.
+    /// 상세 화면에서 "언제 잰 값인지" 를 보여주는 데 쓴다.
+    let dataTime: String?
     
     init(
         entity: DustInfoEntity,
@@ -37,6 +40,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
+        self.dataTime = entity.dataTime
     }
     
     init(
@@ -55,7 +59,7 @@ public final class DustListViewDataModel: Hashable, @unchecked Sendable {
         self.isFavorite = isFavorite
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
-
+        self.dataTime = nil
     }
 }
 

@@ -152,7 +152,7 @@ class DustListViewModelTests {
         }
         
         // Act
-        self.viewModel.routeToDetail(name: "강원도", station: "강원도", dustDensity: "12", microDustDensity: "6", dustGrade: .good, microDustGrade: .good, isFavorite: false)
+        self.viewModel.routeToDetail(name: "강원도", station: "강원도", dustDensity: "12", microDustDensity: "6", dustGrade: .good, microDustGrade: .good, isFavorite: false, dataTime: "2026-01-03T12:34:56Z")
         
         // Assert
         #expect(called == true, "routeToDetailView")
@@ -174,6 +174,7 @@ class SpyRouting: DustListRouting, TestDouble {
         dustGrade: AirQualityGrade,
         microDustGrade: AirQualityGrade,
         isFavorite: Bool,
+        dataTime: String?,
         dismiss: (() -> Void)?
     ) {
         self.verify(name: "routeToDetail", args: name)

@@ -65,7 +65,8 @@ public struct DustListView: View {
                                                     microDustDensity: dataModel.microDustDensity,
                                                     dustGrade: dataModel.dustGrade,
                                                     microDustGrade: dataModel.microDustGrade,
-                                                    isFavorite: dataModel.isFavorite
+                                                    isFavorite: dataModel.isFavorite,
+                                                    dataTime: dataModel.dataTime
                                                 )
                                         }
                                 }

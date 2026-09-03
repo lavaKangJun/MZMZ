@@ -20,6 +20,7 @@ public protocol DustListRouting {
         dustGrade: AirQualityGrade,
         microDustGrade: AirQualityGrade,
         isFavorite: Bool,
+        dataTime: String?,
         dismiss: (() -> Void)?
     )
 }
@@ -48,6 +49,7 @@ public final class DustListRouter: DustListRouting {
         dustGrade: AirQualityGrade,
         microDustGrade: AirQualityGrade,
         isFavorite: Bool,
+        dataTime: String?,
         dismiss: (() -> Void)?
     ) {
         let dependency = CityDetailDependency(
@@ -58,6 +60,7 @@ public final class DustListRouter: DustListRouting {
             dustGrade: dustGrade,
             microDustGrade: microDustGrade,
             isFavorite: isFavorite,
+            dataTime: dataTime,
             dismiss: dismiss
         )
         let view = cityDetailSceneBuilder.makeCityDetailScene(dependency)
