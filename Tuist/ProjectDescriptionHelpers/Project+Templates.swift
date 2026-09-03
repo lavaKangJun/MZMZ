@@ -50,7 +50,8 @@ extension Project {
             dependencies: [
                 .project(target: "Domain", path: .relativeToCurrentFile("../../Domain")),
                 .project(target: "Repository", path: .relativeToCurrentFile("../../Repository")),
-                .project(target: "DustListView", path: .relativeToCurrentFile("../../DustListView"))
+                .project(target: "DustListView", path: .relativeToCurrentFile("../../DustListView")),
+                .project(target: "MZMZTesting", path: .relativeToCurrentFile("../../MZMZTesting"))
             ]
         )
         

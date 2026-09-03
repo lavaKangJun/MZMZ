@@ -11,6 +11,7 @@ import Combine
 import Domain
 import Repository
 import Common
+import MZMZTesting
 //import DustListView
 
 struct Provider: TimelineProvider, @unchecked Sendable {
@@ -299,8 +300,20 @@ struct MZMZWidzet: Widget {
     private let usecase: DustListUseCaseProtocol
 
     public init() {
-        let repository = Repository(dataStore: DataStore.shared, remote: Remote())
-        self.usecase = DustListUseCase(repository: repository)
+        #if DEBUG
+        let isTesting = true
+        #else
+        let isTesting = false
+        #endif
+
+        if isTesting {
+            self.usecase = StubDustListUseCase(
+                repository: StubRepository(dataStore: FakeDataStore.shared)
+            )
+        } else {
+            let repository = Repository(dataStore: DataStore.shared, remote: Remote())
+            self.usecase = DustListUseCase(repository: repository)
+        }
     }
     
     var body: some WidgetConfiguration {
