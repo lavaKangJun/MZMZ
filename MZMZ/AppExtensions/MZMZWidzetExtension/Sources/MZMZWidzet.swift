@@ -314,8 +314,8 @@ struct MZMZWidzet: Widget {
                     .background()
             }
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("미세먼지")
+        .description("즐겨찾기한 지역의 미세먼지를 홈 화면에서 확인하세요.")
         .supportedFamilies([.accessoryRectangular,
                             .systemSmall,
                             .systemMedium

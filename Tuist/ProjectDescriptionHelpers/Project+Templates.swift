@@ -19,7 +19,7 @@ extension Project {
     /// 빌드 번호(CFBundleVersion).
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
-    static let buildVersion = "3"
+    static let buildVersion = "4"
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
@@ -42,9 +42,9 @@ extension Project {
                 "NSExtension": .dictionary([
                     "NSExtensionPointIdentifier": .string("com.apple.widgetkit-extension")
                 ]),
-                "NSAppTransportSecurity" : [
-                    "NSAllowsArbitraryLoads": true
-                ],
+                // 앱 본체와 같은 값. 수출 규정 확인은 본체 Info.plist 를
+                // 보지만, 익스텐션에도 두어 번들 간 값이 어긋나지 않게 한다.
+                "ITSAppUsesNonExemptEncryption": false,
                 "CFBundleDisplayName": "MZMZWidget"
             ],
             dependencies: [
@@ -81,7 +81,7 @@ extension Project {
         
         return [.target(
             name: targetName,
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .appExtension,
             bundleId: "\(organizationName).\(appName).\(extensionName)",
             deploymentTargets: .iOS("18.0"),
@@ -119,7 +119,7 @@ extension Project {
             ]),
             targets: [
                 .target(name: name,
-                        destinations: [.iPhone, .iPad],
+                        destinations: [.iPhone],
                         product: .framework,
                         bundleId: "\(organizationName).\(name)",
                         deploymentTargets: .iOS("18.0"),
@@ -150,7 +150,7 @@ extension Project {
             targets: [
                 .target(
                     name: name,
-                    destinations: [.iPhone, .iPad],
+                    destinations: [.iPhone],
                     product: .framework,
                     bundleId: "\(organizationName).\(name)",
                     deploymentTargets: .iOS("18.0"),
@@ -161,7 +161,7 @@ extension Project {
                 ),
                 .target(
                 name: "\(name)Tests",
-                destinations: [.iPhone, .iPad],
+                destinations: [.iPhone],
                 product: .unitTests,
                 bundleId: "\(organizationName).\(name)Tests",
                 deploymentTargets: .iOS("18.0"),
@@ -183,7 +183,7 @@ extension Project {
     ) -> [Target] {
         return [.target(
             name: name,
-            destinations: [.iPhone, .iPad],
+            destinations: [.iPhone],
             product: .framework,
             bundleId: "\(organizationName).\(name)",
             deploymentTargets: .iOS("18.0"),
@@ -209,14 +209,28 @@ extension Project {
             "UIApplicationSceneManifest": [
                 "UIApplicationSupportsMultipleScenes": false,
                 "UISceneConfigurations": []
-            ],
-            "NSAppTransportSecurity" : [
-                "NSAllowsArbitraryLoads": true
             ]
+            // NSAppTransportSecurity 를 두지 않는다.
+            //
+            // 예전에는 에어코리아를 앱에서 직접 불러(http://apis.data.go.kr)
+            // NSAllowsArbitraryLoads 가 필요했지만, 지금은 그 조회가 우리
+            // 서버(nearestStation)로 넘어가 앱이 여는 연결은 전부 HTTPS 다.
+            // 실제 호출부는 RepositoryImp 의 findLocation(카카오, https)과
+            // nearestStation(https) 둘뿐이다.
+            //
+            // 평문 HTTP 를 열어두면 심사에서 사유를 요구받을 수 있어 닫는다.
+            // Remote.Endpoint 에 남은 http:// 케이스들은 호출부가 없는
+            // 죽은 코드다. 되살리려면 ATS 예외부터 다시 논의해야 한다.
         ]
 
+        // 아이폰 전용.
+        //
+        // .iPad 를 넣으면 App Store Connect 가 13인치 아이패드 스크린샷을
+        // 요구하고, 심사에서도 아이패드로 실행해 본다. UI 가 아이폰 기준
+        // 고정 여백으로 짜여 있어(예: PulseLoader 150pt 고정) 큰 화면에서
+        // 검증된 적이 없다. 다듬은 뒤 다음 버전에서 다시 넣는다.
         return [.target(name: name,
-                        destinations: [.iPhone, .iPad],
+                        destinations: [.iPhone],
                         product: .app,
                         bundleId: "\(organizationName).\(name)",
                         deploymentTargets: .iOS("18.0"),
