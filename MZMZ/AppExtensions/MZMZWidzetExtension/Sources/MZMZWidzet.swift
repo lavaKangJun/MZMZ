@@ -239,16 +239,19 @@ struct MZMZWidzetEntryView : View {
                                 Text(info.location)
                                     .font(.system(size: 12, weight: .semibold))
                                     .foregroundStyle(.white)
-                                HStack(spacing: 4) {
-                                    Text("미세 \(info.dustText)")
-                                    Text("|")
-                                    Text("초미세 \(info.microText)")
-                                }
-                                .font(.system(size: 10))
+                                // Text 를 쪼개 HStack 으로 묶으면 안 된다.
+                                // minimumScaleFactor 가 조각마다 따로 걸려
+                                // 셋이 같은 비율로 줄지 않고, 폭이 모자라면
+                                // 한 조각만 "…" 로 잘린다. 한 덩어리로 두면
+                                // 문장 전체가 같은 비율로 축소된다.
+                                //
                                 // "매우나쁨"/"점검중" 은 "좋음" 보다 한 줄이
                                 // 30pt 넘게 길어서 작은 위젯에서 넘친다.
                                 // 여백을 줄여도 최소 폭 기기에선 모자라므로
                                 // 줄바꿈 대신 축소되게 둔다.
+                                
+                                Text("미세 \(info.dustText)  |  초미세 \(info.microText)")
+                                .font(.system(size: 10))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.8)
                                 .foregroundStyle(.white.opacity(0.9))

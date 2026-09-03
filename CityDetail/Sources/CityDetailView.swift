@@ -216,7 +216,7 @@ public struct CityDetailView: View {
         case .good: return "sun.max.fill"
         case .moderate: return "cloud.sun.fill"
         case .caution: return "exclamationmark.circle.fill"
-        case .bad, .veryBad: return "facemask.fill"
+        case .bad, .veryBad, .extreme: return "facemask.fill"
         case .checking: return "questionmark.circle.fill"
         }
     }
