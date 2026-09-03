@@ -113,7 +113,8 @@ public final class DustListViewModel: @unchecked Sendable   {
         microDustDensity: String,
         dustGrade: AirQualityGrade,
         microDustGrade: AirQualityGrade,
-        isFavorite: Bool
+        isFavorite: Bool,
+        dataTime: String?
     ) {
         let dismiss: () -> Void = { [weak self] in
             self?.fetchDust()
@@ -126,6 +127,7 @@ public final class DustListViewModel: @unchecked Sendable   {
             dustGrade: dustGrade,
             microDustGrade: microDustGrade,
             isFavorite: isFavorite,
+            dataTime: dataTime,
             dismiss: dismiss
         )
     }

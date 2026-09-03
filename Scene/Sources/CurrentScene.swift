@@ -23,6 +23,9 @@ public enum DetailViewType {
         public let isFavorite: Bool
         public let dustGrade: AirQualityGrade
         public let microDustGrade: AirQualityGrade
+        /// 측정 시각. 서버가 주는 "yyyy-MM-dd HH:mm"(KST) 원문.
+        /// 값이 없으면 nil.
+        public let dataTime: String?
     }
     case search(SeachData)
     case deatail(DetailData)
@@ -41,6 +44,7 @@ public struct CityDetailDependency {
         dustGrade: AirQualityGrade,
         microDustGrade: AirQualityGrade,
         isFavorite: Bool,
+        dataTime: String?,
         dismiss: (() -> Void)?
     ) {
         self.detailViewType = 
@@ -52,7 +56,8 @@ public struct CityDetailDependency {
                     microDustDensity: microDustDensity,
                     isFavorite: isFavorite,
                     dustGrade: dustGrade,
-                    microDustGrade: microDustGrade
+                    microDustGrade: microDustGrade,
+                    dataTime: dataTime
                 )
             )
         self.dismiss = dismiss

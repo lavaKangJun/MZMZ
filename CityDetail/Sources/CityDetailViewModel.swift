@@ -27,6 +27,8 @@ public struct CityDetailViewDataModel {
     var isFavorite: Bool = false
     var dustGrade: AirQualityGrade = .checking
     var microDustGrade: AirQualityGrade = .checking
+    /// 측정 시각. 서버가 주는 "yyyy-MM-dd HH:mm"(KST) 원문. 없으면 nil.
+    var dataTime: String? = nil
     
     init(location: String, entity: DustInfoEntity) {
         self.location = location
@@ -37,6 +39,7 @@ public struct CityDetailViewDataModel {
         self.microDustDensity = "\(entity.pm25Value ?? -1)"
         self.dustGrade = AirQualityGrade.grade(forPM10: dustDensity)
         self.microDustGrade = AirQualityGrade.grade(forPM25: microDustDensity)
+        self.dataTime = entity.dataTime
     }
     
     init(
@@ -46,7 +49,8 @@ public struct CityDetailViewDataModel {
         microDustDensity: String,
         isFavorite: Bool,
         dustGrade: AirQualityGrade,
-        microDustGrade: AirQualityGrade
+        microDustGrade: AirQualityGrade,
+        dataTime: String?
     ) {
         self.location = location
         self.station = station
@@ -55,6 +59,7 @@ public struct CityDetailViewDataModel {
         self.dustDensity = dustDensity
         self.microDustDensity = microDustDensity
         self.isFavorite = isFavorite
+        self.dataTime = dataTime
     }
     
     init(location: String) {
@@ -98,7 +103,8 @@ public final class CityDetailViewModel: @unchecked Sendable {
                 microDustDensity: detailData.microDustDensity,
                 isFavorite: detailData.isFavorite,
                 dustGrade: detailData.dustGrade,
-                microDustGrade: detailData.microDustGrade
+                microDustGrade: detailData.microDustGrade,
+                dataTime: detailData.dataTime
             )
             self.loadState = .loaded
         }
