@@ -10,8 +10,9 @@ import ProjectDescriptionHelpers
 
 let project = Project.framework(
     name: "CityDetail",
-    packages: [],
+    packages: [.firebase],
     dependencies: [
+        .package(product: "FirebaseCrashlytics"),
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
         .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),

@@ -52,6 +52,10 @@ public enum AppCheckBootstrap {
         }
         #endif
 
+        // Crashlytics 는 별도 호출 없이 여기서 함께 켜진다.
+        // 링크만 돼 있으면 FirebaseApp 초기화 시점에 크래시 핸들러를 걸고,
+        // 다음 실행 때 직전 크래시를 올린다. 그래서 이 호출을 앱 시작
+        // 가장 앞에 두어야 그전에 난 크래시를 놓치지 않는다.
         FirebaseApp.configure()
     }
 }

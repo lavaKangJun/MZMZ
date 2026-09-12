@@ -11,9 +11,11 @@ import ProjectDescriptionHelpers
 let project = Project.frameworkWithTest(
     name: "DustListView",
     packages: [
-        .remote(url: "https://github.com/apple/swift-testing", requirement: .upToNextMajor(from: "0.10.0"))
+        .remote(url: "https://github.com/apple/swift-testing", requirement: .upToNextMajor(from: "0.10.0")),
+        .firebase
     ],
     dependencies: [
+        .package(product: "FirebaseCrashlytics"),
         .project(target: "Domain", path: .relativeToCurrentFile("../Domain")),
         .project(target: "Repository", path: .relativeToCurrentFile("../Repository")),
         .project(target: "Scene", path: .relativeToCurrentFile("../Scene")),
