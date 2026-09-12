@@ -25,7 +25,7 @@ public final class DustListSceneBuilderImp: @preconcurrency DustListSceneBuilder
     @MainActor
     public func makeDustListScene() -> UIViewController {
         #if DEBUG
-        let isTesting = true
+        let isTesting = false
         #else
         let isTesting = false
         #endif

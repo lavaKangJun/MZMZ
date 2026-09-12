@@ -303,7 +303,7 @@ struct MZMZWidzet: Widget {
 
     public init() {
         #if DEBUG
-        let isTesting = true
+        let isTesting = false
         #else
         let isTesting = false
         #endif

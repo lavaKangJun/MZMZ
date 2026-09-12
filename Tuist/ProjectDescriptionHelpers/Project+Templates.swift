@@ -35,7 +35,7 @@ extension Project {
     /// 빌드 번호(CFBundleVersion).
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
-    static let buildVersion = "4"
+    static let buildVersion = "5"
 
     /// Crashlytics dSYM 업로드 빌드 스크립트를 만든다.
     ///
