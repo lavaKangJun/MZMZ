@@ -7,6 +7,7 @@
 
 import Foundation
 import SQLite3
+import FirebaseCrashlytics
 
 public protocol DataStorable: Sendable {
     func insertTable(data: DustStoreDTO) throws
@@ -42,19 +43,15 @@ public final class DataStore: DataStorable, @unchecked Sendable {
     
     private func openDatabase() -> OpaquePointer? {
         var dbPointer: OpaquePointer?
-        do {
-            guard let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.junyoung.mzmz") else { return nil }
-            
-            let dbURL = filePath.appendingPathComponent(databaseName)
-            if sqlite3_open(dbURL.path(), &dbPointer) != SQLITE_OK {
-                print("Fail create DB")
-                return nil
-            } else {
-                return dbPointer
-            }
-        } catch {
-            print("Fail create file path", error)
+        
+        guard let filePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.junyoung.mzmz") else { return nil }
+        
+        let dbURL = filePath.appendingPathComponent(databaseName)
+        if sqlite3_open(dbURL.path(), &dbPointer) != SQLITE_OK {
+            Crashlytics.crashlytics().log("Fail of opening database.")
             return nil
+        } else {
+            return dbPointer
         }
     }
     

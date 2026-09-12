@@ -12,7 +12,7 @@ import Domain
 import Repository
 import Common
 import MZMZTesting
-//import DustListView
+import FirebaseCrashlytics
 
 struct Provider: TimelineProvider, @unchecked Sendable {
     private let usecase: DustListUseCaseProtocol
@@ -41,6 +41,9 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                 // 즐겨찾기된 지역들만 필터링 (최대 2개)
                 let favoriteInfos = dustInfos.filter { $0.isFavorite }
                 let expected = currentHourDataTime()
+                
+                Crashlytics.crashlytics().log("타임라인 시작: 즐겨찾기 \(favoriteInfos.count)개")
+                
                 // Bool = 이번 정시 값을 아직 못 받음(재시도 대상).
                 let items = try await withThrowingTaskGroup(of: (Int, LocationInfo, Bool).self) { group in
                     for (index, dustInfo) in favoriteInfos.enumerated() {
@@ -73,7 +76,6 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                             )
                         }
                     }
-                    
                     var collected: [(Int, LocationInfo, Bool)] = []
                     for try await model in group {
                         collected.append(model)
@@ -83,14 +85,14 @@ struct Provider: TimelineProvider, @unchecked Sendable {
                 
                 let needsRetry = items.contains(where: { $0.2 })
                 let refreshDate = nextRefreshDate(needsRetry: needsRetry)
-                
+                Crashlytics.crashlytics().log("데이터 수신 완료: \(items.count)개, needsRetry: \(needsRetry)")
                 let sorted = items.sorted(by: { $0.0 < $1.0 }).map( { $0.1 })
                 let timeline = Timeline(entries: [SimpleEntry(items: sorted)], policy: .after(refreshDate))
                 completion(timeline)
                 
             } catch {
+                Crashlytics.crashlytics().record(error: error)
                 let favorites = (try? usecase.getDustInfo().filter { $0.isFavorite }) ?? []
-                
                 let items: [LocationInfo] = favorites.map {
                     LocationInfo(location: $0.location, pm10Grade: .checking, pm25Grade: .checking)
                 }

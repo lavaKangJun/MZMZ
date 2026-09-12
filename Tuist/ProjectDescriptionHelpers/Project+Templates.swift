@@ -5,6 +5,22 @@ import ProjectDescription
 /// Create your own conventions, e.g: a func that makes sure all shared targets are "static frameworks"
 /// See https://docs.tuist.io/guides/helpers/
 
+/// firebase-ios-sdk 패키지 선언.
+///
+/// Crashlytics 를 import 하는 모듈이 각자 이 패키지를 선언해야 한다.
+/// 선언한 타깃이 둘 이상이면 Xcode 가 정적 링크 대신 PackageFrameworks 의
+/// 동적 프레임워크로 바꿔 한 벌만 공유한다. 반대로 선언하지 않고 다른
+/// 모듈을 통해 얻어걸리게 두면, 링크 방식이 바뀌는 순간 undefined symbol 로
+/// 깨진다.
+///
+/// 버전을 여기 한 곳에만 두어 프로젝트마다 어긋나지 않게 한다.
+extension Package {
+    public static let firebase = Package.remote(
+        url: "https://github.com/firebase/firebase-ios-sdk",
+        requirement: .upToNextMajor(from: "12.18.0")
+    )
+}
+
 extension Project {
     static let organizationName = "Junyoung"
     /// Apple Developer 팀 ID.
@@ -20,6 +36,62 @@ extension Project {
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
     static let buildVersion = "4"
+
+    /// Crashlytics dSYM 업로드 빌드 스크립트를 만든다.
+    ///
+    /// 크래시 리포트를 파일명·줄번호까지 풀어 보려면 빌드가 만든 dSYM 을
+    /// 올려야 한다. 안 올리면 콘솔에 주소값만 남은 스택이 쌓인다.
+    ///
+    /// 파이어베이스가 같이 주는 `run` 래퍼를 쓰지 않는다. 그쪽은
+    /// `DWARF_DSYM_FILE_NAME` 하나만 보고 자기 타깃 dSYM 만 올리는데,
+    /// 이 프로젝트는 코드가 거의 전부 동적 프레임워크에 있어(앱 본체 6파일 대
+    /// 프레임워크 41파일) 정작 크래시가 나는 쪽이 빠진다.
+    /// 대신 `upload-symbols` 를 직접 불러 dSYM 폴더를 통째로 넘긴다.
+    /// 폴더를 주면 재귀로 훑어 프레임워크 dSYM 까지 전부 올린다.
+    ///
+    /// 동기로 돌아 업로드가 실패하면 빌드가 깨진다. `run` 은 백그라운드로
+    /// 던져(`> /dev/null 2>&1 &`) 실패해도 조용히 넘어가는데, 그러면 심볼이
+    /// 빠진 걸 크래시가 올라온 뒤에야 알게 된다. 아카이브가 조금 느려지는
+    /// 대신 그 자리에서 알아채는 쪽을 택했다.
+    ///
+    /// - Parameter googleServicePlist: 이 타깃의 GoogleService-Info.plist
+    ///   경로(SRCROOT 기준). 앱과 위젯이 서로 다른 파이어베이스 앱이라
+    ///   각자 자기 plist 로 올려야 한다.
+    private static func crashlyticsUploadScript(
+        googleServicePlist: String
+    ) -> TargetScript {
+        .post(
+            script: #"""
+            # Debug 는 dSYM 을 만들지 않는다(DEBUG_INFORMATION_FORMAT = dwarf).
+            # 올릴 게 없는데 upload-symbols 를 부르면 빈 폴더라고 실패하므로
+            # 여기서 끊는다. 실제 업로드는 Release/아카이브에서만 일어난다.
+            if [ "$DEBUG_INFORMATION_FORMAT" != "dwarf-with-dsym" ]; then
+                echo "note: dSYM 을 만들지 않는 구성이라 Crashlytics 업로드를 건너뛴다"
+                exit 0
+            fi
+
+            # SPM 을 Xcode 네이티브 통합으로 쓰고 있어 실행 파일이 저장소가 아니라
+            # DerivedData 의 체크아웃에 있다. BUILD_DIR 이
+            # .../DerivedData/MZMZ-xxx/Build/Products/... 라 /Build/ 뒤를 잘라내면
+            # 형제 디렉터리인 SourcePackages 를 가리킨다.
+            UPLOAD_SYMBOLS="${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
+
+            "$UPLOAD_SYMBOLS" \
+                -gsp "$SRCROOT/\#(googleServicePlist)" \
+                -p ios \
+                "$DWARF_DSYM_FOLDER_PATH"
+            """#,
+            name: "Upload Crashlytics dSYMs",
+            inputPaths: [
+                "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}"
+            ],
+            // 출력물이 없는 스크립트라 Xcode 가 "매 빌드 실행된다" 고 경고한다.
+            // 빌드마다 dSYM 이 새로 나오니 매번 도는 게 맞고, 이 플래그로
+            // 의도한 동작임을 알려 경고를 없앤다.
+            basedOnDependencyAnalysis: false
+        )
+    }
+
     /// Helper function to create the Project for this ExampleApp
     public static func app(
         name: String,
@@ -48,6 +120,7 @@ extension Project {
                 "CFBundleDisplayName": "MZMZWidget"
             ],
             dependencies: [
+                .package(product: "FirebaseCrashlytics"),
                 .project(target: "Domain", path: .relativeToCurrentFile("../../Domain")),
                 .project(target: "Repository", path: .relativeToCurrentFile("../../Repository")),
                 .project(target: "DustListView", path: .relativeToCurrentFile("../../DustListView")),
@@ -61,6 +134,7 @@ extension Project {
                         disableBundleAccessors: true,
                         disableSynthesizedResourceAccessors: true
                        ),
+                       packages: [.firebase],
                        settings: .settings( base: [
                         "SWIFT_VERSION": "6.0",
                         "SWIFT_STRICT_CONCURRENCY": "minimal",
@@ -94,6 +168,9 @@ extension Project {
                 "AppExtensions/\(targetName)/Resources/**"
             ],
             entitlements: Entitlements.file(path: "AppExtensions/\(targetName)/\(targetName).entitlements"),
+            scripts: [crashlyticsUploadScript(
+                googleServicePlist: "AppExtensions/\(targetName)/Resources/GoogleService-Info.plist"
+            )],
             dependencies: dependencies,
             settings: .settings(configurations: [
                 .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
@@ -239,7 +316,16 @@ extension Project {
                         sources: ["Sources/**"],
                         resources: ["Resources/**"],
                         entitlements: Entitlements.file(path: "./MZMZ.entitlements"),
-                        dependencies: dependencies,
+                        // 앱 본체는 Crashlytics 를 import 하지 않지만 반드시 선언해야 한다.
+                        // 선언한 타깃이 둘 이상이면 Xcode 가 이 제품을 PackageFrameworks 의
+                        // 동적 프레임워크로 빌드하는데, 그걸 앱 번들에 넣는 건 앱 타깃뿐이다.
+                        // 빼면 빌드는 통과하고 이 맥의 시뮬레이터에서도 돈다. dyld 가
+                        // rpath 에 박힌 DerivedData 절대경로로 찾아내기 때문이다.
+                        // 실기기·아카이브·다른 맥에서는 Library not loaded 로 죽는다.
+                        scripts: [crashlyticsUploadScript(
+                            googleServicePlist: "Resources/GoogleService-Info.plist"
+                        )],
+                        dependencies: dependencies + [.package(product: "FirebaseCrashlytics")],
                         settings: .settings(configurations: [
                             .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
                             .release(name: "Release", xcconfig: "Secrets.xcconfig")

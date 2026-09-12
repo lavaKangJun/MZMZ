@@ -12,6 +12,7 @@ import WidgetKit
 import Common
 import Scene
 import Repository
+import FirebaseCrashlytics
 
 enum LoadState {
     case loading
@@ -142,8 +143,12 @@ public final class CityDetailViewModel: @unchecked Sendable {
     // 검색을 통해 들어온 경우 '추가' 버튼을 통해 지역 저정
     func saveCity() {
         if case let .search(searchData) = self.detailViewType {
-            self.usecase.saveDustInfo(location: searchData.location, longitude: searchData.longitude, latitude: searchData.latitude, isFavorite: false)
-            self.router?.routeMainView()
+            do {
+                try self.usecase.saveDustInfo(location: searchData.location, longitude: searchData.longitude, latitude: searchData.latitude, isFavorite: false)
+                self.router?.routeMainView()
+            } catch {
+                Crashlytics.crashlytics().record(error: error)
+            }
         }
     }
     

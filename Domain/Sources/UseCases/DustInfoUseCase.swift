@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol DustInfoUseCaseProtocol: Sendable {
-    func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool)
+    func saveDustInfo(location: String, longitude: String, latitude: String, isFavorite: Bool) throws
     func updateFavorite(location: String, isFavorite: Bool) throws
     func getFavoriteStatus(location: String) throws -> Bool
     func nearestStationDustInfo(lat: String, lng: String) async throws -> DustInfoEntity
@@ -16,7 +16,6 @@ public protocol DustInfoUseCaseProtocol: Sendable {
 
 public final class DustInfoUseCase: DustInfoUseCaseProtocol {
     private let repository: RepositoryProtocol
-    private let authKey = AppSecrets.kakaoRestKey
     
     public init(repository: RepositoryProtocol) {
         self.repository = repository
@@ -26,24 +25,20 @@ public final class DustInfoUseCase: DustInfoUseCaseProtocol {
         return try await repository.nearestStationDustInfo(lat: lat, lng: lng)
     }
     
-    public func saveDustInfo(
+    public func saveDustInfo (
         location: String,
         longitude: String,
         latitude: String,
         isFavorite: Bool
-    ) {
-        do {
-            try self.repository.setDustInfo(
-                DustStoreEntity(
-                    location: location,
-                    longitude: longitude,
-                    latitude: latitude,
-                    isFavorite: isFavorite
-                )
+    ) throws {
+        try self.repository.setDustInfo(
+            DustStoreEntity(
+                location: location,
+                longitude: longitude,
+                latitude: latitude,
+                isFavorite: isFavorite
             )
-        } catch {
-            print("save Error", error)
-        }
+        )
         
     }
     

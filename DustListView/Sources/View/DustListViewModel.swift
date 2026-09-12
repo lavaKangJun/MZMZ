@@ -10,6 +10,7 @@ import UIKit
 import Domain
 import Common
 import WidgetKit
+import FirebaseCrashlytics
 
 @Observable
 public final class DustListViewModel: @unchecked Sendable   {
@@ -86,18 +87,26 @@ public final class DustListViewModel: @unchecked Sendable   {
     }
     
     public func deleteLocation(_ locaion: String) {
-        let result = self.usecase.deleteDustInfo(location: locaion)
-        guard result == true else {
+        do {
+            let result = try self.usecase.deleteDustInfo(location: locaion)
+            guard result == true else {
+                self.errorMessage = "delete fail"
+                self.showError = true
+                return
+            }
+
+            var current = self.dustListModels
+            current.removeAll(where: { $0.location == locaion })
+            self.dustListModels = current
+
+            WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
+        } catch {
+            // 삭제 실패는 여기서만 에러 객체를 볼 수 있다.
+            // usecase 는 결과만 돌려주고 원인을 버린다.
+            Crashlytics.crashlytics().record(error: error)
             self.errorMessage = "delete fail"
             self.showError = true
-            return
         }
-        
-        var current = self.dustListModels
-        current.removeAll(where: { $0.location == locaion })
-        self.dustListModels = current
-        
-        WidgetCenter.shared.reloadTimelines(ofKind: "MZMZWidzet")
     }
     
     @MainActor
