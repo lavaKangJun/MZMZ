@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol RepositoryProtocol: Sendable {
-    func findLocation(location: String, key: String) async throws -> [SearchLocationEntity]
+    func findLocation(location: String) async throws -> [SearchLocationEntity]
     func getDustInfo() throws -> [DustStoreEntity]
     func setDustInfo(_ entity: DustStoreEntity) throws
     func deleteDustInfo(location: String) throws -> Bool

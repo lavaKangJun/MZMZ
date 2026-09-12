@@ -35,7 +35,7 @@ extension Project {
     /// 빌드 번호(CFBundleVersion).
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
-    static let buildVersion = "5"
+    static let buildVersion = "6"
 
     /// Crashlytics dSYM 업로드 빌드 스크립트를 만든다.
     ///
@@ -107,8 +107,6 @@ extension Project {
             appName: name,
             extensionName: "WidzetExtension",
             infoPlist: [
-                "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
-                "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
                 "CFBundleShortVersionString": .string(marketingVersion),
                 "CFBundleVersion": .string(buildVersion),
                 "NSExtension": .dictionary([
@@ -171,11 +169,7 @@ extension Project {
             scripts: [crashlyticsUploadScript(
                 googleServicePlist: "AppExtensions/\(targetName)/Resources/GoogleService-Info.plist"
             )],
-            dependencies: dependencies,
-            settings: .settings(configurations: [
-                .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
-                .release(name: "Release", xcconfig: "Secrets.xcconfig")
-            ])
+            dependencies: dependencies
         )]
     }
     
@@ -276,8 +270,6 @@ extension Project {
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
         let infoPlist: [String: Plist.Value] = [
-            "KAKAO_REST_KEY": "$(KAKAO_REST_KEY)",
-            "AIR_KOREA_KEY": "$(AIR_KOREA_KEY)",
             "CFBundleShortVersionString": .string(marketingVersion),
             "CFBundleVersion": .string(buildVersion),
             // HTTPS 외에 별도 암호화를 쓰지 않아 수출 규정 면제 대상이다.
@@ -293,8 +285,8 @@ extension Project {
             // 예전에는 에어코리아를 앱에서 직접 불러(http://apis.data.go.kr)
             // NSAllowsArbitraryLoads 가 필요했지만, 지금은 그 조회가 우리
             // 서버(nearestStation)로 넘어가 앱이 여는 연결은 전부 HTTPS 다.
-            // 실제 호출부는 RepositoryImp 의 findLocation(카카오, https)과
-            // nearestStation(https) 둘뿐이다.
+            // 실제 호출부는 RepositoryImp 의 findLocation 과 nearestStation
+            // 둘뿐이고, 지금은 둘 다 우리 서버(https)다.
             //
             // 평문 HTTP 를 열어두면 심사에서 사유를 요구받을 수 있어 닫는다.
             // Remote.Endpoint 에 남은 http:// 케이스들은 호출부가 없는
@@ -325,11 +317,7 @@ extension Project {
                         scripts: [crashlyticsUploadScript(
                             googleServicePlist: "Resources/GoogleService-Info.plist"
                         )],
-                        dependencies: dependencies + [.package(product: "FirebaseCrashlytics")],
-                        settings: .settings(configurations: [
-                            .debug(name: "Debug", xcconfig: "Secrets.xcconfig"),
-                            .release(name: "Release", xcconfig: "Secrets.xcconfig")
-                        ])
+                        dependencies: dependencies + [.package(product: "FirebaseCrashlytics")]
                        )
         ]
     }

@@ -53,7 +53,7 @@ public final class AddCityViewModel: @unchecked Sendable {
         
         self.searchTask = Task { [weak self] in
             // 이 사이에 다음 글자가 들어오면 위에서 취소돼 여기서 끝난다.
-            try? await Task.sleep(for: .milliseconds(300))
+            try? await Task.sleep(for: .milliseconds(100))
             guard Task.isCancelled == false, let self else { return }
             
             guard let locations = try? await self.useCase.findLocation(location: text) else { return }

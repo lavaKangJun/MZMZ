@@ -11,7 +11,7 @@ import Domain
 import Repository
 
 public final class MockRepository: RepositoryProtocol, TestDouble {
-    public func findLocation(location: String, key: String) async throws -> [Domain.SearchLocationEntity] {
+    public func findLocation(location: String) async throws -> [Domain.SearchLocationEntity] {
         resolve([SearchLocationEntity].self, name: "findLocation") ?? []
     }
     

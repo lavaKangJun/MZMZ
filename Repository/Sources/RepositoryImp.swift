@@ -18,16 +18,15 @@ public final class Repository: RepositoryProtocol {
         self.remote = remote
     }
     
-    public func findLocation(location: String, key: String) async throws -> [SearchLocationEntity] {
-        var header = ["Authorization": "KakaoAK \(key)"]
-        header["content-type"] = "application/json"
-        
+    public func findLocation(location: String) async throws -> [SearchLocationEntity] {
+        // 우리 서버가 카카오 인증 헤더만 붙여 그대로 중계한다.
+        // 파라미터는 카카오 로컬 API 규격 그대로 보낸다.
         var parameters: [String: String] = [:]
         parameters["analyze_type"] = "similar"
         parameters["query"] = location
         parameters["size"] = "5"
-  
-        let result: KakaoResponse<SearchLocationDTO> = try await self.remote.request(header: header, endpoint: .findLocation, method: .get, parameters: parameters)
+
+        let result: KakaoResponse<SearchLocationDTO> = try await self.remote.request(header: nil, endpoint: .findLocation, method: .get, parameters: parameters)
         return result.documents.map { $0.makeEntity() }
     }
     

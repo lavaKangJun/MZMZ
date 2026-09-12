@@ -11,16 +11,23 @@ import Alamofire
 import FirebaseAppCheck
 
 public enum Endpoint: String {
-    case findLocation = "https://dapi.kakao.com/v2/local/search/address.json"
+    /// 주소 검색. 카카오 로컬 API 를 우리 서버가 대신 호출한다.
+    ///
+    /// 예전에는 앱이 dapi.kakao.com 을 직접 불렀는데, 그러려면 카카오 REST 키를
+    /// Info.plist 에 넣어야 했다. Info.plist 는 .ipa 안에 평문으로 들어가
+    /// 누구나 꺼내 쓸 수 있고, 그러면 우리 쿼터가 소진된다.
+    /// 키를 서버에만 두고 앱은 App Check 토큰으로 신원을 증명한다.
+    case findLocation = "https://asia-northeast3-mzmz-392b7.cloudfunctions.net/searchAddress"
     case nearestStation = "https://asia-northeast3-mzmz-392b7.cloudfunctions.net/nearestStation"
 
     /// App Check 토큰을 붙여야 하는(= 우리가 만든) 엔드포인트인지.
+    ///
+    /// 지금은 둘 다 우리 서버다. 남의 서버를 직접 부르는 경로가 다시 생기면
+    /// 그때 false 를 돌려주면 된다.
     var isOwnServer: Bool {
         switch self {
-        case .nearestStation:
+        case .nearestStation, .findLocation:
             return true
-        case .findLocation:
-            return false
         }
     }
 }

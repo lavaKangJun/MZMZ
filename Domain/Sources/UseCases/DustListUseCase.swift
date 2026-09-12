@@ -15,7 +15,6 @@ public protocol DustListUseCaseProtocol {
 
 public final class DustListUseCase: DustListUseCaseProtocol {
     private let repository: RepositoryProtocol
-    private let authKey = AppSecrets.kakaoRestKey
     
     public init(repository: RepositoryProtocol) {
         self.repository = repository

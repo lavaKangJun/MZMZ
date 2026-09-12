@@ -16,6 +16,6 @@ public final class StubFindLocationUseCase: FindLocationUseCaseProtocol {
     }
     
     public func findLocation(location: String) async throws -> [SearchLocationEntity] {
-        return try await self.repository.findLocation(location: location, key: "authKey")
+        return try await self.repository.findLocation(location: location)
     }
 }

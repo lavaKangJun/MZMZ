@@ -15,7 +15,7 @@ public final class StubRepository: RepositoryProtocol {
         self.dataStore = dataStore
     }
     
-    public func findLocation(location: String, key: String) async throws -> [SearchLocationEntity] {
+    public func findLocation(location: String) async throws -> [SearchLocationEntity] {
         return [
             SearchLocationEntity(addressName: location, longitude: "127.115731280691", latitude: "37.529239225114 ")
         ]

@@ -29,12 +29,6 @@ jobs:
         clean: true
         ref: ${{ github.event.pull_request.head.sha }}
         
-    - name: Create Secrets.xcconfig
-      run: |
-        cat > MZMZ/Secrets.xcconfig << EOF
-        KAKAO_REST_KEY = ${{ secrets.KAKAO_REST_KEY }}
-        EOF
-
     - name: Generate Xcode project with Tuist
       run: tuist generate --no-open --no-binary-cache
 
