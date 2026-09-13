@@ -209,8 +209,8 @@ public struct AirQualityCardBackground: View {
         LinearGradient(
             stops: [
                 .init(color: leftColor, location: 0.0),
-                .init(color: leftColor, location: 0.4),
-                .init(color: rightColor, location: 0.6),
+                .init(color: leftColor, location: 0.44),
+                .init(color: rightColor, location: 0.56),
                 .init(color: rightColor, location: 1.0)
             ],
             startPoint: .topLeading,
@@ -241,11 +241,11 @@ public struct AirQualityCardBackground: View {
     }
     
     private var leftColor: Color {
-        pm10Grade.gradientColors(isDark: colorScheme == .dark)
+        pm10Grade.gradientColors(isDark: colorScheme == .dark).opacity(0.7)
     }
     
     private var rightColor: Color {
-        pm25Grade.gradientColors(isDark: colorScheme == .dark)
+        pm25Grade.gradientColors(isDark: colorScheme == .dark).opacity(0.7)
     }
 }
 
