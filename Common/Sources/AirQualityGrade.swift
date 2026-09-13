@@ -128,6 +128,8 @@ public struct AirQualityCardBackground: View {
     private let pm25Grade: AirQualityGrade
     private let style: AirQualityGradeViewStyle
     @Environment(\.colorScheme) private var colorScheme
+    /// 배경 색의 불투명도. 위에 얹히는 글자·카드가 살짝 비쳐 보이게 한다.
+    private static let backgroundOpacity: Double = 0.9
     
     public init(pm10Grade: AirQualityGrade, pm25Grade: AirQualityGrade, style: AirQualityGradeViewStyle) {
         self.pm10Grade = pm10Grade
@@ -194,7 +196,7 @@ public struct AirQualityCardBackground: View {
     @ViewBuilder
     private var backgroundView: some View {
         if pm10Grade == pm25Grade {
-            leftColor
+            leftBaseColor
         } else {
             switch style {
             case .list:
@@ -205,30 +207,60 @@ public struct AirQualityCardBackground: View {
         }
     }
     
+    /// 리스트 카드 경계 블러 반경(pt). 카드가 작아 디테일보다 좁게 잡는다.
+    private static let listSeamBlurRadius: CGFloat = 12
+
+    /// 리스트 카드 배경. 디테일과 같은 기법이되 대각선 경계를 유지한다.
+    /// 구조와 이유는 detailViewBackground 주석 참고.
     private var listBackgroundView: some View {
-        LinearGradient(
-            stops: [
-                .init(color: leftColor, location: 0.0),
-                .init(color: leftColor, location: 0.44),
-                .init(color: rightColor, location: 0.56),
-                .init(color: rightColor, location: 1.0)
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        GeometryReader { geo in
+            LinearGradient(
+                stops: [
+                    .init(color: leftBaseColor, location: 0.44),
+                    .init(color: rightBaseColor, location: 0.56)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .frame(width: geo.size.width * 2, height: geo.size.height * 2)
+            .blur(radius: Self.listSeamBlurRadius)
+            .frame(width: geo.size.width, height: geo.size.height)
+            .clipped()
+            .opacity(Self.backgroundOpacity)
+        }
     }
     
+    /// 경계를 흐릴 반경(pt). 클수록 두 색이 섞이는 폭이 넓어진다.
+    private static let detailSeamBlurRadius: CGFloat = 20
+
+    /// 디테일 풀스크린 배경. 좌우 두 면을 붙이고 경계를 블러로 흐린다.
+    ///
+    /// 블러는 두 면을 2배 크기로 그린 뒤 건다. 그냥 걸면 번짐이 화면
+    /// 가장자리까지 미쳐 테두리가 투명하게 바랜다. 크게 그려 그 번짐을
+    /// 화면 밖으로 밀어내고 원래 크기로 잘라낸다.
+    ///
+    /// 두 면은 HStack 이 아니라 하드 스톱(0.5/0.5) 하나짜리 LinearGradient 로
+    /// 그린다. 뷰 두 개를 붙이면 경계 픽셀에 안티앨리어싱이 걸려 그 열의
+    /// 알파가 떨어지고, 반투명이 더 투명해져 뒤의 흰 배경이 비친다. 블러가
+    /// 그걸 퍼뜨려 정중앙에 옅은 흰 선이 생긴다. 좋음/보통처럼 밝은 색끼리는
+    /// 밝기 경사가 평평해 그 선이 도드라진다.
+    /// 같은 이유로 opacity 는 색마다가 아니라 블러가 끝난 뒤 전체에 건다.
     private var detailViewBackground: some View {
-        LinearGradient(
-            stops: [
-                .init(color: leftColor, location: 0.0),
-                .init(color: leftColor, location: 0.47),
-                .init(color: rightColor, location: 0.53),
-                .init(color: rightColor, location: 1.0)
-            ],
-            startPoint: .leading,
-            endPoint: .trailing
-        )
+        GeometryReader { geo in
+            LinearGradient(
+                stops: [
+                    .init(color: leftBaseColor, location: 0.5),
+                    .init(color: rightBaseColor, location: 0.5)
+                ],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .frame(width: geo.size.width * 2, height: geo.size.height * 2)
+            .blur(radius: Self.detailSeamBlurRadius)
+            .frame(width: geo.size.width, height: geo.size.height)
+            .clipped()
+            .opacity(Self.backgroundOpacity)
+        }
     }
     
     private func particleCount(for grade: AirQualityGrade) -> Int {
@@ -239,13 +271,14 @@ public struct AirQualityCardBackground: View {
         default: return 0
         }
     }
-    
-    private var leftColor: Color {
-        pm10Grade.gradientColors(isDark: colorScheme == .dark).opacity(0.7)
+
+    /// 불투명 원색. 블러처럼 알파가 끼면 안 되는 곳에서 쓴다.
+    private var leftBaseColor: Color {
+        pm10Grade.gradientColors(isDark: colorScheme == .dark)
     }
-    
-    private var rightColor: Color {
-        pm25Grade.gradientColors(isDark: colorScheme == .dark).opacity(0.7)
+
+    private var rightBaseColor: Color {
+        pm25Grade.gradientColors(isDark: colorScheme == .dark)
     }
 }
 
