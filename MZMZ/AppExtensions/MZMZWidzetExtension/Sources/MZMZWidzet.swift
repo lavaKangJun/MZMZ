@@ -198,6 +198,20 @@ struct MZMZWidzetEntryView : View {
     
     var entry: Provider.Entry
 
+    /// medium 카드의 등급 블록. 앱 리스트의 GradeColumn 과 같은 배치(라벨 위, 등급 아래).
+    /// GradeColumn 은 DustListView 안에서 private 이라 여기서 따로 그린다.
+    /// 위젯의 LocationInfo 에는 농도값이 없어 등급 글자만 보여준다.
+    private func gradeBlock(label: String, text: String, alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 1) {
+            Text(label)
+                .font(.system(size: 12))
+                .foregroundStyle(.white.opacity(0.85))
+            Text(text)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white)
+        }
+    }
+
     @ViewBuilder
     var body: some View {
         switch widgetFamily {
@@ -240,7 +254,7 @@ struct MZMZWidzetEntryView : View {
                             
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(info.location)
-                                    .font(.system(size: 12, weight: .semibold))
+                                    .font(.system(size: 13, weight: .medium))
                                     .foregroundStyle(.white)
                                 // Text 를 쪼개 HStack 으로 묶으면 안 된다.
                                 // minimumScaleFactor 가 조각마다 따로 걸려
@@ -252,12 +266,21 @@ struct MZMZWidzetEntryView : View {
                                 // 30pt 넘게 길어서 작은 위젯에서 넘친다.
                                 // 여백을 줄여도 최소 폭 기기에선 모자라므로
                                 // 줄바꿈 대신 축소되게 둔다.
-                                
-                                Text("미세 \(info.dustText)  |  초미세 \(info.microText)")
-                                .font(.system(size: 10))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                                .foregroundStyle(.white.opacity(0.9))
+                                if widgetFamily == .systemMedium {
+                                    // medium 은 폭이 넉넉해 위 제약이 걸리지 않는다.
+                                    // 앱 리스트 카드처럼 미세는 왼쪽 끝, 초미세는 오른쪽 끝에 둔다.
+                                    HStack(alignment: .bottom) {
+                                        gradeBlock(label: "미세", text: info.dustText, alignment: .leading)
+                                        Spacer()
+                                        gradeBlock(label: "초미세", text: info.microText, alignment: .trailing)
+                                    }
+                                } else {
+                                    Text("미세 \(info.dustText)  |  초미세 \(info.microText)")
+                                    .font(.system(size: 10))
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
+                                    .foregroundStyle(.white.opacity(0.9))
+                                }
                             }
                             .padding(.horizontal, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
