@@ -15,6 +15,10 @@ import FirebaseCore
 import FirebaseAppCheck
 
 public enum AppCheckBootstrap {
+    /// 이 프로세스에서 초기화를 마쳤는지.
+    private nonisolated(unsafe) static var isConfigured = false
+    private static let configureLock = NSLock()
+
     /// 증명 방식.
     ///
     /// App Attest 가 더 강하지만(기기 + 앱 바이너리 무결성) 앱 익스텐션에서는
@@ -36,8 +40,17 @@ public enum AppCheckBootstrap {
     /// 한다. 순서가 바뀌면 기본 공급자로 초기화돼 지정한 방식이 안 걸린다.
     /// - Parameter attestation: 이 프로세스에서 쓸 증명 방식
     public static func configure(_ attestation: Attestation) {
-        // 이미 초기화된 뒤 또 부르면 Firebase 가 경고를 낸다.
-        guard FirebaseApp.app() == nil else { return }
+        // 이미 했으면 그냥 나간다.
+        //
+        // FirebaseApp.app() 으로 확인하면 안 된다. 설정 전에 그걸 부르면
+        // FirebaseCore 가 "The default Firebase app has not yet been
+        // configured" 경고를 찍는다. 초기화가 정상으로 되는데도 프로세스마다
+        // 한 번씩 이 경고가 남아, 진짜 문제인 줄 알고 한참 헤맸다.
+        // 그래서 Firebase 에 묻지 않고 우리가 기억한다.
+        Self.configureLock.lock()
+        defer { Self.configureLock.unlock() }
+        guard Self.isConfigured == false else { return }
+        Self.isConfigured = true
 
         #if DEBUG
         // 시뮬레이터와 디버그 빌드는 App Attest / DeviceCheck 를 못 쓴다.
