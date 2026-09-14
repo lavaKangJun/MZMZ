@@ -207,7 +207,7 @@ struct MZMZWidzetEntryView : View {
                 .font(.system(size: 12))
                 .foregroundStyle(.white.opacity(0.85))
             Text(text)
-                .font(.system(size: 15, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(.white)
         }
     }
@@ -248,7 +248,7 @@ struct MZMZWidzetEntryView : View {
                             AirQualityCardBackground(
                                 pm10Grade: info.pm10Grade,
                                 pm25Grade: info.pm25Grade,
-                                style: .list
+                                style: .widget
                             )
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             

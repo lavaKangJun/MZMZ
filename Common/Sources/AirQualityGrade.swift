@@ -119,8 +119,13 @@ extension AirQualityGrade {
 }
 
 public enum AirQualityGradeViewStyle {
+    /// 앱 리스트 카드.
     case list
+    /// 앱 상세 풀스크린.
     case detail
+    /// 홈 위젯 카드. 생김새는 list 와 같지만 블러를 쓰지 않는다.
+    /// 위젯 익스텐션은 메모리 한도가 낮아 오프스크린 버퍼를 감당하지 못한다.
+    case widget
 }
 
 public struct AirQualityCardBackground: View {
@@ -158,7 +163,7 @@ public struct AirQualityCardBackground: View {
     
     private var sunOverlay: some View {
         switch style {
-        case .list:
+        case .list, .widget:
             // 카드: 우상단 구석에 작게
             GeometryReader { geo in
                 Circle()
@@ -201,6 +206,8 @@ public struct AirQualityCardBackground: View {
             switch style {
             case .list:
                 listBackgroundView
+            case .widget:
+                widgetBackgroundView
             case .detail:
                 detailViewBackground
             }
@@ -210,7 +217,7 @@ public struct AirQualityCardBackground: View {
     /// 리스트 카드 경계 블러 반경(pt). 카드가 작아 디테일보다 좁게 잡는다.
     private static let listSeamBlurRadius: CGFloat = 12
 
-    /// 리스트 카드 배경. 디테일과 같은 기법이되 대각선 경계를 유지한다.
+    /// 앱 리스트 카드 배경. 디테일과 같은 기법이되 대각선 경계를 유지한다.
     /// 구조와 이유는 detailViewBackground 주석 참고.
     private var listBackgroundView: some View {
         GeometryReader { geo in
@@ -228,6 +235,24 @@ public struct AirQualityCardBackground: View {
             .clipped()
             .opacity(Self.backgroundOpacity)
         }
+    }
+
+    /// 홈 위젯 카드 배경. 생김새는 리스트와 같게 맞추되 블러를 쓰지 않는다.
+    ///
+    /// 위젯 익스텐션은 메모리 한도가 낮다. 블러는 뷰를 오프스크린 버퍼에 그린 뒤
+    /// 흐리고, 가장자리 번짐을 감추려 2배 크기로 그리므로 버퍼가 커진다.
+    /// 한도를 넘으면 시스템이 익스텐션을 죽이고, 그러면 위젯은 마지막으로
+    /// 성공한 화면을 계속 보여준다(= 갱신이 안 되는 것처럼 보인다).
+    private var widgetBackgroundView: some View {
+        LinearGradient(
+            stops: [
+                .init(color: leftBaseColor, location: 0.45),
+                .init(color: rightBaseColor, location: 0.55)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .opacity(Self.backgroundOpacity)
     }
     
     /// 경계를 흐릴 반경(pt). 클수록 두 색이 섞이는 폭이 넓어진다.
