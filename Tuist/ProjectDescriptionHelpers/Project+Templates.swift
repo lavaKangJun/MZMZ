@@ -31,11 +31,15 @@ extension Project {
 
     /// 사용자에게 보이는 버전(CFBundleShortVersionString).
     /// 앱스토어 버전 표기에 쓰인다.
-    static let marketingVersion = "1.0.0"
+    static let marketingVersion = "1.0.1"
     /// 빌드 번호(CFBundleVersion).
     ///
     /// 앱과 위젯이 반드시 같은 값이어야 업로드가 통과한다.
-    static let buildVersion = "9"
+    ///
+    /// 유일성은 `marketingVersion` 안에서만 따진다. 마케팅 버전을 올리면
+    /// 1 부터 다시 시작해도 되고, 같은 마케팅 버전으로 다시 올릴 때만
+    /// 이 값을 키우면 된다.
+    static let buildVersion = "1"
     /// Crashlytics dSYM 업로드 스크립트. 앱 타깃에만 붙인다.
     ///
     /// 두 단계로 나뉜다.
