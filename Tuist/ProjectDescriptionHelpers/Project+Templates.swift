@@ -107,6 +107,10 @@ extension Project {
                 // 앱 본체와 같은 값. 수출 규정 확인은 본체 Info.plist 를
                 // 보지만, 익스텐션에도 두어 번들 간 값이 어긋나지 않게 한다.
                 "ITSAppUsesNonExemptEncryption": false,
+                // 앱 본체와 같은 이유로 선언한다(아래 makeAppTargets 주석 참고).
+                // 익스텐션만 en 으로 남으면 위젯 갤러리 쪽 언어 판정이 앱과 어긋난다.
+                "CFBundleDevelopmentRegion": "ko",
+                "CFBundleLocalizations": ["ko"],
                 "CFBundleDisplayName": "MZMZWidget"
             ],
             dependencies: [
@@ -277,6 +281,15 @@ extension Project {
         let infoPlist: [String: Plist.Value] = [
             "CFBundleShortVersionString": .string(marketingVersion),
             "CFBundleVersion": .string(buildVersion),
+            // 한국 전용 앱이고 UI 문장이 전부 한국어로 하드코딩돼 있다.
+            // 이 두 키가 없으면 CFBundleDevelopmentRegion 이
+            // $(DEVELOPMENT_LANGUAGE) → en 으로 해석되고, ko.lproj 도 없어
+            // 번들에 한국어 리소스가 하나도 없는 상태가 된다. 그러면
+            // App Store 제품 페이지의 "언어" 가 영어로 표시된다(그 값은
+            // App Store Connect 입력이 아니라 업로드된 바이너리에서 읽어간다).
+            // .lproj 없이 지원 언어를 선언하는 용도가 CFBundleLocalizations 다.
+            "CFBundleDevelopmentRegion": "ko",
+            "CFBundleLocalizations": ["ko"],
             // HTTPS 외에 별도 암호화를 쓰지 않아 수출 규정 면제 대상이다.
             // 선언해두면 업로드할 때마다 묻지 않는다.
             "ITSAppUsesNonExemptEncryption": false,
